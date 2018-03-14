@@ -1,0 +1,138 @@
+body{
+	background: #F8F8F8;
+}
+.wrapper{
+	width:100%;
+	text-align:center;
+	height: 50px;
+	background:black;
+	color: grey;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 2.5em;
+}
+
+.no_margin{
+	margin:0;
+}
+h1{
+	text-align:center;
+}
+h2{
+	text-align:center;
+}
+
+.winner{
+	color:green;
+}
+.loser{
+	color:red;
+}
+
+.max_width{
+	width:100%;
+	margin:10px;
+}
+
+.max_width_margintop10{
+	width:100%;
+	margin-top:10px;
+}
+
+.width_80{
+	width:80%;
+	margin-right:10%;
+	margin-left: 10%;
+}
+
+.map{
+	border: solid 2px;
+	height: 350px;
+	width: 100%;
+}
+
+.map_block{
+	height: 38px;
+	width: 38px;
+	background: black;
+}
+
+.player1{
+	float: left;
+	width: 30px;
+	height: 30px;
+}
+.player2{
+	float: right;
+	width: 30px;
+	height: 30px;
+}
+
+.countdown{
+	line-height:0.5em;
+}
+
+.progress{
+	margin-bottom: 8px;
+}
+
+.results{
+	margin-top:15px;
+}
+
+.jumbotron p{
+	text-align: center;
+}
+.play-button{
+	width:20%;
+}
+
+.jumbotron a{
+	text-decoration:none;
+}
+
+.icon{
+	height:100px;
+	width:100%;
+}
+
+.list-map-design{
+	overflow-y: scroll;
+    overflow-x: hidden;
+    display: block;
+   	height:626px;
+}
+
+.default-code{
+	 background:#B8CAFF;
+}
+
+.over{
+	overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+textarea{
+	resize:vertical;
+}
+
+label{
+	text-align:center;
+}
+
+.row p{
+	text-align:center;
+}
+.width_80{
+	width:80%;
+	margin-right:10%;
+	margin-left: 10%;
+}
+
+.center div{
+	text-align:center;
+}
+
+.tright{
+	text-align: right;
+}

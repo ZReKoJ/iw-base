@@ -39,4 +39,40 @@ public class RootController {
 	public String upload() {
 		return "upload";
 	}
+	
+	@GetMapping("/results")
+	public String results() {
+		return "results";
+	}
+	
+	@GetMapping("/playing")
+	public String playing() {
+		return "playing";
+	}
+	
+	@GetMapping("/map-design")
+	public String map_design() {
+		return "map-design";
+	}
+
+	@GetMapping("/code-design")
+	public String code_design() {
+		return "code-design";
+	}
+	
+	@GetMapping("/profile")
+	public String profile() {
+		return "profile";
+	}
+	
+	@GetMapping("/settings")
+	public String settings() {
+		return "settings";
+	}
+	
+	@GetMapping("/ranking")
+	public String ranking() {
+		return "ranking";
+	}
+	
 }
