@@ -10,7 +10,7 @@
     <div class="row">
     <div class="col-sm-2"> </div>
      <div class="col-sm-3">
-      <img src="http://santetotal.com/wp-content/uploads/2014/05/default-user.png" class="img-fluid" style="width:100%">
+      	<img src="http://santetotal.com/wp-content/uploads/2014/05/default-user.png" class="img-fluid" style="width:100%">
      </div>
      <div class="col-sm-5">
         <ul class="list-group list-group-flush">
