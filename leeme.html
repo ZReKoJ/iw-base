@@ -1,43 +1,292 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-</head>
-<body>
-<h1>Iw-Base</h1>
-
-Este es un leeme.html de ejemplo, pensado para que lo modifiques para tu proyecto. Cambia el encabezado (h1), y lista los integrantes de tu grupo, y en general actualízalo para hacerlo tuyo.
-
-<h2>Integrantes</h2>
-
-<ul>
-    <li>María Ejémplez Pérez</li>
-    <li>José Pérez Ejémplez</li>
-</ul>
-
-<h2>Proyecto</h2>
-
-Copia y pega aquí el texto de la última versión de proyecto.
-
-<h2>Comentarios al profesor</h2>
-
-Este es el único sitio de tu entrega en el que debes poner comentarios "al profesor" (en otros sitios, se trataría de comentarios "al desarrollador" o "al cliente"). ¡Aprovecha"
-
-<h2>Vistas</h2>
-
-Detalla aquí tus vistas. Usa enlaces a localhost:8080/ (SIN nombre de proyecto; correspondientes a arrancar la aplicación en modo spring-boot desde STS) para enlazar cada vista.
-<ul>
-    <li><a href="localhost:8080/">vista principal</a> - descripción muy corta de la vista
-</ul>
-
-<h2>Recursos</h2>
-
-Esto es un listado de todos los recursos externos utilizados (es decir: no escritos por los desarrolladors ni incluidos en la plantilla del profesor).
-
-<ul>
-    <li><a href="localhost:8080/spring.jpg">imagen de primavera</a> (<a href="https://en.wikipedia.org/wiki/Spring_(season)#/media/File:Camino_entre_el_bosque_de_cerezos_en_flor.jpg">
-            CC-BY-SA</a>) - usada para logotipo
-    <li><a href="https://code.jquery.com/jquery-3.1.1.min.js">JQuery</a> (<a href="https://jquery.org/license/">MIT/Apache</a>) - librería js para simplificar la aplicación de comportamientos		
-</ul>
-</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1 align="center">Robotron 2000</h1>
+        <h2 align="center">Integrantes</h2>
+        Descripción del proyecto.
+        <h2 align="center">Integrantes</h2>
+        <ul class="list-group">
+            <li class="list-group-item">César Abades Ruiz</li>
+            <li class="list-group-item">Zihao Hong</li>
+            <li class="list-group-item">Lorenzo Leal Jiménez</li>
+        </ul>
+        <h2 align="center">Proyecto</h2>
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Version 1.0.0</h5>
+                    <small class="text-muted">19 de febrero de 2018</small>
+                </div>
+                <p class="mb-1">Se hicieron las primeras vistas de prueba: Main page, Zona de juego, Resultado, Code Design, Map Design, Ranking.</p>
+                <small class="text-muted">Terminado</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Version 1.0.1</h5>
+                    <small class="text-muted">...</small>
+                </div>
+                <p class="mb-1">Terminar todas las vistas propuestas.</p>
+                <small class="text-muted">En proceso.</small>
+            </a>
+        </div>
+        <h2 align="center">Comentarios al profesor</h2>
+        <p>Los únicos recursos que hemos utilizado son los de bootstrap y los usuarios que usamos son los mismos a y b</p>
+        <h2 align="center">Vistas</h2>
+        
+        <div class="list-group">
+            <a href="http://localhost:8080/" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Main Page</h5>
+                    <small class="text-muted">http://localhost:8080/</small>
+                </div>
+				<ul>
+                    <li>
+                        <h2>Título del juego.</h2>
+                    </li>
+                    <li>
+                        <h2>Breve descripción del juego.</h2>
+                    </li>
+                    <li>
+                        <h2>Botones:</h2>
+                        <ul>
+                            <li>
+                                <h3>Play: este botón te permite llegar a la zona de juego, donde se simulará el enfrentamiento usando los códigos de los usuarios.</h3>
+                            </li>
+                            <li>
+                                <h3>Code Design: te redirige a la página donde se crean y editan los códigos de tus robots.</h3>
+                            </li>
+                            <li>
+                                <h3>Ranking: muestra la página con la lista de los usuarios con mejores puntuaciones.</h3>
+                            </li>
+                            <li>
+                                <h3>Map Design: te envía a la página de diseño de mapas.</h3>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>Información: En esta sección aparecen las alertas que avisan a los usuarios de las novedades del juego.</h2>
+                    </li>
+                </ul>
+            </a>
+        </div>
+        <ul>
+            <li>
+                <h1>Vista 1: Main page</h1>
+                <ul>
+                    <li>
+                        <h2>Título del juego.</h2>
+                    </li>
+                    <li>
+                        <h2>Breve descripción del juego.</h2>
+                    </li>
+                    <li>
+                        <h2>Botones:</h2>
+                        <ul>
+                            <li>
+                                <h3>Play: este botón te permite llegar a la zona de juego, donde se simulará el enfrentamiento usando los códigos de los usuarios.</h3>
+                            </li>
+                            <li>
+                                <h3>Code Design: te redirige a la página donde se crean y editan los códigos de tus robots.</h3>
+                            </li>
+                            <li>
+                                <h3>Ranking: muestra la página con la lista de los usuarios con mejores puntuaciones.</h3>
+                            </li>
+                            <li>
+                                <h3>Map Design: te envía a la página de diseño de mapas.</h3>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>Información: En esta sección aparecen las alertas que avisan a los usuarios de las novedades del juego.</h2>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h1>Vista 2: Zona de juego</h1>
+                <ul>
+                    <li>
+                        <h2>Título del enfrentamiento. En el aparecen los usuarios que se están enfrentando.</h2>
+                    </li>
+                    <li>
+                        <h2>Mapa e iconos del juego.</h2>
+                    </li>
+                    <li>
+                        <h2>Información sobre el juego de ambos jugadores entre los que se incluye:</h2>
+                        <ul>
+                            <li>
+                                <h3>Vida actual del robot.</h3>
+                            </li>
+                            <li>
+                                <h3>Objetos recogidos.</h3>
+                            </li>
+                            <li>
+                                <h3>Número de golpes propinados al adversario.</h3>
+                            </li>
+                            <li>
+                                <h3>Habilidades usadas.</h3>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>Botón que permite llegar a la pantalla de resultados.</h2>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h1>Vista 3: Resultado</h1>
+                <ul>
+                    <li>
+                        <h2>Título de ganador en el que aparece el nombre del ganador del enfrentamiento.</h2>
+                    </li>
+                    <li>
+                        <h2>Información final del juego para ambos jugadores entre los que se incluye:</h2>
+                        <ul>
+                            <li>
+                                <h3>Vida final del robot.</h3>
+                            </li>
+                            <li>
+                                <h3>Objetos recogidos.</h3>
+                            </li>
+                            <li>
+                                <h3>Número de golpes propinados al adversario.</h3>
+                            </li>
+                            <li>
+                                <h3>Habilidades usadas.</h3>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h2>Botón que redirige a la página principal para poder modificar el código si has perdido o mirar el score si has ganado.</h2>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h1>Vista 4: Code Design</h1>
+                <ul>
+                    <li>
+                        <h2>
+                        Your codes: es una lista con todos los códigos que el usuario ha subido con
+                        anterioridad. El elemento que se encuentra en azul es el que se está usando
+                        actualmente. Además, el botón “Use this code” lleva a la página principal para
+                        permitir al usuario iniciar una nueva partida una vez le ha dicho a su robot qué
+                        código es el que debe usar.
+                        <h2>
+                    </li>
+                    <li>
+                        <h2>Upload new code: esta sección permite subir un nuevo código de
+                            comportamiento del robot de dos maneras diferentes:
+                        </h2>
+                        <ul>
+                            <li>
+                                <h3>From file: </h3>
+                                <ul>
+                                    <li>
+                                        <h4>Título</h4>
+                                    </li>
+                                    <li>
+                                        <h4>Input “Name”. Este input se utiliza para establecer un nombre
+                                            con el que el nuevo código aparecerá en “Your codes”.
+                                        </h4>
+                                    </li>
+                                    <li>
+                                        <h4>Input del archivo para seleccionar el archivo deseado desde el
+                                            almacenamiento local
+                                        </h4>
+                                    </li>
+                                    <li>
+                                        <h4>Botón de subida. Este botón mantiene a usuario en la misma
+                                            página. Lo que hace es recargarla para que aparezca el nuevo
+                                            código en la lista “Your codes”.
+                                        </h4>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>Writing: </h3>
+                                <ul>
+                                    <li>
+                                        <h4>
+                                            Título
+                                        </h4>
+                                    </li>
+                                    <li>
+                                        <h4>
+                                            Input “Name”. Este input se utiliza para establecer un nombre
+                                            con el que el nuevo código aparecerá en “Your codes”.
+                                        </h4>
+                                    </li>
+                                    <li>
+                                        <h4>
+                                            Área de texto donde se puede escribir el nuevo código a subir.
+                                        </h4>
+                                    </li>
+                                    <li>
+                                        <h4>
+                                            Botón de subida. Este botón mantiene a usuario en la misma
+                                            página. Lo que hace es recargarla para que aparezca el nuevo
+                                            código en la lista “Your codes”.
+                                        </h4>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h1>Vista 5: Map Design</h1>
+                <ul>
+                    <li>
+                        <h2>
+                        Your maps: es una lista con todos los mapas que el usuario ha creado. El
+                        elemento que se encuentra en azul es el que está seleccionado. Además, el
+                        botón “Use this map” lleva a la página principal para permitir al usuario iniciar
+                        una nueva partida en el mapa seleccionado.
+                        <h2>
+                    </li>
+                    <li>
+                        <h2>Design your map: aquí es donde el usuario podrá editar sus mapas y crear
+                            mapas nuevos, está compuesta por los siguientes elementos:
+                        </h2>
+                        <ul>
+                            <li>
+                                <h3>Lista lateral con los elementos que se pueden añadir. La idea es utilizar
+                                    el mecanismo Drag and Drop.
+                                </h3>
+                            </li>
+                            <li>
+                                <h3>Zona de edición del mapa. </h3>
+                            </li>
+                            <li>
+                                <h3>Botón “Save”. Lleva a la página inicial.</h3>
+                            </li>
+                            <li>
+                                <h3>Botón “Cancel”. Lleva a la página inicial.</h3>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h1>Vista 6: Ranking</h1>
+                <ul>
+                    <li>
+                        <h2>Lista de los usuarios con mejores puntuaciones ordenados de mayor a menor.</h2>
+                    </li>
+                    <li>
+                        <h2>Botón “Back”. Lleva a la página inicial.</h2>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <h2 align="center">Recursos</h2>
+        <ul>
+            <li><a href="https://getbootstrap.com/">Bootstrap</a> - usada para la presentación del proyecto
+            <li><a href="https://code.jquery.com/jquery-3.1.1.min.js">JQuery</a> (<a href="https://jquery.org/license/">MIT/Apache</a>) - librería js para simplificar la aplicación de comportamientos		
+        </ul>
+    </body>
 </html>
