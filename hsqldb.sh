@@ -5,6 +5,7 @@
 # Requires working maven
 #
 
+JAVA_OPTS=-Xmx128M
 VER=2.3.3
 JAR=~/.m2/repository/org/hsqldb/hsqldb/$VER/hsqldb-$VER.jar
 
@@ -19,7 +20,7 @@ function getJar() {
 
 function start() {
      getJar
-     (java -cp $JAR org.hsqldb.server.Server &)
+     (java $JAVA_OPTS -cp $JAR org.hsqldb.server.Server &)
 }
 
 function gui() {
@@ -35,8 +36,8 @@ function stop() {
 function other() {
     getJar
     shift
-    echo "java -cp $JAR org.hsqldb.server.Server $@"
-     (java -cp $JAR org.hsqldb.server.Server $@ &)
+    echo "java $JAVA_OPTS -cp $JAR org.hsqldb.server.Server $@"
+     (java $JAVA_OPTS -cp $JAR org.hsqldb.server.Server $@ &)
 }
 
 # help contents
