@@ -15,6 +15,7 @@
     <link href="${s}/css/starter-template.css" rel="stylesheet">
   
     <link href="${s}/css/stylesheet.css" rel="stylesheet">
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   </head>
   <body>
   	<div class ="wrapper">

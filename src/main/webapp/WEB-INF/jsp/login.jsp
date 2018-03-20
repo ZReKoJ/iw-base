@@ -79,6 +79,5 @@
         </div>
     </div>
 </div>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="${s}/js/login.js"></script>
 <%@ include file="../jspf/footer.jspf"%>
