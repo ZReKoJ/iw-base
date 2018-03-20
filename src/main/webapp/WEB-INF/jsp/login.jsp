@@ -22,7 +22,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <form id="login-form" action="/login" method="post">
+                        <form id="login-form" action="/login" method="post" role="form">
                             <div class="form-group">
                                 <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
                             </div>
@@ -51,20 +51,17 @@
                                 </div>
                             </div>
                         </form>
-                        <form id="register-form" action="/admin/addUser" method="post" role="form" style="display: none;">
+                        <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">
                             <div class="form-group">
                                 <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
                             </div>
                             <div class="form-group">
-                                <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
-                            </div>
-                            <div class="form-group">
                                 <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>
                             </div>
-                            <div class="form-group">
-                                <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
-                            </div>
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            <div class="form-group">
+                                <input type="password" name="confirmPassword" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6 col-sm-offset-3">
@@ -79,5 +76,17 @@
         </div>
     </div>
 </div>
+<table>
+	<thead>
+	<tr><th>id<th>login<th>roles</tr>
+	</thead>
+	<tbody>
+	<c:forEach items="${users}" var="u">
+		<tr>
+		<td>${u.id}<td>${u.login}<td>${u.roles}
+		</tr>	
+	</c:forEach>
+	</tbody>
+	</table>
 <script src="${s}/js/login.js"></script>
 <%@ include file="../jspf/footer.jspf"%>
