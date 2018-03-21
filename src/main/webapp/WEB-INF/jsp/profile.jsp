@@ -154,5 +154,12 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-2">
+            <a href="/"><button type="button" class="btn btn-primary max_width back">Back</button></a>
+        </div>
+        <div class="col-sm-5"></div>
+    </div>
     <script src="${s}/js/profile.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

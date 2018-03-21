@@ -49,5 +49,13 @@
         </div>
         <div class="col-sm-4"></div>
     </div>
+    
+    <div class="row">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-2">
+            <a href="/"><button type="button" class="btn btn-primary max_width back">Back</button></a>
+        </div>
+        <div class="col-sm-5"></div>
+    </div>
 </div>
 <%@ include file="../jspf/footer.jspf"%>
