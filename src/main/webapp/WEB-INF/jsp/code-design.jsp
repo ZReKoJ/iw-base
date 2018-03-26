@@ -4,6 +4,9 @@
 <%@ taglib prefix="sec"
     uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
+<link href="${s}/css/codemirror.css" rel="stylesheet">
+<script src="${s}/js/codemirror.js"></script>
+<script src="${s}/js/code-design.js"></script>
 <div class="jumbotron">
         <h1 class="display-4">Design your code</h1>
         <div class="row">
@@ -30,8 +33,8 @@
             </div>
         </div>
         <div class="row">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>				
-        </div>
+        	<textarea class="codemirror-textarea"></textarea>     
+		</div>
         <div class="row">
                 <div class="col-sm-4"></div>
                     <div class="col-sm-2">
