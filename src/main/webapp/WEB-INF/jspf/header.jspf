@@ -18,10 +18,71 @@
 	<script src="${s}/js/jquery-1.11.1.min.js"></script>
   </head>
   <body>
-  	<div class ="wrapper">
-   		<div class = "content">
-    		<p>ROBOTRÓN 2000</p>
-    	</div>
-    </div>
-		<div class="container">
 
+
+	<div class="navbar navbar-default navbar-fixed-top row back_grey"
+		role="navigation">
+
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="col-sm-1"></div>
+		<div class="navbar-header col-sm-3">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-ex1-collapse">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/"><p class="brand_title">ROBOTRON 2000</p></a>
+		</div>
+		<div class="navbar-header col-sm-6"></div>
+		<!-- DROPDOWN LOGIN STARTS HERE  -->
+		<div class="col-sm-2">
+			<ul id="signInDropdown" class="nav navbar-nav">
+				<li class="dropdown">
+					<button type="button" id="dropdownMenu1" data-toggle="dropdown"
+						class="btn btn-info navbar-btn dropdown-toggle">
+						<i class="glyphicon glyphicon-user"></i> User <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu trans_-31-5_per">
+
+
+						<li style="width: 250px;">
+
+
+							<div class="card pad_17">
+								<img class="card-img-top width_100" src="${s}/img/avatar.png"
+									alt="Card image cap">
+								<div class="card-body">
+									<h3 class="card-title">User</h3>
+								</div>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">Platinum</li>
+									<li class="list-group-item">Wins: 2784</li>
+									<li class="list-group-item">Draw: 456</li>
+									<li class="list-group-item">Win ratio: 45%</li>
+								</ul>
+								<div class="card-body row">
+									
+									<div class="col-sm-6">
+										<a href="profile"><button type="button" class="btn btn-light width_100 color_black">Profile</button></a>
+									</div>
+									
+									<div class="col-sm-6">
+										<a href="login"><button type="button" class="btn btn-light width_100 color_black">Logout</button></a>
+									</div>
+									
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+
+		</div>
+		<!-- DROPDOWN LOGIN ENDS HERE  -->
+
+	</div>
+
+
+	<div class="container">

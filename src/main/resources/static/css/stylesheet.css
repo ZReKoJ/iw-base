@@ -2,14 +2,14 @@ body{
 	background: #F8F8F8;
 }
 .wrapper{
-	width:100%;
+	width:80%;
 	text-align:center;
 	height: 50px;
-	background:black;
 	color: grey;
 	font-weight: bold;
 	font-style: italic;
-	font-size: 2.5em;
+	font-size: 250%;
+	margin:0;
 }
 
 .no_margin{
@@ -34,6 +34,10 @@ h2{
 	margin:10px;
 }
 
+.width_100{
+	width:100%;
+}
+
 .max_width_margintop10{
 	width:100%;
 	margin-top:10px;
@@ -44,6 +48,7 @@ h2{
 	margin-right:10%;
 	margin-left: 10%;
 }
+
 
 .map{
 	border: solid 2px;
@@ -120,6 +125,10 @@ label{
 	text-align:center;
 }
 
+.card-body a{
+	text-align:center;
+}
+
 .row p{
 	text-align:center;
 }
@@ -135,4 +144,38 @@ label{
 
 .tright{
 	text-align: right;
+}
+
+.feature_header{
+	padding-top:9%;
+	font-weight: bold;
+	font-size: 130%;
+	color: grey;
+}
+
+.row_header{
+	 background:black;
+}
+
+.pad_17{
+	padding:17px;
+}
+
+.trans_-31-5_per{
+	transform:translateX(-31.5%);
+	
+}
+.color_black{
+	color:black;
+}
+
+.brand_title{
+	font-weight:bold;
+	font-size:145%;
+	font-style: italic;
+	color:black;
+	
+}
+.back_grey{
+	background:#6D6D6D;
 }
