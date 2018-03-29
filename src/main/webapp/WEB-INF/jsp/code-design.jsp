@@ -13,7 +13,7 @@
         <h1 class="display-4">Design your code</h1>
         <div class="row">
             <div class="input-group image-preview">
-            <input type="text" class="form-control image-preview-filename" placeholder="Set the name for your code">
+            <input type="text" id="codeFileName" class="form-control image-preview-filename" placeholder="Set the name for your code">
             <span class="input-group-btn">
             	<div class="btn btn-default image-preview-input">
                     <span class="glyphicon glyphicon-folder-open"></span>
@@ -22,6 +22,9 @@
                 </div>
             </span>
             </div>
+        </div>
+		<div class="row">
+        	<div id="original">Click here</div><br>
         </div>
         <div class="row">
         	<textarea id="codeText" class="codemirror-textarea"></textarea> 

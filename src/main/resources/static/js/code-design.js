@@ -4,14 +4,17 @@ $(document).ready(function(){
 		lineNumbers : true,
 		mode : "javascript",
 		theme : "lucario",
-		extraKeys: {"Ctrl-Space": "autocomplete"},
-        value: document.documentElement.innerHTML
+		indentUnit : 4,
+		tabSize : 4,
+		smartIndent : true,
+		maxHighlightLength : Infinity,
+		extraKeys: {"Ctrl-Space": "autocomplete"}
 	});
+	
+    editor.setValue(document.documentElement.innerHTML);
+    
+    $("#original").click(function() {
+        $("#codeFileName").val($(this).text());
+        editor.setValue("hola mundo");
+    });
 });
-
-$(".inputFile").change(function (){    
-	var file = this.files[0];
-    reader.onload = function (e) {
-        $(".image-preview-filename").val(file.name);            
-    }        
-});  
