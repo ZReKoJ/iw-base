@@ -23,9 +23,6 @@
             </span>
             </div>
         </div>
-		<div class="row">
-        	<div id="original">Click here</div><br>
-        </div>
         <div class="row">
         	<textarea id="codeText" class="codemirror-textarea"></textarea> 
 		</div>

@@ -12,9 +12,18 @@ $(document).ready(function(){
 	});
 	
     editor.setValue(document.documentElement.innerHTML);
+
     
-    $("#original").click(function() {
-        $("#codeFileName").val($(this).text());
-        editor.setValue("hola mundo");
+    $(".image-preview-input").change(function() {
+        var fileInput = document.getElementById('fileSent');
+        var file = fileInput.files[0];
+        $("#codeFileName").val(file.name);
+        
+        var fileReader = new FileReader();
+		fileReader.readAsText(file);
+        fileReader.onload = function (e) {
+			editor.setValue(fileReader.result);
+		}
     });
+    
 });
