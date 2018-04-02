@@ -1,26 +1,26 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"
-    uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 <link href="${s}/css/profile.css" rel="stylesheet">
-<div class="row user-menu-container square">
+<div class="row user-menu-container square whiteBg">
         <div class="col-md-7 user-details">
-            <div class="row coralbg white">
+            <div class="row neutralColourDarkBg white">
+                <img src="${s}/img/avatar.png" class="col-md-5">
                 <div class="col-md-6 no-pad">
                     <div class="user-pad">
-                        <h3>Welcome back, User</h3>
+                        <h3>Welcome back, 
+							<sec:authorize access="isAnonymous()">No estás registrado.</sec:authorize>
+							<sec:authorize access="isAuthenticated()">
+								<sec:authentication property="principal.username" />
+							</sec:authorize>
+						</h3>
                         <h4 class="white"><i class="fa fa-check-circle-o"></i>Platino</h4>
                     </div>
                 </div>
-                <div class="col-md-6 no-pad">
-                    <div class="user-image">
-                        <img src="https://farm7.staticflickr.com/6163/6195546981_200e87ddaf_b.jpg" class="img-responsive thumbnail">
-                    </div>
-                </div>
             </div>
-            <div class="row overview">
+            <div class="row overview whiteBg">
                 <div class="col-md-4 user-pad text-center">
                     <h3>WIN</h3>
                     <h4>2,784</h4>
@@ -35,26 +35,17 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-1 user-menu-btns">
+        <div class="col-md-2 user-menu-btns">
             <div class="btn-group-vertical square" id="responsive">
-                <a href="#" class="btn btn-block btn-default active">
-                  <i class="fa fa-bell-o fa-3x">History</i>
-                </a>
-                <a href="#" class="btn btn-default">
-                  <i class="fa fa-envelope-o fa-3x">Password</i>
-                </a>
-                <a href="#" class="btn btn-default">
-                  <i class="fa fa-laptop fa-3x">Codes</i>
-                </a>
-                <a href="#" class="btn btn-default">
-                  <i class="fa fa-laptop fa-3x">Maps</i>
-                </a>
-                <a href="#" class="btn btn-default">
-                  <i class="fa fa-cloud-upload fa-3x">Logout</i>
-                </a>
+    			<a class="btn neutralColourLightBg active" href="#" role="button">History</a>
+    			<a class="btn neutralColourLightBg" href="#" role="button">Account</a>
+    			<a class="btn neutralColourLightBg" href="#" role="button">Codes</a>
+    			<a class="btn neutralColourLightBg" href="#" role="button">Maps</a>
+    			<a class="btn neutralColourLightBg" href="login" role="button">Logout</a>
+    			<a class="btn neutralColourLightBg" href="/" role="button">Back</a>
             </div>
         </div>
-        <div class="col-md-4 user-menu user-pad">
+        <div class="col-md-3 user-menu user-pad">
             <div class="user-menu-content active">
                 <h3>
                     Recent Interactions
@@ -153,13 +144,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-5"></div>
-        <div class="col-sm-2">
-            <a href="/"><button type="button" class="btn btn-primary max_width back">Back</button></a>
-        </div>
-        <div class="col-sm-5"></div>
     </div>
     <script src="${s}/js/profile.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

@@ -12,6 +12,54 @@ body{
 	margin:0;
 }
 
+.neutralColourDark {
+	color: #0979B2;
+}
+
+.neutralColourLight {
+	color: #2995CC;
+}
+
+.strikingColourDark {
+	color: #B22430;
+}
+
+.strikingColourLight {
+	color: #FF192E;
+}
+
+.otherColour {
+	color: #FFF933;
+}
+
+.white {
+	color: #fff!important;
+}
+
+.neutralColourDarkBg {
+	background-color: #0979B2;
+}
+
+.neutralColourLightBg {
+	background-color: #2995CC;
+}
+
+.strikingColourDarkBg {
+	background-color: #B22430;
+}
+
+.strikingColourLightBg {
+	background-color: #FA396f;
+}
+
+.otherColourBg {
+	background-color: #FFF933;
+}
+
+.whiteBg {
+	background-color: #fff!important;
+}
+
 .no_margin{
 	margin:0;
 }

@@ -3,7 +3,6 @@ $(document).ready(function() {
     $btnLinks = $btnSets.find('a');
  
     $btnLinks.click(function(e) {
-        e.preventDefault();
         $(this).siblings('a.active').removeClass("active");
         $(this).addClass("active");
         var index = $(this).index();

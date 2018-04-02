@@ -19,15 +19,10 @@
     color: #46D8D2;
 }
 
-.white {
-    color: #fff!important;
-}
-
 /* -- The "User's Menu Container" specific elements. Custom container for the snippet -- */
 div.user-menu-container {
   z-index: 10;
-  background-color: #fff;
-  margin-top: 20px;
+  margin-top: 100px;
   background-clip: padding-box;
   opacity: 0.97;
   filter: alpha(opacity=97);
@@ -48,15 +43,6 @@ div.user-menu-container a, div.user-menu-container .btn  {
     transition: 1s ease;
 }
 
-div.user-menu-container .thumbnail {
-   width:100%;
-   min-height:200px;
-   border: 0px!important;
-   padding: 0px;
-   border-radius: 0;
-   border: 0px!important;
-}
-
 /* -- Vertical Button Group -- */
 div.user-menu-container .btn-group-vertical {
     display: block;
@@ -64,7 +50,6 @@ div.user-menu-container .btn-group-vertical {
 
 div.user-menu-container .btn-group-vertical>a {
     padding: 20px 25px;
-    background-color: #46D8D2;
     color: white;
     border-color: #fff;
 }
@@ -75,7 +60,7 @@ div.btn-group-vertical>a:hover {
 }
 
 div.btn-group-vertical>a.active {
-    background: #FA396F;
+    background: #FA396f;
     box-shadow: none;
     color: white;
 }
