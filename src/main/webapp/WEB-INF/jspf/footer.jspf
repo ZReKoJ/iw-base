@@ -1,7 +1,6 @@
-<%@ page pageEncoding="UTF-8"%>
-</div><!-- /.container -->
-          
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="${s}/js/bootstrap.min.js"></script>
-  </body>
+		<%@ page pageEncoding="UTF-8"%>
+		</div><!-- /.container -->
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="${s}/js/bootstrap.min.js"></script>
+	</body>
 </html>

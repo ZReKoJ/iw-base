@@ -13,8 +13,7 @@ $(document).ready(function(){
 	
     editor.setValue(document.documentElement.innerHTML);
 
-    
-    $(".image-preview-input").change(function() {
+    $(".btn-glyphicon-title").change(function() {
         var fileInput = document.getElementById('fileSent');
         var file = fileInput.files[0];
         $("#codeFileName").val(file.name);

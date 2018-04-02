@@ -20,73 +20,69 @@
                 <hr>
             </div>
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <form id="login-form" action="/login" method="post" role="form">
-                            <div class="form-group">
-                                <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>
-                            </div>
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <div class="form-group text-center">
-                                <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                                <label for="remember"> Remember Me</label>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6 col-sm-offset-3">
-                                        <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="text-center">
-                                            <a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">
-                            <div class="form-group">
-                                <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>
-                            </div>
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            <div class="form-group">
-                                <input type="password" name="confirmPassword" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6 col-sm-offset-3">
-                                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                <form id="login-form" action="/login" method="post" role="form">
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>
+                    </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <div class="form-group text-center">
+                        <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+                        <label for="remember"> Remember Me</label>
+                    </div>
+                    <div class="form-group text-center">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <a href="#" tabindex="5" class="forgot-password">Forgot Password?</a>
+                    </div>
+                </form>
+                <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>
+                    </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <div class="form-group">
+                        <input type="password" name="confirmPassword" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <table>
-	<thead>
-	<tr><th>id<th>login<th>roles</tr>
-	</thead>
-	<tbody>
-	<c:forEach items="${users}" var="u">
-		<tr>
-		<td>${u.id}<td>${u.login}<td>${u.roles}
-		</tr>	
-	</c:forEach>
-	</tbody>
-	</table>
+    <thead>
+        <tr>
+            <th>id
+            <th>login
+            <th>roles
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="${users}" var="u">
+            <tr>
+                <td>${u.id}
+                <td>${u.login}
+                <td>${u.roles}
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
 <script src="${s}/js/login.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

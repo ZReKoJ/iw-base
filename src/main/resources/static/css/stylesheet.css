@@ -34,9 +34,6 @@ h2{
 	margin:10px;
 }
 
-.width_100{
-	width:100%;
-}
 
 .max_width_margintop10{
 	width:100%;
@@ -125,10 +122,6 @@ label{
 	text-align:center;
 }
 
-.card-body a{
-	text-align:center;
-}
-
 .row p{
 	text-align:center;
 }
@@ -157,18 +150,6 @@ label{
 	 background:black;
 }
 
-.pad_17{
-	padding:17px;
-}
-
-.trans_-31-5_per{
-	transform:translateX(-31.5%);
-	
-}
-.color_black{
-	color:black;
-}
-
 .brand_title{
 	font-weight:bold;
 	font-size:145%;
@@ -180,15 +161,23 @@ label{
 	background:#6D6D6D;
 }
 
-.image-preview-input {
-    position: relative;
-	overflow: hidden;
-	margin: 0px;    
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;    
+#userProfileIcon {
+	height: 24px;
+	width: 24px;
 }
-.image-preview-input input[type=file] {
+
+#userProfilePicture {
+	height: 280px;
+	width: 280px;
+}
+
+#profileCard {
+	padding: 10px;
+	width: 300px;
+}
+
+/* code-design */
+.btn-glyphicon-title input[type=file] {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -198,7 +187,4 @@ label{
 	cursor: pointer;
 	opacity: 0;
 	filter: alpha(opacity=0);
-}
-.image-preview-input-title {
-    margin-left:2px;
 }
