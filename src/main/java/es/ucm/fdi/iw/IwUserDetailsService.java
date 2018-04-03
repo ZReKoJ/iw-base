@@ -23,21 +23,22 @@ public class IwUserDetailsService implements UserDetailsService {
         this.entityManager = em;
     }
 
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String nickname){
     	try {
-	        User u = entityManager.createQuery("from User where login = :login", User.class)
-	                            .setParameter("login", username)
+    		log.info("No such user: " + nickname);
+	        User u = entityManager.createQuery("from User where nickname = :nickname", User.class)
+	                            .setParameter("nickname", nickname)
 	                            .getSingleResult();
 	        // build UserDetails object
 	        ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
 	        for (String r : u.getRoles().split("[,]")) {
 	        	roles.add(new SimpleGrantedAuthority("ROLE_" + r));
-		        log.info("Roles for " + username + " include " + roles.get(roles.size()-1));
+		        log.info("Roles for " + nickname + " include " + roles.get(roles.size()-1));
 	        }
 	        return new org.springframework.security.core.userdetails.User(
 	        		u.getNickname(), u.getPassword(), roles); 
 	    } catch (Exception e) {
-    		log.info("No such user: " + username);
+    		log.info("No such user: " + nickname);
     		return null;
     	}
     }

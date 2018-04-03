@@ -18,6 +18,9 @@ public class User {
 	private int win;
 	private int lose;
 	private int draw;
+
+	private byte enabled;
+	private String roles; // split by , to separate roles
 	private List<Map> ownedMaps;
 	
 	@OneToMany(targetEntity=Map.class)
@@ -30,9 +33,6 @@ public class User {
 		this.ownedMaps = ownedMaps;
 
 	}
-	
-	private String roles; // split by , to separate roles
-	private byte enabled;
 	
 	@Id
 	@GeneratedValue
@@ -57,8 +57,12 @@ public class User {
 		return password;
 	}
 
-	public void setPassword(String user_password) {
+	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void setOwnedMaps(List<Map> ownedMaps) {
+		this.ownedMaps = ownedMaps;
 	}
 
 	public int getWin() {
