@@ -36,19 +36,19 @@
                             <span class="userProfilePic">
                             <img id="userProfileIcon" class="icon" src="${s}/img/avatar.png">
                             </span>
-                            <span class="userProfileName">${user.login}</span>
+                            <span class="userProfileName">${user.nickname}</span>
                             <b class="caret"></b>
                             </a>
                             <div class="dropdown-menu">
                             	<div id="profileCard" class="card">
-								    <h5 class="card-header">${user.login}</h5>
+								    <h5 class="card-header">${user.nickname}</h5>
 								  	<img id="userProfilePicture" class="card-img-top" src="${s}/img/avatar.png" alt="Card image cap">
 								  	<div class="card-body">
 								    	<ul class="list-group list-group-flush">
 	                                        <li class="list-group-item">Platinum</li>
-	                                        <li class="list-group-item">Wins: 2784</li>
-	                                        <li class="list-group-item">Draw: 456</li>
-	                                        <li class="list-group-item">Win ratio: 45%</li>
+	                                        <li class="list-group-item">Wins: ${user.win}</li>
+	                                        <li class="list-group-item">Draw: ${user.draw}</li>
+	                                        <li class="list-group-item">Lose: ${user.lose}</li>
 	                                    </ul>
 										<div class="btn-group btn-group-justified">
 	                                        <a class="btn btn-primary" href="profile" role="button">Profile</a>

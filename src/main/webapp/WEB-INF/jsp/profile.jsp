@@ -10,7 +10,7 @@
                 <img src="${s}/img/avatar.png" class="col-md-5">
                 <div class="col-md-6 no-pad">
                     <div class="user-pad">
-                        <h3>Welcome back, ${user.login}</h3>
+                        <h3>Welcome back, ${user.nickname}</h3>
                         <h4 class="white"><i class="fa fa-check-circle-o"></i>Platino</h4>
                     </div>
                 </div>
@@ -18,15 +18,15 @@
             <div class="row overview whiteBg">
                 <div class="col-md-4 user-pad text-center">
                     <h3>WIN</h3>
-                    <h4>2,784</h4>
+                    <h4>${user.win}</h4>
                 </div>
                 <div class="col-md-4 user-pad text-center">
                     <h3>DRAW</h3>
-                    <h4>456</h4>
+                    <h4>${user.draw}</h4>
                 </div>
                 <div class="col-md-4 user-pad text-center">
                     <h3>LOSS</h3>
-                    <h4>4,901</h4>
+                    <h4>${user.lose}</h4>
                 </div>
             </div>
         </div>

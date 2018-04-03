@@ -44,6 +44,10 @@ public class RootController {
 		User u = new User();
 		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
+		u.setWin(0);
+		u.setDraw(0);
+		u.setLose(0);
+		u.setEnabled((byte) 0x01);
 		u.setRoles("USER");
 		entityManager.persist(u);
 		
