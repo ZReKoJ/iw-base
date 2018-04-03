@@ -22,7 +22,7 @@
             <div class="panel-body">
                 <form id="login-form" action="/login" method="post" role="form">
                     <div class="form-group">
-                        <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
+                        <input class="form-control" type="text" id="username" name="nickname" placeholder="Username"/>
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>
@@ -45,7 +45,7 @@
                 </form>
                 <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">
                     <div class="form-group">
-                        <input class="form-control" type="text" id="username" name="username" placeholder="Username"/>
+                        <input class="form-control" type="text" id="username" name="nickname" placeholder="Username"/>
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="password" id="password" name="password" placeholder="Password"/>

@@ -38,11 +38,11 @@ public class RootController {
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	@Transactional
 	public String createUser(
-			@RequestParam String username, 
+			@RequestParam String nickname, 
 			@RequestParam String password,
 			@RequestParam String confirmPassword, Model m) {
 		User u = new User();
-		u.setLogin(username);
+		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
 		u.setRoles("USER");
 		entityManager.persist(u);

@@ -62,11 +62,11 @@ public class AdminController {
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	@Transactional
 	public String addUser(
-			@RequestParam String login, 
+			@RequestParam String nickname, 
 			@RequestParam String password, 
 			@RequestParam(required=false) String isAdmin, Model m) {
 		User u = new User();
-		u.setLogin(login);
+		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
 		u.setRoles("on".equals(isAdmin) ? "ADMIN,USER" : "USER");
 		entityManager.persist(u);
