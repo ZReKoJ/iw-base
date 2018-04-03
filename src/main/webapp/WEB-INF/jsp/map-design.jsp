@@ -1,9 +1,9 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"
-    uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
+<script src="${s}/js/map-design.js"></script>
 <div class="jumbotron">
         <h1 class="display-4">Design your map</h1>
         <hr class="my-4">
@@ -72,19 +72,11 @@
             </ul>
         </div>
         <div class="col-sm-9">
-            <div class="jumbotron">
-                <img class="map" src=${s}/img/Forgotten-Crypt-Battle-Map.jpg></img>
-                <div class="row">
-                    <div class="col-sm-4"></div>
-                    <div class="col-sm-2">
-                        <a href="/" type="button" class="btn btn-primary max_width results">Upload</a>		  		
-                    </div>
-                    <div class="col-sm-2">
-                        <a href="settings" type="button" class="btn btn-primary max_width results">Cancel</a>		  		
-                    </div>
-                    <div class="col-sm-4"></div>
-                </div>
-            </div>
+            <canvas id="canvas" width="300" height="300"></canvas>
+            <div class="btn-toolbar pull-right">
+		    	<a class="btn btn-primary" href="/" onclick="javascript:alert('not implemented yet !!');" role="button">Upload</a>
+		        <a class="btn btn-primary" href="/settings" role="button">Cancel</a>
+		    </div>
         </div>
 </div>
 <%@ include file="../jspf/footer.jspf"%>

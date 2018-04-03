@@ -10,12 +10,7 @@
                 <img src="${s}/img/avatar.png" class="col-md-5">
                 <div class="col-md-6 no-pad">
                     <div class="user-pad">
-                        <h3>Welcome back, 
-							<sec:authorize access="isAnonymous()">No estás registrado.</sec:authorize>
-							<sec:authorize access="isAuthenticated()">
-								<sec:authentication property="principal.username" />
-							</sec:authorize>
-						</h3>
+                        <h3>Welcome back, ${user.login}</h3>
                         <h4 class="white"><i class="fa fa-check-circle-o"></i>Platino</h4>
                     </div>
                 </div>

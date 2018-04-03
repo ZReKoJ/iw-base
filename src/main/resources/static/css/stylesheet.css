@@ -236,3 +236,10 @@ label{
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
+
+canvas {
+	width: 100%;
+	height: auto;
+	border:1px solid #c3c3c3;
+	background-color: gray; 
+}

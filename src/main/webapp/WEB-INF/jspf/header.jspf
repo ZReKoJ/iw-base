@@ -36,17 +36,12 @@
                             <span class="userProfilePic">
                             <img id="userProfileIcon" class="icon" src="${s}/img/avatar.png">
                             </span>
-                            <span class="userProfileName">User</span>
+                            <span class="userProfileName">${user.login}</span>
                             <b class="caret"></b>
                             </a>
                             <div class="dropdown-menu">
                             	<div id="profileCard" class="card">
-	                            	<sec:authorize access="isAnonymous()">
-								    <h5 class="card-header">No estás registrado.</h5>
-									</sec:authorize>
-									<sec:authorize access="isAuthenticated()">
-								    <h5 class="card-header"><sec:authentication property="principal.username" /></h5>
-									</sec:authorize>
+								    <h5 class="card-header">${user.login}</h5>
 								  	<img id="userProfilePicture" class="card-img-top" src="${s}/img/avatar.png" alt="Card image cap">
 								  	<div class="card-body">
 								    	<ul class="list-group list-group-flush">

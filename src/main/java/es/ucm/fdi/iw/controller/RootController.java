@@ -3,6 +3,7 @@ package es.ucm.fdi.iw.controller;
 import java.security.Principal;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,20 +51,27 @@ public class RootController {
 		login(m);
 		m.addAttribute("users", entityManager
 				.createQuery("select u from User u").getResultList());
+		
+		
+		
 		return "login";
 	}
     
 	@GetMapping({"/", "/index"})
-	public String root(Model model, Principal principal) {
-		log.info(principal.getName() + " de tipo " + principal.getClass());		
+	public String root(Model model, Principal principal, HttpSession s) {
+		log.info(principal.getName() + " de tipo " + principal.getClass());
+		if (s.getAttribute("user") == null) {
+			s.setAttribute("user", entityManager
+					.createQuery("from User where login = :login", User.class)
+                    .setParameter("login", principal.getName())
+                    .getSingleResult());
+		}
 		// org.springframework.security.core.userdetails.User
 		return "home";
 	}
 	
 	@GetMapping("/login")
 	public String login(Model m) {
-		m.addAttribute("users", entityManager
-				.createQuery("select u from User u").getResultList());
 		return "login";
 	}
 	
