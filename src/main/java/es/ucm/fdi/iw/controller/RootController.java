@@ -56,8 +56,6 @@ public class RootController {
 		m.addAttribute("users", entityManager
 				.createQuery("select u from User u").getResultList());
 		
-		
-		
 		return "login";
 	}
     
