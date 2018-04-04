@@ -209,6 +209,7 @@ label{
 	background:#6D6D6D;
 }
 
+/* profile */
 #userProfileIcon {
 	height: 24px;
 	width: 24px;
@@ -237,9 +238,10 @@ label{
 	filter: alpha(opacity=0);
 }
 
-canvas {
+/* map-design */
+#mapBuilder {
 	width: 100%;
 	height: auto;
 	border:1px solid #c3c3c3;
-	background-color: gray; 
+	background-color: black; 
 }
