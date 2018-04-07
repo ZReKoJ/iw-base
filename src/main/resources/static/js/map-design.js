@@ -2,63 +2,293 @@ $( document ).ready(function() {
 
 	var canvas = document.getElementById("mapBuilder");
 	var ctx = canvas.getContext("2d");
-	var container = $(canvas).parent();
-	
-	window.addEventListener('resize', resizeCanvas, false);
+	var parent = $(canvas).parent();
+	var grid = document.getElementById("grid-element");
 
-    function resizeCanvas() {
-            canvas.width = container.width();
-            canvas.height = container.width();
-            drawCellMap(); 
-    }
-    
-    resizeCanvas();
+	canvas.width = parent.width();
+	canvas.height = canvas.width;
+	grid.style.height = canvas.height + "px";
 
-    function drawCellMap() {
-    	// Create gradient
-    	/*var grd=ctx.createLinearGradient(0, 0, canvas.width, 0);
-    	grd.addColorStop(0,"red");
-    	grd.addColorStop(1,"white");
+	function createArray(length) {
+	    var arr = new Array(length || 0),
+	        i = length;
 
-    	// Fill with gradient
-    	ctx.fillStyle = grd;
-    	ctx.fillRect(0, 0, canvas.width, canvas.height);*/
-    	
-    	// Draw lines
-    	var numCells = 20;
+	    if (arguments.length > 1) {
+	        var args = Array.prototype.slice.call(arguments, 1);
+	        while(i--) arr[length-1 - i] = createArray.apply(this, args);
+	    }
 
-    	var cellDimension = Math.floor(canvas.width / numCells);
+	    return arr;
+	}
 
-    	var horizontalMargin = canvas.width % cellDimension;
-    	var verticalMargin = canvas.height % cellDimension;
+	var numCell = {
+		x : 10,
+	    y : 10
+	}
 
-    	var marginLeft = Math.floor(horizontalMargin / 2);
-    	var marginRight = Math.ceil(verticalMargin / 2);
+	var mapContent = createArray(numCell.x, numCell.y);
+	for (var i = 0; i < numCell.x; i++){
+		for (var j = 0; j < numCell.y; j++){
+	    	mapContent[i][j] = 0;
+	    }
+	}
 
-    	var marginUp = Math.floor(verticalMargin / 2);
-    	var marginDown = Math.ceil(verticalMargin / 2);
+	var dragSpeed = 0.05;
+	var zoomScale = 1;
+	var lineDash = 0;
 
-    	ctx.setLineDash([1, 1]);
-    	ctx.lineWidth = 1;
+	var winDim;
+	var winCenter;
+	var winDist;
 
-    	var i = marginLeft + 0.5;
+	function resizeWin() {
+	    
+	    winDim = {
+	        x : canvas.width,
+	        y : canvas.height
+	    }
 
-    	while (i < canvas.width){
-    		ctx.moveTo(i, 0);
-    		ctx.lineTo(i, canvas.height);
-    		i = i + cellDimension;
-    	}
+	    winCenter = {
+	        x : Math.floor(winDim.x / 2),
+	        y : Math.floor(winDim.y / 2)
+	    } 
+	    
+	    winDist = {
+	        left : winCenter.x,
+	        right : winDim.x - winCenter.x,
+	    	up : winCenter.y,
+	        down : winDim.y - winCenter.y
+	    }
 
-    	var j = marginUp + 0.5;
+	}
 
-    	while (j < canvas.height){
-    		ctx.moveTo(0, j);
-    		ctx.lineTo(canvas.width, j);
-    		j = j + cellDimension;
-    	}
+	resizeWin();
 
-    	ctx.strokeStyle = "lightGray";
-    	ctx.stroke();
-    }
+	var mapDim = {
+	    x : winDim.x - 10,
+	    y : winDim.y - 10,
+	};
+
+	var cellDim = {
+	    x : Math.floor(mapDim.x / numCell.x),
+	    y : Math.floor(mapDim.y / numCell.y)
+	};
+	    
+	var center = {
+	    x : Math.floor(mapDim.x / 2),
+	    y : Math.floor(mapDim.y / 2)
+	}
+	mapDim = {
+	    x : numCell.x * cellDim.x,
+	    y : numCell.y * cellDim.y
+	}
+	center = {
+	    x : Math.floor(mapDim.x / 2),
+	    y : Math.floor(mapDim.y / 2)
+	}
+
+	var mapDist;
+	var margin;
+
+	var mousePos = {
+		x : "x",
+	    y : "y"
+	}
+
+	var mouseMapPos = {
+		x : "x",
+	    y : "y"
+	}
+
+	var cellPos = {
+		x : "x",
+	    y : "y"
+	}
+
+	function resetValues() {
+	    
+	    mapDim = {
+	        x : numCell.x * cellDim.x,
+	        y : numCell.y * cellDim.y
+	    }
+	    
+	    lineDash = (mapDim.x < winDim.x || mapDim.y < winDim.y) ? 0 : 1; 
+	    
+	    center = {
+	        x : Math.floor(mapDim.x / 2),
+	        y : Math.floor(mapDim.y / 2)
+	    }
+	    
+	    mapDist = {
+	        left : center.x,
+	        right : mapDim.x - center.x,
+	        up : center.y,
+	        down : mapDim.y - center.y
+	    }
+
+	    margin = {
+	        left : winDist.left - mapDist.left,
+	        right : winDist.right - mapDist.right,
+	        up : winDist.up - mapDist.up,
+	        down : winDist.down - mapDist.down
+	    }
+
+	}
+
+	function drawCellMap() {
+
+	    ctx.setLineDash([lineDash, lineDash]);
+	    ctx.lineWidth = 1;
+	    ctx.strokeStyle = "gray";
+	    
+		var coord = {
+	    	left : (margin.left > 0) ? margin.left : 0,
+	        right : (margin.right > 0) ? winDim.x - margin.right : winDim.x,
+			up : (margin.up > 0) ? margin.up : 0,
+	        down : (margin.down > 0) ? winDim.y - margin.down : winDim.y
+		}
+	    
+	    var i = (margin.left > 0) ? margin.left : cellDim.x - Math.abs(margin.left % cellDim.x);
+	    var j = (margin.up > 0) ? margin.up : cellDim.y - Math.abs(margin.up % cellDim.y);
+
+	    ctx.fillStyle = "#FFD519";
+	    for (var ii = 0; ii < numCell.x; ii++){
+	        for (var jj = 0; jj < numCell.y; jj++){
+	            if (mapContent[ii][jj] != 0) {
+	                ctx.fillRect(ii * cellDim.x + margin.left, jj * cellDim.y + margin.up, cellDim.x, cellDim.y);
+	            }
+	        }
+	    }
+
+	    ctx.fillStyle = "#00FFEE";
+		if (0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y) {
+	        ctx.fillRect(cellPos.x * cellDim.x + margin.left, cellPos.y * cellDim.y + margin.up, cellDim.x, cellDim.y);
+	    }
+		  
+	    ctx.fillStyle = "white";
+	    ctx.font = "20px Arial";
+	    ctx.fillText("[" + mousePos.x + ", " + mousePos.y + "]", 10, 20);
+	    ctx.fillText("[" + mouseMapPos.x + ", " + mouseMapPos.y + "]", 10, 40);
+	    ctx.fillText("[" + cellPos.x + ", " + cellPos.y + "]", 10, 60);
+	    ctx.font = "15px Arial";
+	    ctx.fillText("Dimension win [" + winDim.x + ", " + winDim.y + "]", 10, 80);
+	    ctx.fillText("Dimension map [" + mapDim.x + ", " + mapDim.y + "]", 10, 100);
+	    ctx.fillText("Dimension cell [" + cellDim.x + ", " + cellDim.y + "]", 10, 120);
+	    ctx.fillText("Distance win [" + winDist.left + ", " + winDist.right + ", " + winDist.up + ", " + winDist.down + "]", 10, 140);
+	    ctx.fillText("Distance map [" + mapDist.left + ", " + mapDist.right + ", " + mapDist.up + ", " + mapDist.down + "]", 10, 160);
+	    ctx.fillText("Center [" + center.x + ", " + center.y + "]", 10, 180);
+	    ctx.fillText("Margin [" + margin.left + ", " + margin.right + ", " + margin.up + ", " + margin.down + "]", 10, 200);
+	    ctx.fillText("Coord [" + coord.left + ", " + coord.right + ", " + coord.up + ", " + coord.down + "]", 10, 220);
+	    
+	    while (i <= coord.right){
+	        ctx.moveTo(i + 0.5, coord.up);
+	        ctx.lineTo(i + 0.5, coord.down);
+	        i += cellDim.x;
+	    }
+
+	    while (j <= coord.down){
+	        ctx.moveTo(coord.left, j + 0.5);
+	        ctx.lineTo(coord.right, j + 0.5);
+	        j += cellDim.y;
+	    }
+	    
+	    ctx.stroke();
+	}
+
+	function clear() {
+	    ctx.save();
+	    ctx.beginPath();
+	    ctx.setTransform(1, 0, 0, 1, 0, 0);
+	    ctx.clearRect(0, 0, canvas.width, canvas.height);
+	    ctx.restore();
+	}
+
+	var drag = false;
+
+	canvas.addEventListener('mousemove', function(event) {
+		var rect = canvas.getBoundingClientRect();
+		
+	    mousePos = {
+	        x: Math.floor((event.clientX - rect.left) * (canvas.width / rect.width)),
+	        y: Math.floor((event.clientY - rect.top) * (canvas.height / rect.height))
+	    }
+	    
+	    mouseMapPos = {
+	    	x: mousePos.x - margin.left,
+	    	y: mousePos.y - margin.up
+	    }
+	    
+	    cellPos = {
+	    	x: Math.floor(mouseMapPos.x / cellDim.x),
+	    	y: Math.floor(mouseMapPos.y / cellDim.y)
+	    }
+	    
+	    if (drag && 0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
+	    	mapContent[cellPos.x][cellPos.y] = 1;
+	    }
+		
+	    clear();
+	    drawCellMap();
+	    
+	});
+
+	canvas.addEventListener('mousedown', function(event) {
+
+		drag = true;
+	    
+	    if (0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
+	    	mapContent[cellPos.x][cellPos.y] = 1;
+	    }
+
+	})
+
+	canvas.addEventListener('mouseup',function(event){
+
+	    drag = false;
+
+	});
+
+	canvas.addEventListener('wheel', function(event){
+
+		if (0 <= mouseMapPos.x && mouseMapPos.x < mapDim.x && 0 <= mouseMapPos.y && mouseMapPos.y < mapDim.y) { 
+	        center = {
+	            x : mouseMapPos.x,
+	            y : mouseMapPos.y
+	        }
+	    }
+	    if (mapDim.x < winDim.x && mapDim.y < winDim.y) {
+	        center = {
+	            x : Math.floor(mapDim.x / 2),
+	            y : Math.floor(mapDim.y / 2)
+	        }
+	    }
+
+	    if (event.deltaY < 0) {
+	        cellDim.x += zoomScale;
+	        cellDim.y += zoomScale;
+	        if (cellDim.x > (winDim.x / 5) || cellDim.y > (winDim.y / 5)){
+	            cellDim.x -= zoomScale;
+	            cellDim.y -= zoomScale;
+	        }
+	    }
+	    else {
+	        cellDim.x -= zoomScale;
+	        cellDim.y -= zoomScale;
+	        if (mapDim.x < winDim.x || mapDim.y < winDim.y){
+	            cellDim.x += zoomScale;
+	            cellDim.y += zoomScale;
+	        }
+	    }
+	    
+	    clear();
+		resetValues();
+	    drawCellMap();
+	    
+	    event.returnValue = false;
+	    
+	});
+
+	resetValues();
+	drawCellMap()
 
 });
