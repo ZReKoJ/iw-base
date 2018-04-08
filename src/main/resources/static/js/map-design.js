@@ -22,20 +22,15 @@ $( document ).ready(function() {
 	}
 
 	var numCell = {
-		x : 10,
-	    y : 10
+		x : 100,
+	    y : 100
 	}
 
 	var mapContent = createArray(numCell.x, numCell.y);
-	for (var i = 0; i < numCell.x; i++){
-		for (var j = 0; j < numCell.y; j++){
-	    	mapContent[i][j] = 0;
-	    }
-	}
 
 	var dragSpeed = 0.05;
 	var zoomScale = 1;
-	var lineDash = 0;
+	var lineWidth = 1;
 
 	var winDim;
 	var winCenter;
@@ -138,7 +133,7 @@ $( document ).ready(function() {
 	function drawCellMap() {
 
 	    ctx.setLineDash([lineDash, lineDash]);
-	    ctx.lineWidth = 1;
+	    ctx.lineWidth = lineWidth;
 	    ctx.strokeStyle = "gray";
 	    
 		var coord = {
@@ -151,11 +146,22 @@ $( document ).ready(function() {
 	    var i = (margin.left > 0) ? margin.left : cellDim.x - Math.abs(margin.left % cellDim.x);
 	    var j = (margin.up > 0) ? margin.up : cellDim.y - Math.abs(margin.up % cellDim.y);
 
-	    ctx.fillStyle = "#FFD519";
+	    while (i <= coord.right){
+	        ctx.moveTo(i + 0.5, coord.up);
+	        ctx.lineTo(i + 0.5, coord.down);
+	        i += cellDim.x;
+	    }
+
+	    while (j <= coord.down){
+	        ctx.moveTo(coord.left, j + 0.5);
+	        ctx.lineTo(coord.right, j + 0.5);
+	        j += cellDim.y;
+	    }
+	    
 	    for (var ii = 0; ii < numCell.x; ii++){
 	        for (var jj = 0; jj < numCell.y; jj++){
-	            if (mapContent[ii][jj] != 0) {
-	                ctx.fillRect(ii * cellDim.x + margin.left, jj * cellDim.y + margin.up, cellDim.x, cellDim.y);
+	            if (mapContent[ii][jj] != undefined) {
+	                ctx.drawImage(mapContent[ii][jj], ii * cellDim.x + margin.left, jj * cellDim.y + margin.up, cellDim.x, cellDim.y);
 	            }
 	        }
 	    }
@@ -180,17 +186,6 @@ $( document ).ready(function() {
 	    ctx.fillText("Margin [" + margin.left + ", " + margin.right + ", " + margin.up + ", " + margin.down + "]", 10, 200);
 	    ctx.fillText("Coord [" + coord.left + ", " + coord.right + ", " + coord.up + ", " + coord.down + "]", 10, 220);
 	    
-	    while (i <= coord.right){
-	        ctx.moveTo(i + 0.5, coord.up);
-	        ctx.lineTo(i + 0.5, coord.down);
-	        i += cellDim.x;
-	    }
-
-	    while (j <= coord.down){
-	        ctx.moveTo(coord.left, j + 0.5);
-	        ctx.lineTo(coord.right, j + 0.5);
-	        j += cellDim.y;
-	    }
 	    
 	    ctx.stroke();
 	}
@@ -224,7 +219,7 @@ $( document ).ready(function() {
 	    }
 	    
 	    if (drag && 0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
-	    	mapContent[cellPos.x][cellPos.y] = 1;
+	    	mapContent[cellPos.x][cellPos.y] = $('.active')[0];
 	    }
 		
 	    clear();
@@ -237,7 +232,7 @@ $( document ).ready(function() {
 		drag = true;
 	    
 	    if (0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
-	    	mapContent[cellPos.x][cellPos.y] = 1;
+	    	mapContent[cellPos.x][cellPos.y] = $('.active')[0];
 	    }
 
 	})
@@ -289,6 +284,62 @@ $( document ).ready(function() {
 	});
 
 	resetValues();
-	drawCellMap()
+	drawCellMap();
+
+    window.onresize = function(event) {
+        canvas.width = parent.width();
+        canvas.height = canvas.width;
+        grid.style.height = canvas.height + "px";
+        
+    resizeWin();
+
+	mapDim = {
+	    x : winDim.x - 10,
+	    y : winDim.y - 10,
+	};
+
+	cellDim = {
+	    x : Math.floor(mapDim.x / numCell.x),
+	    y : Math.floor(mapDim.y / numCell.y)
+	};
+	    
+	center = {
+	    x : Math.floor(mapDim.x / 2),
+	    y : Math.floor(mapDim.y / 2)
+	}
+	
+    mapDim = {
+	    x : numCell.x * cellDim.x,
+	    y : numCell.y * cellDim.y
+	}
+	
+    center = {
+	    x : Math.floor(mapDim.x / 2),
+	    y : Math.floor(mapDim.y / 2)
+	}
+    
+	resetValues();
+    drawCellMap();
+    
+    };
+
+
+	var path;
+	for (var x = 1; x < 170; x++){
+		path = "<img class='icon' src='/static/img/map/component (" + x + ").png'>";
+		$('#grid-element').append(path)
+	}
+    
+	var imgs = $('#grid-element').find('img');
+	
+	imgs.click(function(e) {
+		$(this).addClass("active"); 
+		$(this).siblings('img.icon.active').removeClass("active");
+	});
+	
+	imgs.mouseover(function(){
+		$(this).attr("style", "border: 2px solid white");
+		$(this).siblings('img.icon').removeAttr( "style" );
+	});
 
 });

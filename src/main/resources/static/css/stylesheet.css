@@ -240,17 +240,24 @@ label{
 }
 
 #grid-element {
-  display: inline-block;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  width: 30%;
-  height: 100%;
-  float: right
-  zoom: 1;
+	padding: 10px;
+	display: inline-block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 30%;
+	height: 100%;
+	float: right;
+	background-color: black;
 }
 
 .map-content {
-  float : right;
-  width: 70%;
-  height: 100%;
+	float : right;
+	width: 70%;
+	height: 100%;
+}
+
+
+
+.active {
+    border: 2px solid red;
 }
