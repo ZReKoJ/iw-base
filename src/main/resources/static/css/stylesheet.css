@@ -256,6 +256,6 @@ label{
 	height: 100%;
 }
 
-.active {
+.selected {
     border: 2px solid red;
 }

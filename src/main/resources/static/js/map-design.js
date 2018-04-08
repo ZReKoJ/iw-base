@@ -222,7 +222,7 @@ $( document ).ready(function() {
 	    }
 	    
 	    if (drag && 0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
-	    	mapContent[cellPos.x][cellPos.y] = $('.active')[0];
+	    	mapContent[cellPos.x][cellPos.y] = $('.selected')[0];
 	    }
 		
 	    clear();
@@ -235,7 +235,7 @@ $( document ).ready(function() {
 		drag = true;
 	    
 	    if (0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
-	    	mapContent[cellPos.x][cellPos.y] = $('.active')[0];
+	    	mapContent[cellPos.x][cellPos.y] = $('.selected')[0];
 	    }
 
 	})
@@ -333,8 +333,8 @@ $( document ).ready(function() {
 	var imgs = $('#grid-element').find('img');
 	
 	imgs.click(function(e) {
-		$(this).addClass("active"); 
-		$(this).siblings('img.icon.active').removeClass("active");
+		$(this).addClass("selected"); 
+		$(this).siblings('img.icon.selected').removeClass("selected");
 	});
 	
 	imgs.mouseover(function(){
