@@ -30,7 +30,8 @@ $( document ).ready(function() {
 
 	var dragSpeed = 0.05;
 	var zoomScale = 1;
-	var lineWidth = 1;
+	var moveScale = 5;
+	var lineWidth = 0;
 
 	var winDim;
 	var winCenter;
@@ -102,17 +103,19 @@ $( document ).ready(function() {
 
 	function resetValues() {
 	    
+    	var operation = {
+        	x : mapDim.x,
+            y : mapDim.y
+        }
+	    
 	    mapDim = {
 	        x : numCell.x * cellDim.x,
 	        y : numCell.y * cellDim.y
 	    }
 	    
-	    lineDash = (mapDim.x < winDim.x || mapDim.y < winDim.y) ? 0 : 1; 
-	    
-	    center = {
-	        x : Math.floor(mapDim.x / 2),
-	        y : Math.floor(mapDim.y / 2)
-	    }
+	    lineWidth = (mapDim.x < winDim.x || mapDim.y < winDim.y) ? 0 : 1; 
+        center.x = Math.floor(mapDim.x * center.x / operation.x);
+        center.y = Math.floor(mapDim.y * center.y / operation.y);
 	    
 	    mapDist = {
 	        left : center.x,
@@ -132,8 +135,8 @@ $( document ).ready(function() {
 
 	function drawCellMap() {
 
-	    ctx.setLineDash([lineDash, lineDash]);
-	    ctx.lineWidth = lineWidth;
+	    ctx.setLineDash([lineWidth, lineWidth]);
+	    ctx.lineWidth = 1;
 	    ctx.strokeStyle = "gray";
 	    
 		var coord = {
@@ -245,38 +248,35 @@ $( document ).ready(function() {
 
 	canvas.addEventListener('wheel', function(event){
 
-		if (0 <= mouseMapPos.x && mouseMapPos.x < mapDim.x && 0 <= mouseMapPos.y && mouseMapPos.y < mapDim.y) { 
-	        center = {
-	            x : mouseMapPos.x,
-	            y : mouseMapPos.y
-	        }
-	    }
-	    if (mapDim.x < winDim.x && mapDim.y < winDim.y) {
-	        center = {
-	            x : Math.floor(mapDim.x / 2),
-	            y : Math.floor(mapDim.y / 2)
-	        }
-	    }
-
-	    if (event.deltaY < 0) {
-	        cellDim.x += zoomScale;
-	        cellDim.y += zoomScale;
-	        if (cellDim.x > (winDim.x / 5) || cellDim.y > (winDim.y / 5)){
-	            cellDim.x -= zoomScale;
-	            cellDim.y -= zoomScale;
-	        }
-	    }
-	    else {
-	        cellDim.x -= zoomScale;
-	        cellDim.y -= zoomScale;
-	        if (mapDim.x < winDim.x || mapDim.y < winDim.y){
-	            cellDim.x += zoomScale;
-	            cellDim.y += zoomScale;
-	        }
-	    }
+		var horizontal = mousePos.x - winCenter.x;
+		var vertical = mousePos.y - winCenter.y;
+        
+		if (Math.abs(horizontal) < winCenter.x * 0.6 && Math.abs(vertical) < winCenter.y * 0.6){
+            if (event.deltaY < 0) {
+                cellDim.x += zoomScale;
+                cellDim.y += zoomScale;
+                if (cellDim.x > (winDim.x / 10) || cellDim.y > (winDim.y / 10)){
+                    cellDim.x -= zoomScale;
+                    cellDim.y -= zoomScale;
+                }
+            }
+            else {
+                cellDim.x -= zoomScale;
+                cellDim.y -= zoomScale;
+                if (mapDim.x < winDim.x || mapDim.y < winDim.y){
+                    cellDim.x += zoomScale;
+                    cellDim.y += zoomScale;
+                }
+            }
+        }
+        else {
+        	var zoomValue = (event.deltaY < 0) ? moveScale : moveScale * -1;
+            center.x += (horizontal > 0) ? zoomValue : zoomValue * -1;
+            center.y += (vertical > 0) ? zoomValue : zoomValue * -1;
+        }
 	    
-	    clear();
-		resetValues();
+        clear();
+        resetValues();
 	    drawCellMap();
 	    
 	    event.returnValue = false;
