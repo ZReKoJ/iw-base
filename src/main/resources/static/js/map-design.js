@@ -5,9 +5,11 @@ $( document ).ready(function() {
 	var parent = $(canvas).parent();
 	var grid = document.getElementById("grid-element");
 
-	canvas.width = parent.width();
-	canvas.height = canvas.width;
-	grid.style.height = canvas.height + "px";
+	function canvasSize(){
+		canvas.width = parent.width();
+		canvas.height = parent.width();
+		grid.style.height = canvas.height + "px";
+	}
 
 	function createArray(length) {
 	    var arr = new Array(length || 0),
@@ -41,7 +43,7 @@ $( document ).ready(function() {
 	    
 	    winDim = {
 	        x : canvas.width,
-	        y : canvas.height
+	        y : canvas.width
 	    }
 
 	    winCenter = {
@@ -58,29 +60,33 @@ $( document ).ready(function() {
 
 	}
 
-	resizeWin();
-
-	var mapDim = {
-	    x : winDim.x - 10,
-	    y : winDim.y - 10,
-	};
-
-	var cellDim = {
-	    x : Math.floor(mapDim.x / numCell.x),
-	    y : Math.floor(mapDim.y / numCell.y)
-	};
-	    
-	var center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
-	}
-	mapDim = {
-	    x : numCell.x * cellDim.x,
-	    y : numCell.y * cellDim.y
-	}
-	center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
+	var mapDim;
+	var cellDim;
+	var center;
+	
+	function initValues() {
+		mapDim = {
+		    x : winDim.x - 10,
+		    y : winDim.y - 10,
+		};
+	
+		cellDim = {
+		    x : Math.floor(mapDim.x / numCell.x),
+		    y : Math.floor(mapDim.y / numCell.y)
+		};
+		    
+		center = {
+		    x : Math.floor(mapDim.x / 2),
+		    y : Math.floor(mapDim.y / 2)
+		}
+		mapDim = {
+		    x : numCell.x * cellDim.x,
+		    y : numCell.y * cellDim.y
+		}
+		center = {
+		    x : Math.floor(mapDim.x / 2),
+		    y : Math.floor(mapDim.y / 2)
+		}
 	}
 
 	var mapDist;
@@ -283,46 +289,15 @@ $( document ).ready(function() {
 	    
 	});
 
-	resetValues();
-	drawCellMap();
+	window.onresize = function() {
 
-    window.onresize = function(event) {
-        canvas.width = parent.width();
-        canvas.height = canvas.width;
-        grid.style.height = canvas.height + "px";
-        
-    resizeWin();
-
-	mapDim = {
-	    x : winDim.x - 10,
-	    y : winDim.y - 10,
-	};
-
-	cellDim = {
-	    x : Math.floor(mapDim.x / numCell.x),
-	    y : Math.floor(mapDim.y / numCell.y)
-	};
-	    
-	center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
-	}
-	
-    mapDim = {
-	    x : numCell.x * cellDim.x,
-	    y : numCell.y * cellDim.y
-	}
-	
-    center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
-	}
-    
-	resetValues();
-    drawCellMap();
+    	canvasSize();
+	    resizeWin();
+		initValues();
+		resetValues();
+	    drawCellMap();
     
     };
-
 
 	var path;
 	for (var x = 1; x < 170; x++){
@@ -341,5 +316,11 @@ $( document ).ready(function() {
 		$(this).attr("style", "border: 2px solid white");
 		$(this).siblings('img.icon').removeAttr( "style" );
 	});
+
+	canvasSize();
+    resizeWin();
+	initValues();
+	resetValues();
+    drawCellMap();
 
 });

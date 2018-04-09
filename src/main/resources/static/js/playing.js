@@ -4,8 +4,10 @@ $( document ).ready(function() {
 	var ctx = canvas.getContext("2d");
 	var parent = $(canvas).parent();
 
-	canvas.width = parent.width();
-	canvas.height = canvas.width;
+	function canvasSize(){
+		canvas.width = parent.width();
+		canvas.height = parent.width();
+	}
 
 	function createArray(length) {
 	    var arr = new Array(length || 0),
@@ -39,7 +41,7 @@ $( document ).ready(function() {
 	    
 	    winDim = {
 	        x : canvas.width,
-	        y : canvas.height
+	        y : canvas.width
 	    }
 
 	    winCenter = {
@@ -56,29 +58,33 @@ $( document ).ready(function() {
 
 	}
 
-	resizeWin();
-
-	var mapDim = {
-	    x : winDim.x - 10,
-	    y : winDim.y - 10,
-	};
-
-	var cellDim = {
-	    x : Math.floor(mapDim.x / numCell.x),
-	    y : Math.floor(mapDim.y / numCell.y)
-	};
-	    
-	var center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
-	}
-	mapDim = {
-	    x : numCell.x * cellDim.x,
-	    y : numCell.y * cellDim.y
-	}
-	center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
+	var mapDim;
+	var cellDim;
+	var center;
+	
+	function initValues() {
+		mapDim = {
+		    x : winDim.x - 10,
+		    y : winDim.y - 10,
+		};
+	
+		cellDim = {
+		    x : Math.floor(mapDim.x / numCell.x),
+		    y : Math.floor(mapDim.y / numCell.y)
+		};
+		    
+		center = {
+		    x : Math.floor(mapDim.x / 2),
+		    y : Math.floor(mapDim.y / 2)
+		}
+		mapDim = {
+		    x : numCell.x * cellDim.x,
+		    y : numCell.y * cellDim.y
+		}
+		center = {
+		    x : Math.floor(mapDim.x / 2),
+		    y : Math.floor(mapDim.y / 2)
+		}
 	}
 
 	var mapDist;
@@ -173,6 +179,22 @@ $( document ).ready(function() {
 	        ctx.fillRect(cellPos.x * cellDim.x + margin.left, cellPos.y * cellDim.y + margin.up, cellDim.x, cellDim.y);
 	    }
 		  
+	    ctx.fillStyle = "white";
+	    ctx.font = "20px Arial";
+	    ctx.fillText("[" + mousePos.x + ", " + mousePos.y + "]", 10, 20);
+	    ctx.fillText("[" + mouseMapPos.x + ", " + mouseMapPos.y + "]", 10, 40);
+	    ctx.fillText("[" + cellPos.x + ", " + cellPos.y + "]", 10, 60);
+	    ctx.font = "15px Arial";
+	    ctx.fillText("Dimension win [" + winDim.x + ", " + winDim.y + "]", 10, 80);
+	    ctx.fillText("Dimension map [" + mapDim.x + ", " + mapDim.y + "]", 10, 100);
+	    ctx.fillText("Dimension cell [" + cellDim.x + ", " + cellDim.y + "]", 10, 120);
+	    ctx.fillText("Distance win [" + winDist.left + ", " + winDist.right + ", " + winDist.up + ", " + winDist.down + "]", 10, 140);
+	    ctx.fillText("Distance map [" + mapDist.left + ", " + mapDist.right + ", " + mapDist.up + ", " + mapDist.down + "]", 10, 160);
+	    ctx.fillText("Center [" + center.x + ", " + center.y + "]", 10, 180);
+	    ctx.fillText("Margin [" + margin.left + ", " + margin.right + ", " + margin.up + ", " + margin.down + "]", 10, 200);
+	    ctx.fillText("Coord [" + coord.left + ", " + coord.right + ", " + coord.up + ", " + coord.down + "]", 10, 220);
+	    
+	    
 	    ctx.stroke();
 	}
 
@@ -266,45 +288,32 @@ $( document ).ready(function() {
 	    
 	});
 
-	resetValues();
-	drawCellMap();
+	window.onresize = function() {
 
-    window.onresize = function(event) {
-        canvas.width = parent.width();
-        canvas.height = canvas.width;
-        grid.style.height = canvas.height + "px";
-        
-    resizeWin();
-
-	mapDim = {
-	    x : winDim.x - 10,
-	    y : winDim.y - 10,
-	};
-
-	cellDim = {
-	    x : Math.floor(mapDim.x / numCell.x),
-	    y : Math.floor(mapDim.y / numCell.y)
-	};
-	    
-	center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
-	}
-	
-    mapDim = {
-	    x : numCell.x * cellDim.x,
-	    y : numCell.y * cellDim.y
-	}
-	
-    center = {
-	    x : Math.floor(mapDim.x / 2),
-	    y : Math.floor(mapDim.y / 2)
-	}
-    
-	resetValues();
-    drawCellMap();
+    	canvasSize();
+	    resizeWin();
+		initValues();
+		resetValues();
+	    drawCellMap();
     
     };
+	/*
+	function fullscreen(){
+	    
+		if(canvas.webkitRequestFullScreen) {
+			canvas.webkitRequestFullScreen();
+		}
+		else {
+			canvas.mozRequestFullScreen();
+		}
+	}
 
+	canvas.addEventListener("click", fullscreen);
+*/
+	canvasSize();
+    resizeWin();
+	initValues();
+	resetValues();
+    drawCellMap();
 
 });
