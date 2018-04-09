@@ -5,11 +5,9 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <%@ include file="../jspf/header.jspf"%>
+<script src="${s}/js/playing.js"></script>
 
 <div class="jumbotron">
-	<h1 class="display-4">Lorenzo vs Zihao</h1>
-	<hr class="my-4">
-
 	<div class="row">
 		<div class="col-sm-3 card no_margin">
 		  		<div class="card-body">
@@ -30,7 +28,7 @@
 		  		
 			</div>
 		<div class="col-sm-6">
-			<img class="map" src=${s}/img/Forgotten-Crypt-Battle-Map.jpg></img>
+            <canvas id="mapBuilder"></canvas>
 		</div>
 		<div class="col-sm-3 card no_margin">
 		  		<div class="card-body">
