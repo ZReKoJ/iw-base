@@ -41,9 +41,9 @@ $( document ).ready(function() {
 
 	function resizeWin() {
 	    
-	    winDim = {
+		winDim = {
 	        x : canvas.width,
-	        y : canvas.width
+	        y : canvas.height
 	    }
 
 	    winCenter = {
@@ -66,8 +66,8 @@ $( document ).ready(function() {
 	
 	function initValues() {
 		mapDim = {
-		    x : winDim.x - 10,
-		    y : winDim.y - 10,
+		    x : Math.min(winDim.x - 10, winDim.y - 10),
+		    y : Math.min(winDim.x - 10, winDim.y - 10),
 		};
 	
 		cellDim = {

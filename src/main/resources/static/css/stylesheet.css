@@ -63,18 +63,20 @@ body{
 .no_margin{
 	margin:0;
 }
+
 h1{
 	text-align:center;
 }
+
 h2{
 	text-align:center;
 }
 
 .winner{
-	color:green;
+	color: green;
 }
 .loser{
-	color:red;
+	color: red;
 }
 
 .max_width{

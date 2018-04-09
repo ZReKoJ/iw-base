@@ -4,9 +4,20 @@ $( document ).ready(function() {
 	var ctx = canvas.getContext("2d");
 	var parent = $(canvas).parent();
 
+	var fullScreen = false;
+	
 	function canvasSize(){
-		canvas.width = parent.width();
-		canvas.height = parent.width();
+		
+		if (fullScreen){
+			canvas.width  = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+		else {
+			canvas.width = parent.width();
+			canvas.height = parent.width();
+		}
+		
+		fullScreen = false;
 	}
 
 	function createArray(length) {
@@ -41,7 +52,7 @@ $( document ).ready(function() {
 	    
 	    winDim = {
 	        x : canvas.width,
-	        y : canvas.width
+	        y : canvas.height
 	    }
 
 	    winCenter = {
@@ -63,9 +74,10 @@ $( document ).ready(function() {
 	var center;
 	
 	function initValues() {
+		
 		mapDim = {
-		    x : winDim.x - 10,
-		    y : winDim.y - 10,
+		    x : Math.max(winDim.x - 10, winDim.y - 10),
+		    y : Math.max(winDim.x - 10, winDim.y - 10),
 		};
 	
 		cellDim = {
@@ -193,6 +205,8 @@ $( document ).ready(function() {
 	    ctx.fillText("Center [" + center.x + ", " + center.y + "]", 10, 180);
 	    ctx.fillText("Margin [" + margin.left + ", " + margin.right + ", " + margin.up + ", " + margin.down + "]", 10, 200);
 	    ctx.fillText("Coord [" + coord.left + ", " + coord.right + ", " + coord.up + ", " + coord.down + "]", 10, 220);
+	    ctx.fillText("Canvas [" + canvas.width +", " + canvas.height + "]", 10, 240);
+	    ctx.fillText("Windows Screen [" + window.innerWidth +", " + window.innerHeight + "]", 10, 260);
 	    
 	    
 	    ctx.stroke();
@@ -289,7 +303,6 @@ $( document ).ready(function() {
 	});
 
 	window.onresize = function() {
-
     	canvasSize();
 	    resizeWin();
 		initValues();
@@ -297,7 +310,7 @@ $( document ).ready(function() {
 	    drawCellMap();
     
     };
-	/*
+	
 	function fullscreen(){
 	    
 		if(canvas.webkitRequestFullScreen) {
@@ -306,10 +319,13 @@ $( document ).ready(function() {
 		else {
 			canvas.mozRequestFullScreen();
 		}
+		
+		fullScreen = true;
+		
 	}
 
-	canvas.addEventListener("click", fullscreen);
-*/
+	document.getElementById("full-screen").addEventListener("click", fullscreen);
+
 	canvasSize();
     resizeWin();
 	initValues();
