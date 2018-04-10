@@ -300,8 +300,8 @@ $( document ).ready(function() {
     };
 
 	var path;
-	for (var x = 1; x < 170; x++){
-		path = "<img class='icon' src='/static/img/map/component (" + x + ").png'>";
+	for (var x = 1; x < 324; x++){
+		path = "<img class='icon' src='/static/img/map2/component (" + x + ").png'>";
 		$('#grid-element').append(path)
 	}
     
