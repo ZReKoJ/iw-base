@@ -103,50 +103,50 @@ function setCanvasSize(canvas, width, height){
 	canvas.height = height;
 }
 
+function defineCellStatus(cellNumber, windowStatus) {
+	let status = {
+		number: undefined,
+		dimension: undefined
+	}
+	
+	status.number = {
+		x: cellNumber.x,
+		y: cellNumber.y
+	}
+	
+	status.dimension = {
+		width : Math.floor(windowStatus.dimension.width / status.number.x),
+	    height : Math.floor(windowStatus.dimension.height / status.number.y)
+	}
+	
+	return status;
+}
+
 function defineWindowStatus(width, height) {
-	let windowStatus = {
+	let status = {
 		dimension: undefined,
 		center: undefined,
 		margin: undefined
 	}
 
-	windowStatus.dimension = {
+	status.dimension = {
 		width: width,
 		height: height
 	}
 	
-	windowStatus.center = {
-		x: Math.floor(windowStatus.dimension.width / 2),
-		y: Math.floor(windowStatus.dimension.height / 2)
+	status.center = {
+		x: Math.floor(status.dimension.width / 2),
+		y: Math.floor(status.dimension.height / 2)
 	}
 	
-	windowStatus.margin = {
-		left: windowStatus.center.x,
-		right: windowStatus.dimension.width - windowStatus.center.x,
-		top: windowStatus.center.y,
-		down: windowStatus.dimension.height - windowStatus.center.y
+	status.margin = {
+		left: status.center.x,
+		right: status.dimension.width - status.center.x,
+		top: status.center.y,
+		down: status.dimension.height - status.center.y
 	}
 	
-	return windowStatus;
-}
-
-function createCellStatus(cellNumber, windowStatus) {
-	let cellStatus = {
-		number: undefined,
-		dimension: undefined
-	}
-	
-	number = {
-		x: cellNumber.x,
-		y: cellNumber.y
-	}
-	
-	dimension = {
-		width : Math.floor(windowStatus.dimension.width / cellStatus.number.x),
-	    height : Math.floor(windowStatus.dimension.height / cellStatus.number.y)
-	}
-	
-	return cellStatus;
+	return status;
 }
 
 /**
@@ -156,30 +156,110 @@ function createCellStatus(cellNumber, windowStatus) {
  * @returns
  */
 function defineMapStatus(cellStatus, dimensionStatus){
-	let mapStatus = {
+	let status = {
 		dimension: undefined,
 		center: undefined,
-		margin: undefined,
+		margin: undefined
 	}
 	
-	mapStatus.dimension = {
+	status.dimension = {
 		width: cellStatus.number.x * cellStatus.dimension.width,
-		heigh: cellStatus.number.y * cellStatus.dimension.height
+		height: cellStatus.number.y * cellStatus.dimension.height
 	}
 	
-	mapStatus.center = {
-		x: Math.floor(mapStatus.dimension.width * dimensionStatus.center.x / dimensionStatus.dimension.width),
-		y: Math.floor(mapStatus.dimension.height * dimensionStatus.center.y / dimensionStatus.dimension.height)
+	status.center = {
+		x: Math.floor(status.dimension.width * dimensionStatus.center.x / dimensionStatus.dimension.width),
+		y: Math.floor(status.dimension.height * dimensionStatus.center.y / dimensionStatus.dimension.height)
 	}
 	
-	mapStatus.margin = {
-		left: mapStatus.center.x,
-		right: mapStatus.dimension.width - mapStatus.center.x,
-		top: mapStatus.center.y,
-		down: mapStatus.dimension.height - mapStatus.center.y
+	status.margin = {
+		left: status.center.x,
+		right: status.dimension.width - status.center.x,
+		top: status.center.y,
+		down: status.dimension.height - status.center.y
 	}
 	
-	return mapStatus;
+	return status;
+}
+
+function defineMapFeature(mapStatus, windowStatus){
+	let feature = {
+		zoomScale: 1,
+		moveScale: 5,
+		lineDash: 0,
+		lineWidth: 1,
+		margin: undefined
+	}
+	
+	feature.lineDash = (mapStatus.dimension.width < windowStatus.dimension.width || mapStatus.dimension.height < windowStatus.dimension.height) ? 0 : 1; 
+
+	feature.margin = {
+        left : windowStatus.margin.left - mapStatus.margin.left,
+        right : windowStatus.margin.right - mapStatus.margin.right,
+        top : windowStatus.margin.top - mapStatus.margin.top,
+        down : windowStatus.margin.down - mapStatus.margin.down
+    }
+	
+	return feature;
+}
+
+function drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature, mapContent) {
+
+    ctx.setLineDash([mapFeature.lineDash, mapFeature.lineDash]);
+    ctx.lineWidth = mapFeature.lineWidth;
+    ctx.strokeStyle = "gray";
+    
+	let coord = {
+    	left : (mapFeature.margin.left > 0) ? mapFeature.margin.left : 0,
+        right : (mapFeature.margin.right > 0) ? windowStatus.dimension.width - mapFeature.margin.right : windowStatus.dimension.width,
+		up : (mapFeature.margin.top > 0) ? mapFeature.margin.top : 0,
+        down : (mapFeature.margin.down > 0) ? windowStatus.dimension.height - mapFeature.margin.down : windowStatus.dimension.height
+	}
+    
+    let i = (mapFeature.margin.left > 0) ? mapFeature.margin.left : cellStatus.dimension.width - Math.abs(mapFeature.margin.left % cellStatus.dimension.width);
+    let j = (mapFeature.margin.top > 0) ? mapFeature.margin.top : cellStatus.dimension.height - Math.abs(mapFeature.margin.top % cellStatus.dimension.height);
+
+    while (i <= coord.right){
+        ctx.moveTo(i + 0.5, coord.up);
+        ctx.lineTo(i + 0.5, coord.down);
+        i += cellStatus.dimension.width;
+    }
+
+    while (j <= coord.down){
+        ctx.moveTo(coord.left, j + 0.5);
+        ctx.lineTo(coord.right, j + 0.5);
+        j += cellStatus.dimension.height;
+    }
+    
+    for (let ii = 0; ii < cellStatus.number.x; ii++){
+        for (let jj = 0; jj < cellStatus.number.y; jj++){
+            if (mapContent[ii][jj] != undefined) {
+                ctx.drawImage(mapContent[ii][jj], ii * cellStatus.dimension.width + mapFeature.margin.left, jj * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
+            }
+        }
+    }
+
+    /*ctx.fillStyle = "#00FFEE";
+	if (0 <= cellPos.x && cellPos.x < cellStatus.number.x && 0 <= cellPos.y && cellPos.y < cellStatus.number.y) {
+        ctx.fillRect(cellPos.x * cellStatus.dimension.width + mapFeature.margin.left, cellPos.y * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
+    }*/
+	/*
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText("[" + mousePos.x + ", " + mousePos.y + "]", 10, 20);
+    ctx.fillText("[" + mouseMapPos.x + ", " + mouseMapPos.y + "]", 10, 40);
+    ctx.fillText("[" + cellPos.x + ", " + cellPos.y + "]", 10, 60);
+    ctx.font = "15px Arial";
+    ctx.fillText("Dimension win [" + windowStatus.dimension.width + ", " + windowStatus.dimension.height + "]", 10, 80);
+    ctx.fillText("Dimension map [" + mapStatus.dimension.width + ", " + mapStatus.dimension.height + "]", 10, 100);
+    ctx.fillText("Dimension cell [" + cellStatus.dimension.width + ", " + cellStatus.dimension.height + "]", 10, 120);
+    ctx.fillText("Distance win [" + windowStatus.margin.left + ", " + windowStatus.margin.right + ", " + windowStatus.margin.top + ", " + windowStatus.margin.down + "]", 10, 140);
+    ctx.fillText("Distance map [" + mapStatus.margin.left + ", " + mapStatus.margin.right + ", " + mapStatus.margin.top + ", " + mapStatus.margin.down + "]", 10, 160);
+    ctx.fillText("Center [" + mapStatus.center.x + ", " + mapStatus.center.y + "]", 10, 180);
+    ctx.fillText("Margin [" + mapFeature.margin.left + ", " + mapFeature.margin.right + ", " + mapFeature.margin.top + ", " + mapFeature.margin.down + "]", 10, 200);
+    ctx.fillText("Coord [" + coord.left + ", " + coord.right + ", " + coord.up + ", " + coord.down + "]", 10, 220);
+    */
+    ctx.stroke();
 }
 
 function mapDesign() {
@@ -198,44 +278,12 @@ function mapDesign() {
 		x : 100,
 	    y : 100
 	}
-
-	let mapContent = createArray(numCell.x, numCell.y);
-
-	let dragSpeed = 0.05;
-	let zoomScale = 1;
-	let moveScale = 5;
-	let lineWidth = 0;
-
+	
 	let windowStatus = defineWindowStatus(canvas.width, canvas.height);
 	let cellStatus = defineCellStatus(numCell, windowStatus);
-
-	let mapDim;
-	let cellDim;
-	let center;
-	
-	function initValues() {
-		
-		cellStatus = defineCellStatus(numCell, windowStatus);
-		let mapStatus = defineMapStatus(cellStatus, windowStatus);
-		
-		mapDim = {
-		    x : mapStatus.dimension.width,
-		    y : mapStatus.dimension.height
-		};
-	
-		cellDim = {
-		    x : cellStatus.dimension.width,
-		    y : cellStatus.dimension.height
-		};
-		    
-		center = {
-		    x : mapStatus.center.x,
-		    y :  mapStatus.center.y
-		}
-	}
-
-	let mapDist;
-	let margin;
+	let mapStatus = defineMapStatus(cellStatus, windowStatus);
+	let mapFeature = defineMapFeature(mapStatus, windowStatus);
+	let mapContent = createArray(cellStatus.number.x, cellStatus.number.y);
 
 	let mousePos = {
 		x : "x",
@@ -251,99 +299,7 @@ function mapDesign() {
 		x : "x",
 	    y : "y"
 	}
-
-	function resetValues() {
-	    
-    	let operation = {
-        	x : mapDim.x,
-            y : mapDim.y
-        }
-	    
-	    mapDim = {
-	        x : numCell.x * cellDim.x,
-	        y : numCell.y * cellDim.y
-	    }
-	    
-	    lineWidth = (mapDim.x < windowStatus.dimension.width || mapDim.y < windowStatus.dimension.height) ? 0 : 1; 
-        center.x = Math.floor(mapDim.x * center.x / operation.x);
-        center.y = Math.floor(mapDim.y * center.y / operation.y);
-	    
-	    mapDist = {
-	        left : center.x,
-	        right : mapDim.x - center.x,
-	        up : center.y,
-	        down : mapDim.y - center.y
-	    }
-
-	    margin = {
-	        left : windowStatus.margin.left - mapDist.left,
-	        right : windowStatus.margin.right - mapDist.right,
-	        up : windowStatus.margin.top - mapDist.up,
-	        down : windowStatus.margin.down - mapDist.down
-	    }
-
-	}
-
-	function drawCellMap() {
-
-	    ctx.setLineDash([lineWidth, lineWidth]);
-	    ctx.lineWidth = 1;
-	    ctx.strokeStyle = "gray";
-	    
-		let coord = {
-	    	left : (margin.left > 0) ? margin.left : 0,
-	        right : (margin.right > 0) ? windowStatus.dimension.width - margin.right : windowStatus.dimension.width,
-			up : (margin.up > 0) ? margin.up : 0,
-	        down : (margin.down > 0) ? windowStatus.dimension.height - margin.down : windowStatus.dimension.height
-		}
-	    
-	    let i = (margin.left > 0) ? margin.left : cellDim.x - Math.abs(margin.left % cellDim.x);
-	    let j = (margin.up > 0) ? margin.up : cellDim.y - Math.abs(margin.up % cellDim.y);
-
-	    while (i <= coord.right){
-	        ctx.moveTo(i + 0.5, coord.up);
-	        ctx.lineTo(i + 0.5, coord.down);
-	        i += cellDim.x;
-	    }
-
-	    while (j <= coord.down){
-	        ctx.moveTo(coord.left, j + 0.5);
-	        ctx.lineTo(coord.right, j + 0.5);
-	        j += cellDim.y;
-	    }
-	    
-	    for (let ii = 0; ii < numCell.x; ii++){
-	        for (let jj = 0; jj < numCell.y; jj++){
-	            if (mapContent[ii][jj] != undefined) {
-	                ctx.drawImage(mapContent[ii][jj], ii * cellDim.x + margin.left, jj * cellDim.y + margin.up, cellDim.x, cellDim.y);
-	            }
-	        }
-	    }
-
-	    ctx.fillStyle = "#00FFEE";
-		if (0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y) {
-	        ctx.fillRect(cellPos.x * cellDim.x + margin.left, cellPos.y * cellDim.y + margin.up, cellDim.x, cellDim.y);
-	    }
-		  
-	    ctx.fillStyle = "white";
-	    ctx.font = "20px Arial";
-	    ctx.fillText("[" + mousePos.x + ", " + mousePos.y + "]", 10, 20);
-	    ctx.fillText("[" + mouseMapPos.x + ", " + mouseMapPos.y + "]", 10, 40);
-	    ctx.fillText("[" + cellPos.x + ", " + cellPos.y + "]", 10, 60);
-	    ctx.font = "15px Arial";
-	    ctx.fillText("Dimension win [" + windowStatus.dimension.width + ", " + windowStatus.dimension.height + "]", 10, 80);
-	    ctx.fillText("Dimension map [" + mapDim.x + ", " + mapDim.y + "]", 10, 100);
-	    ctx.fillText("Dimension cell [" + cellDim.x + ", " + cellDim.y + "]", 10, 120);
-	    ctx.fillText("Distance win [" + windowStatus.margin.left + ", " + windowStatus.margin.right + ", " + windowStatus.margin.top + ", " + windowStatus.margin.down + "]", 10, 140);
-	    ctx.fillText("Distance map [" + mapDist.left + ", " + mapDist.right + ", " + mapDist.up + ", " + mapDist.down + "]", 10, 160);
-	    ctx.fillText("Center [" + center.x + ", " + center.y + "]", 10, 180);
-	    ctx.fillText("Margin [" + margin.left + ", " + margin.right + ", " + margin.up + ", " + margin.down + "]", 10, 200);
-	    ctx.fillText("Coord [" + coord.left + ", " + coord.right + ", " + coord.up + ", " + coord.down + "]", 10, 220);
-	    
-	    
-	    ctx.stroke();
-	}
-
+	
 	function clear() {
 	    ctx.save();
 	    ctx.beginPath();
@@ -363,21 +319,21 @@ function mapDesign() {
 	    }
 	    
 	    mouseMapPos = {
-	    	x: mousePos.x - margin.left,
-	    	y: mousePos.y - margin.up
+	    	x: mousePos.x - mapFeature.margin.left,
+	    	y: mousePos.y - mapFeature.margin.top
 	    }
 	    
 	    cellPos = {
-	    	x: Math.floor(mouseMapPos.x / cellDim.x),
-	    	y: Math.floor(mouseMapPos.y / cellDim.y)
+	    	x: Math.floor(mouseMapPos.x / cellStatus.dimension.width),
+	    	y: Math.floor(mouseMapPos.y / cellStatus.dimension.height)
 	    }
 	    
-	    if (drag && 0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
+	    if (drag && 0 <= cellPos.x && cellPos.x < cellStatus.number.x && 0 <= cellPos.y && cellPos.y < cellStatus.number.y){
 	    	mapContent[cellPos.x][cellPos.y] = $('.selected')[0];
 	    }
 		
 	    clear();
-	    drawCellMap();
+	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature, mapContent);
 	    
 	});
 
@@ -385,7 +341,7 @@ function mapDesign() {
 
 		drag = true;
 	    
-	    if (0 <= cellPos.x && cellPos.x < numCell.x && 0 <= cellPos.y && cellPos.y < numCell.y){
+	    if (0 <= cellPos.x && cellPos.x < cellStatus.number.x && 0 <= cellPos.y && cellPos.y < cellStatus.number.y){
 	    	mapContent[cellPos.x][cellPos.y] = $('.selected')[0];
 	    }
 
@@ -404,31 +360,32 @@ function mapDesign() {
         
 		if (Math.abs(horizontal) < windowStatus.center.x * 0.6 && Math.abs(vertical) < windowStatus.center.y * 0.6){
             if (event.deltaY < 0) {
-                cellDim.x += zoomScale;
-                cellDim.y += zoomScale;
-                if (cellDim.x > (windowStatus.dimension.width / 10) || cellDim.y > (windowStatus.dimension.height / 10)){
-                    cellDim.x -= zoomScale;
-                    cellDim.y -= zoomScale;
+                cellStatus.dimension.width += mapFeature.zoomScale;
+                cellStatus.dimension.height += mapFeature.zoomScale;
+                if (cellStatus.dimension.width > (windowStatus.dimension.width / 10) || cellStatus.dimension.height > (windowStatus.dimension.height / 10)){
+                    cellStatus.dimension.width -= mapFeature.zoomScale;
+                    cellStatus.dimension.height -= mapFeature.zoomScale;
                 }
             }
             else {
-                cellDim.x -= zoomScale;
-                cellDim.y -= zoomScale;
-                if (mapDim.x < windowStatus.dimension.width || mapDim.y < windowStatus.dimension.height){
-                    cellDim.x += zoomScale;
-                    cellDim.y += zoomScale;
+                cellStatus.dimension.width -= mapFeature.zoomScale;
+                cellStatus.dimension.height -= mapFeature.zoomScale;
+                if (mapStatus.dimension.width < windowStatus.dimension.width || mapStatus.dimension.height < windowStatus.dimension.height){
+                    cellStatus.dimension.width += mapFeature.zoomScale;
+                    cellStatus.dimension.height += mapFeature.zoomScale;
                 }
             }
         }
         else {
-        	let zoomValue = (event.deltaY < 0) ? moveScale : moveScale * -1;
-            center.x += (horizontal > 0) ? zoomValue : zoomValue * -1;
-            center.y += (vertical > 0) ? zoomValue : zoomValue * -1;
+        	let zoomValue = (event.deltaY < 0) ? mapFeature.moveScale : mapFeature.moveScale * -1;
+        	mapStatus.center.x += (horizontal > 0) ? zoomValue : zoomValue * -1;
+        	mapStatus.center.y += (vertical > 0) ? zoomValue : zoomValue * -1;
         }
 	    
         clear();
-        resetValues();
-	    drawCellMap();
+        mapStatus = defineMapStatus(cellStatus, mapStatus);
+    	mapFeature = defineMapFeature(mapStatus, windowStatus);
+	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature, mapContent);
 	    
 	    event.returnValue = false;
 	    
@@ -438,9 +395,11 @@ function mapDesign() {
 
     	canvasSize();
 	    windowStatus = defineWindowStatus(canvas.width, canvas.height);
-		initValues();
-		resetValues();
-	    drawCellMap();
+	    cellStatus = defineCellStatus(numCell, windowStatus);
+		mapStatus = defineMapStatus(cellStatus, windowStatus);
+		mapStatus = defineMapStatus(cellStatus, mapStatus);
+    	mapFeature = defineMapFeature(mapStatus, windowStatus);
+	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature, mapContent);
     
     };
 
@@ -464,8 +423,10 @@ function mapDesign() {
 
 	canvasSize();
     windowStatus = defineWindowStatus(canvas.width, canvas.height);
-	initValues();
-	resetValues();
-    drawCellMap();
+    cellStatus = defineCellStatus(numCell, windowStatus);
+	mapStatus = defineMapStatus(cellStatus, windowStatus);
+	mapStatus = defineMapStatus(cellStatus, mapStatus);
+	mapFeature = defineMapFeature(mapStatus, windowStatus);
+    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature, mapContent);
 
 }

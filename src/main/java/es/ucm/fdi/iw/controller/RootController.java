@@ -170,8 +170,7 @@ public class RootController {
 	}
 
 	@GetMapping("/code-design")
-	public String code_design(HttpServletResponse response) {
-		response.setHeader("X-XSS-Protection", "0");
+	public String code_design() {
 		return "code-design";
 	}
 	
