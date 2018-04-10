@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.Principal;
+import java.util.Calendar;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.model.Code;
 import es.ucm.fdi.iw.model.User;
 
 @Controller	
@@ -64,44 +66,17 @@ public class RootController {
 		
 		entityManager.flush();
 		login(m);
-		m.addAttribute("users", entityManager
-				.createQuery("select u from User u").getResultList());
 		
 		return "login";
 	}
     
-    /*@RequestMapping(value = "/createCode", method = RequestMethod.POST)
-	public String createCode(
-			@RequestParam("codeFileName") String codeFileName,
-			@RequestParam("code") String code,
-			Model m) {
-		
-    	String error = "";
-        if (code.isEmpty()) {
-        	error = "You failed to upload a code for " 
-                + codeFileName + " because the file was empty.";        
-        } else {
-        	
-        	File f = new File("1", codeFileName);
-        	try (BufferedOutputStream stream = new BufferedOutputStream(
-	        	new FileOutputStream(f))) {
-        		
-	        	stream.write(code.getBytes());
-	        	return "Uploaded " + m.asMap().get("users").toString() + " into " + f.getAbsolutePath();
-        	} catch (Exception e) {
-	        	error = "Upload failed "
-	        	+ codeFileName + " => " + e.getMessage();
-        	}
-        }
-		
-		return "code-design";
-	}*/
-    
     @RequestMapping(value = "/createCode", method=RequestMethod.POST)
+    @Transactional
     public String handleFileUpload(
     		HttpServletResponse response,
     		@RequestParam("code") String code,
     		@RequestParam("codeFileName") String codeFileName,
+    		HttpSession s,
     		Model m){
     	log.info(codeFileName);
     	log.info(code);
@@ -111,17 +86,36 @@ public class RootController {
                 + codeFileName + " because the file was empty.";     
         	log.info(error);
         } else {
-        	log.info(m.toString());
-	        File f = localData.getFile("1", codeFileName);
-	        try (BufferedOutputStream stream =
-	                new BufferedOutputStream(
-	                    new FileOutputStream(f))) {
-	            stream.write(code.getBytes());
+        	
+	    		Code codeObject= new Code();
+	    		User u = new User();
+	    		u.setId(Long.parseLong(s.getAttribute("user").toString()));
+	    		log.info(u.getId()+u.getNickname());
+	    		codeObject.setCreator(u);
+	    		codeObject.setDescription("");
+	    		codeObject.setName(codeFileName);
+	    		codeObject.setCodeText(code);
+	    		codeObject.setCreationTime(Calendar.getInstance().getTime());
+
+	    		entityManager.persist(codeObject);
+	    		
+	    		entityManager.flush();
+	    		
+	    		File f = localData.getFile("codes", String.valueOf(codeObject.getId()));
+	    		try (BufferedOutputStream stream =
+		                new BufferedOutputStream(
+		                		new FileOutputStream(f)
+		                )
+		        )
+	    		{
+	    			stream.write(code.getBytes());
+	     
+	    		} catch (Exception e) {
+	    			error = "Upload failed " + codeFileName + " => " + e.getMessage();
+	    		}
+	    		
 	            return "/code-design";
-	        } catch (Exception e) {
-		    	error = "Upload failed " 
-		    			+ codeFileName + " => " + e.getMessage();
-	        }
+	            
         }
         // exit with error, blame user
     	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
