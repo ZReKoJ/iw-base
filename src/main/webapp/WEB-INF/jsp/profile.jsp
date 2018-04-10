@@ -3,7 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
+
 <link href="${s}/css/profile.css" rel="stylesheet">
+
 <div class="row user-menu-container square whiteBg">
         <div class="col-md-7 user-details">
             <div class="row neutralColourDarkBg white">
@@ -140,5 +142,11 @@
             </div>
         </div>
     </div>
-    <script src="${s}/js/profile.js"></script>
+    
+    <script>
+	$( document ).ready(function() {
+		profile();
+	});
+	</script>
+	
 <%@ include file="../jspf/footer.jspf"%>
