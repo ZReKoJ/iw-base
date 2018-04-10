@@ -13,7 +13,7 @@
             <a class="btn btn-primary" href="results" role="button">Results</a>
 		</div>
 		<div class="map-content">
-        	<canvas id="mapBuilder"></canvas>
+        	<canvas id="canvas"></canvas>
         </div>
 	</div>
 </div>
