@@ -12,25 +12,31 @@
 
 <div class="jumbotron">
     <h1 class="display-4">Design your code</h1>
-    <div class="row">
-        <div class="input-group">
-            <input type="text" id="codeFileName" class="form-control" placeholder="Set the name for your code">
-            <span class="input-group-btn">
-                <div class="btn btn-default btn-glyphicon-title">
-                    <span class="glyphicon glyphicon-folder-open"></span>
-                    <span class="button-text">Browse</span>
-                    <input type="file" id="fileSent" class="file" data-error="No has especificado el fichero">
-                </div>
-            </span>
-        </div>
-    </div>
-    <div class="row">
-        <textarea id="codeText" class="codemirror-textarea"></textarea> 
-    </div>
-    <div class="btn-toolbar pull-right">
-    	<a class="btn btn-primary" href="/" onclick="javascript:alert('not implemented yet !!');" role="button">Upload</a>
-        <a class="btn btn-primary" href="/settings" role="button">Cancel</a>
-    </div>
+    <form id="code-form" action="/createCode" 
+		enctype="multipart/form-data" method="post" role="form">
+	    <div class="row">
+	        <div class="input-group">
+	        	
+		            <input type="text" id="codeFileName" name="codeFileName" class="form-control" placeholder="Set the name for your code">
+		            <span class="input-group-btn">
+		                <div class="btn btn-default btn-glyphicon-title">
+		                    <span class="glyphicon glyphicon-folder-open"></span>
+		                    <span class="button-text">Browse</span>
+		                    <input type="file" id="fileSent" class="file" data-error="No has especificado el fichero">
+		                </div>
+		            </span>
+		           
+	        </div>
+	    </div>
+	    <div class="row">
+	        <textarea id="codeText" name="code" type="text" class="codemirror-textarea"></textarea> 
+	    </div>
+	    <div class="btn-toolbar pull-right">
+	    	<button class="btn btn-primary" role="button" type="submit">Upload</button>
+	        <a class="btn btn-primary" href="/settings" role="button">Cancel</a>
+	    </div>
+	    <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
+	</form>	    
 </div>
 
 <script src="${s}/js/code-design.js"></script>

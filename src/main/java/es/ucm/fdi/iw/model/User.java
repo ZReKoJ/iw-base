@@ -22,6 +22,8 @@ public class User {
 	private byte enabled;
 	private String roles; // split by , to separate roles
 	private List<Map> ownedMaps;
+	private List<Code> ownedCodes;
+	
 	
 	@OneToMany(targetEntity=Map.class)
 	@JoinColumn(name="user_name") // <-- avoids creating an extra User_Map table
@@ -63,6 +65,16 @@ public class User {
 
 	public void setOwnedMaps(List<Map> ownedMaps) {
 		this.ownedMaps = ownedMaps;
+	}
+
+	@OneToMany(targetEntity=Map.class)
+	@JoinColumn(name="user_name") // <-- avoids creating an extra User_Map table
+	public List<Code> getOwnedCodes() {
+		return ownedCodes;
+	}
+
+	public void setOwnedCodes(List<Code> ownedCodes) {
+		this.ownedCodes = ownedCodes;
 	}
 
 	public int getWin() {
