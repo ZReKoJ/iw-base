@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -72,8 +73,8 @@ public class User {
 		this.ownedMaps = ownedMaps;
 	}
 
-	@OneToMany(targetEntity=Map.class)
-	@JoinColumn(name="user_name") // <-- avoids creating an extra User_Map table
+	@OneToMany(targetEntity=Code.class, fetch = FetchType.EAGER)
+	@JoinColumn(name="nickname") // <-- avoids creating an extra User_Map table
 	public List<Code> getOwnedCodes() {
 		return ownedCodes;
 	}

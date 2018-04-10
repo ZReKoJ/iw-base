@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.security.Principal;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
@@ -91,7 +92,6 @@ public class RootController {
 	    		Code codeObject= new Code();
 	    		User u = new User();
 	    		u.setId(Long.parseLong(s.getAttribute("user").toString()));
-	    		log.info(u.getId()+u.getNickname());
 	    		codeObject.setCreator(u);
 	    		codeObject.setDescription("");
 	    		codeObject.setName(codeFileName);
@@ -114,7 +114,7 @@ public class RootController {
 	    		} catch (Exception e) {
 	    			error = "Upload failed " + codeFileName + " => " + e.getMessage();
 	    		}
-	    		
+	  
 	            return "/code-design";
 	            
         }
@@ -133,6 +133,7 @@ public class RootController {
 						.createQuery("from User where nickname = :nickname", User.class)
 	                    .setParameter("nickname", principal.getName())
 	                    .getSingleResult());
+				User u = (User) s.getAttribute("user");
 			}
 			// org.springframework.security.core.userdetails.User
 
@@ -175,8 +176,16 @@ public class RootController {
 	}
 	
 	@GetMapping("/profile")
-	public String profile() {
-		return "profile";
+	public String profile(HttpSession s) {
+		User u = (User) s.getAttribute("user");
+		s.setAttribute("codes", entityManager
+				.createQuery("from Code where creator = :id", Code.class)
+                .setParameter("id",  u).getResultList());
+		
+		List<Code> lista = (List<Code>) s.getAttribute("codes");
+		Code code = lista.get(0);
+		log.info(code.getName());
+		return "/profile";
 	}
 	
 	@GetMapping("/settings")

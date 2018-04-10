@@ -87,44 +87,12 @@
                 <h3>
                     Trending
                 </h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="view">
-                            <div class="caption">
-                                <p>47LabsDesign</p>
-                                <a href="" rel="tooltip" title="Appreciate"><span class="fa fa-heart-o fa-2x"></span></a>
-                                <a href="" rel="tooltip" title="View"><span class="fa fa-search fa-2x"></span></a>
-                            </div>
-                            <img src="http://24.media.tumblr.com/273167b30c7af4437dcf14ed894b0768/tumblr_n5waxesawa1st5lhmo1_1280.jpg" class="img-responsive">
-                        </div>
-                        <div class="info">
-                            <p class="small" style="text-overflow: ellipsis">An Awesome Title</p>
-                            <p class="small coral text-right"><i class="fa fa-clock-o"></i> Posted Today | 10:42 A.M.</small>
-                        </div>
-                        <div class="stats turqbg">
-                            <span class="fa fa-heart-o"> <strong>47</strong></span>
-                            <span class="fa fa-eye pull-right"> <strong>137</strong></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="view">
-                            <div class="caption">
-                                <p>47LabsDesign</p>
-                                <a href="" rel="tooltip" title="Appreciate"><span class="fa fa-heart-o fa-2x"></span></a>
-                                <a href="" rel="tooltip" title="View"><span class="fa fa-search fa-2x"></span></a>
-                            </div>
-                            <img src="http://24.media.tumblr.com/282fadab7d782edce9debf3872c00ef1/tumblr_n3tswomqPS1st5lhmo1_1280.jpg" class="img-responsive">
-                        </div>
-                        <div class="info">
-                            <p class="small" style="text-overflow: ellipsis">An Awesome Title</p>
-                            <p class="small coral text-right"><i class="fa fa-clock-o"></i> Posted Today | 10:42 A.M.</small>
-                        </div>
-                        <div class="stats turqbg">
-                            <span class="fa fa-heart-o"> <strong>47</strong></span>
-                            <span class="fa fa-eye pull-right"> <strong>137</strong></span>
-                        </div>
-                    </div>
-                </div>
+                <ul>
+	                <c:forEach var="code" items="${codes}">
+						<li class="btn neutralColourLightBg">${code.name}</li>
+					</c:forEach>
+				</ul>
+	            
             </div>
             <div class="user-menu-content">
                 <h2 class="text-center">
