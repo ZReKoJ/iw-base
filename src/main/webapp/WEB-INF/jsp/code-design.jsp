@@ -1,8 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"
-    uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
 <!-- Tema del editor de codemirror -->
@@ -33,7 +32,12 @@
     </div>
 </div>
 
-<script src="${s}/js/code-design.js"></script>
+<script>
+$( document ).ready(function() {
+	codeDesign();
+});
+</script>
+
 <script src="${s}/js/codemirror.js"></script>
 <script src="${s}/js/javascriptMode.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

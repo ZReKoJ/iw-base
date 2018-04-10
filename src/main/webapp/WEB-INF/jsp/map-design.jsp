@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
-<script src="${s}/js/map-design.js"></script>
+
 <div class="jumbotron">
     <h1 class="display-4">Design your map</h1>
     <hr class="my-4">
@@ -21,4 +21,11 @@
         </div>
     </div>
 </div>
+    
+<script>
+	$( document ).ready(function() {
+		mapDesign();
+	});
+</script>
+
 <%@ include file="../jspf/footer.jspf"%>
