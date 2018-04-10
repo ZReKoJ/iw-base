@@ -11,7 +11,7 @@
         <div id="grid-element">
         </div>
         <div class="map-content">
-            <canvas id="mapBuilder"></canvas>
+            <canvas id="canvas"></canvas>
         </div>
     </div>
     <div class="row">

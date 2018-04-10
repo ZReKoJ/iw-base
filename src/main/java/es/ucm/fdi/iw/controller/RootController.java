@@ -78,6 +78,7 @@ public class RootController {
     		@RequestParam("codeFileName") String codeFileName,
     		HttpSession s,
     		Model m){
+    	response.setHeader("X-XSS-Protection", "0");
     	log.info(codeFileName);
     	log.info(code);
 		String error = "";
@@ -169,7 +170,8 @@ public class RootController {
 	}
 
 	@GetMapping("/code-design")
-	public String code_design() {
+	public String code_design(HttpServletResponse response) {
+		response.setHeader("X-XSS-Protection", "0");
 		return "code-design";
 	}
 	

@@ -234,7 +234,7 @@ label{
 }
 
 /* map-design */
-#mapBuilder {
+#canvas {
 	width: 100%;
 	height: auto;
 	border:1px solid #c3c3c3;
