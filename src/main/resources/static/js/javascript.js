@@ -99,8 +99,9 @@ function getCanvas() {
 }
 
 function setCanvasSize(canvas, width, height){
-	canvas.width = width;
-	canvas.height = height;
+	let max = Math.max(width, height);
+	canvas.width = max;
+	canvas.height = max;
 }
 
 function defineCellStatus(cellNumber, windowStatus) {
@@ -348,7 +349,7 @@ function mapDesign() {
 	let parent = $(canvas).parent();
 	let grid = document.getElementById("grid-element");
 
-	setCanvasSize(canvas, parent.width(), parent.width());
+	setCanvasSize(canvas, parent.width(), parent.height());
 	grid.style.height = canvas.height + "px";
 	
 	numCell = {
@@ -422,7 +423,7 @@ function mapDesign() {
 
 	window.onresize = function() {
 
-		setCanvasSize(canvas, parent.width(), parent.width());
+		setCanvasSize(canvas, parent.width(), parent.height());
 		grid.style.height = canvas.height + "px";
 	    windowStatus = defineWindowStatus(canvas.width, canvas.height);
 	    cellStatus = defineCellStatus(numCell, windowStatus);
@@ -463,7 +464,7 @@ function playing() {
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
 	
-	setCanvasSize(canvas, parent.width(), parent.width());
+	setCanvasSize(canvas, parent.width(), parent.height());
 
 	let numCell = {
 		x : 100,
@@ -494,7 +495,6 @@ function playing() {
 	    clearCanvasContext(ctx, canvas);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContentColour(ctx, mapContent, cellStatus, mapFeature);
-	    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
 	    
 	    event.returnValue = false;
@@ -528,7 +528,6 @@ function playing() {
     	mapFeature = defineMapFeature(mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContentColour(ctx, mapContent, cellStatus, mapFeature);
-	    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
 	    
 	    event.returnValue = false;
@@ -541,7 +540,7 @@ function playing() {
 			setCanvasSize(canvas, window.innerWidth, window.innerHeight);
 		}
 		else {
-			setCanvasSize(canvas, parent.width(), parent.width());
+			setCanvasSize(canvas, parent.width(), parent.height());
 		}
 		
 		fullScreen = false;
@@ -551,7 +550,6 @@ function playing() {
     	mapFeature = defineMapFeature(mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContentColour(ctx, mapContent, cellStatus, mapFeature);
-	    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
     
     };
 	
@@ -571,6 +569,5 @@ function playing() {
 	document.getElementById("full-screen").addEventListener("click", fullscreen);
 
 	drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
-    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
 
 }
