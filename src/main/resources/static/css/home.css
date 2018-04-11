@@ -1,0 +1,154 @@
+@import "https://fonts.googleapis.com/css?family=Alegreya+Sans:400,500";
+html {
+  
+  height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background: #0979B2;
+  background-image: url("../img/home-bg-img.png");
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.menu, .button {
+  width: 150px;
+  height: 150px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.menu {
+  position: fixed;
+  top: 150px;
+  left: 50px;
+  -webkit-transition: -webkit-transform 1.125s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  transition: -webkit-transform 1.125s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  transition: transform 1.125s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  transition: transform 1.125s cubic-bezier(0.39, 1.52, 0.46, 0.92), -webkit-transform 1.125s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  -webkit-transform: scale3d(1, 1, 1);
+          transform: scale3d(1, 1, 1);
+  -webkit-transform-origin: top left;
+          transform-origin: top left;
+  cursor: pointer;
+}
+
+.button {
+  color: #ffffff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  mix-blend-mode: multiply;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 33%;
+  font: 25px/100px Alegreya Sans, sans-serif;
+  text-decoration: none;
+  -webkit-transition: -webkit-transform 0.75s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  transition: -webkit-transform 0.75s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  transition: transform 0.75s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  transition: transform 0.75s cubic-bezier(0.39, 1.52, 0.46, 0.92), -webkit-transform 0.75s cubic-bezier(0.39, 1.52, 0.46, 0.92);
+  will-change: transform;
+}
+.button.closed {
+  -webkit-transform: translate3d(0, 0, 0) !important;
+          transform: translate3d(0, 0, 0) !important;
+}
+
+.main {
+  color: #f8f7f2;
+  text-align: center;
+  mix-blend-mode: normal;
+  line-height: 100px;
+  box-shadow: 0 0 0 5px rgba(70, 14, 19, 0.3);
+  -webkit-transition: border-color 0.75s, color 0.75s;
+  transition: border-color 0.75s, color 0.75s;
+  will-change: color, border-color, background;
+}
+.closed .main {
+  color: #f8f7f2;
+  box-shadow: 0 0 0 5px rgba(3, 15, 1, 0);
+}
+
+.play {
+  font: 40px/100px Alegreya Sans, sans-serif;
+  background-color: #ef6568;
+  text-align: center;
+  top: 0%;
+  left: 225%;
+  -webkit-transition-duration: 0.525s;
+          transition-duration: 0.525s;
+}
+.closed .play {
+  -webkit-transform: translate3d(-100%, -10%, 0);
+          transform: translate3d(-100%, -10%, 0);
+}
+
+.ranking {
+  background-color: #6fb7e6;
+  text-align: center;
+  top: 86.10368%;
+  left: 207.873%;
+  -webkit-transition-duration: 0.675s;
+          transition-duration: 0.675s;
+}
+.closed .ranking {
+  -webkit-transform: translate3d(-198.36244%, -89.19384%, 0) rotate(-180deg);
+          transform: translate3d(-198.36244%, -89.19384%, 0) rotate(-180deg);
+}
+
+.profile {
+  background-color: #6d8ee7;
+  text-align: center;
+  top: 159.09908%;
+  left: 159.09908%;
+  -webkit-transition-duration: 0.825s;
+          transition-duration: 0.825s;
+}
+.closed .profile {
+  -webkit-transform: translate3d(-153.22122%, -151.00892%, 0) rotate(-180deg);
+          transform: translate3d(-153.22122%, -151.00892%, 0) rotate(-180deg);
+}
+
+.code {
+  background-color: #8880ea;
+  text-align: center;
+  top: 207.873%;
+  left: 86.10368%;
+  -webkit-transition-duration: 0.975s;
+          transition-duration: 0.975s;
+}
+.closed .code {
+  -webkit-transform: translate3d(-91.98154%, -199.78284%, 0) rotate(-180deg);
+          transform: translate3d(-91.98154%, -199.78284%, 0) rotate(-180deg);
+}
+
+.mapd {
+  background-color: #7e66b0;
+  text-align: center;
+  top: 225%;
+  left: 0%;
+  -webkit-transition-duration: 1.125s;
+          transition-duration: 1.125s;
+}
+.closed .mapd {
+  -webkit-transform: translate3d(-9.51056%, -228.09016%, 0) rotate(-180deg);
+          transform: translate3d(-9.51056%, -228.09016%, 0) rotate(-180deg);
+}

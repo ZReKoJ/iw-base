@@ -4,7 +4,39 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 	
-<div class="jumbotron">
+<link href="${s}/css/home.css" rel="stylesheet">
+
+
+<div class='menu closed'>
+  <a href="profile" class='profile button'></a>
+  <a href="ranking" class='ranking button'></a>
+  <a href="playing" class='play button'> Play </a>
+  <a href="code-design" class='code button'></a>
+  <a href="map-design" class='mapd button'></a>
+  <div class='main button'> Menu </div>
+</div>
+
+<script>
+    $(".main.button").mousedown(function(){
+	$(".menu").toggleClass("closed");
+	
+	if($(".menu").hasClass("closed")) {
+		$(".main.button").text("Menu");
+		$(".profile.button").text(" ");
+		$(".ranking.button").text(" ");
+		$(".code.button").text(" ");
+		$(".mapd.button").text(" ");
+	} else {
+		$(".main.button").text("Close");
+		$(".profile.button").text("Profile");
+		$(".ranking.button").text("Ranking");
+		$(".code.button").text("Code Design");
+		$(".mapd.button").text("Map Design");
+	}
+})
+</script>
+
+<!--<div class="jumbotron">
   <h1 class="display-4">Welcome to Robotrón 2000!</h1>
   <p>A simple game where you can have fun and learn Javascript at the same time</p>
   <p class="lead">
