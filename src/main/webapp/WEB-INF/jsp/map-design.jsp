@@ -18,6 +18,7 @@
         <div class="btn-toolbar pull-right">
             <a class="btn btn-primary" href="/" onclick="javascript:alert('not implemented yet !!');" role="button">Upload</a>
             <a class="btn btn-primary" href="/settings" role="button">Cancel</a>
+            <a id="test" class="btn btn-primary" href="#" onclick="javascript:alert('this is a test');" role="button">Test</a>
         </div>
     </div>
 </div>
