@@ -99,9 +99,8 @@ function getCanvas() {
 }
 
 function setCanvasSize(canvas, width, height){
-	let max = Math.max(width, height);
-	canvas.width = max;
-	canvas.height = max;
+	canvas.width = width;
+	canvas.height = height;
 }
 
 function defineCellStatus(cellNumber, windowStatus) {
@@ -119,6 +118,9 @@ function defineCellStatus(cellNumber, windowStatus) {
 		width : Math.floor(windowStatus.dimension.width / status.number.x),
 	    height : Math.floor(windowStatus.dimension.height / status.number.y)
 	}
+
+	status.dimension.width = Math.min(status.dimension.width, status.dimension.height);
+	status.dimension.height = Math.min(status.dimension.width, status.dimension.height);
 	
 	return status;
 }
@@ -262,13 +264,29 @@ function drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature) {
 }
 
 function drawMapContent(ctx, mapContent, cellStatus, mapFeature){
-    for (let ii = 0; ii < cellStatus.number.x; ii++){
-        for (let jj = 0; jj < cellStatus.number.y; jj++){
-            if (mapContent[ii][jj] != undefined) {
-                ctx.drawImage(mapContent[ii][jj], ii * cellStatus.dimension.width + mapFeature.margin.left, jj * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
+    for (let i = 0; i < cellStatus.number.x; i++){
+        for (let j = 0; j < cellStatus.number.y; j++){
+            if (mapContent[i][j] != undefined) {
+                ctx.drawImage(mapContent[i][j].image, i * cellStatus.dimension.width + mapFeature.margin.left, j * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
             }
         }
     }
+}
+
+function writeMapContentValues(mapContent, cellStatus){
+	let text = "";
+	for (let i = 0; i < cellStatus.number.x; i++){
+        for (let j = 0; j < cellStatus.number.y; j++){
+            if (mapContent[i][j] != undefined) {
+            	text += mapContent[i][j].index + " ";
+            }
+            else {
+            	text += "-1 ";
+            }
+        }
+        text += "\n";
+    }
+	console.log(text);
 }
 
 function drawMapContentColour(ctx, mapContent, cellStatus, mapFeature){
@@ -349,13 +367,14 @@ function mapDesign() {
 	let parent = $(canvas).parent();
 	let grid = document.getElementById("grid-element");
 
-	setCanvasSize(canvas, parent.width(), parent.height());
+	setCanvasSize(canvas, parent.width(), parent.width());
 	grid.style.height = canvas.height + "px";
 	
 	numCell = {
 		x: 100,
 		y: 100
 	}
+	var index;
 	
 	let windowStatus = defineWindowStatus(canvas.width, canvas.height);
 	let cellStatus = defineCellStatus(numCell, windowStatus);
@@ -374,7 +393,12 @@ function mapDesign() {
 		mouseAt = defineMouseAt(event, canvas, mapFeature, cellStatus);
 	    
 	    if (drag && 0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y){
-	    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = $('.selected')[0];
+	    	if ($('.selected')[0] != undefined){
+		    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = {
+		    			image: $('.selected')[0],
+		    			index: index
+		    	}
+	    	}
 	    }
 		
 	    clearCanvasContext(ctx, canvas);
@@ -391,7 +415,12 @@ function mapDesign() {
 		drag = true;
 	    
 	    if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y){
-	    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = $('.selected')[0];
+	    	if ($('.selected')[0] != undefined){
+		    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = {
+		    			image: $('.selected')[0],
+		    			index: index
+		    	}
+	    	}
 	    }
 	    
 	    event.returnValue = false;
@@ -423,7 +452,7 @@ function mapDesign() {
 
 	window.onresize = function() {
 
-		setCanvasSize(canvas, parent.width(), parent.height());
+		setCanvasSize(canvas, parent.width(), parent.width());
 		grid.style.height = canvas.height + "px";
 	    windowStatus = defineWindowStatus(canvas.width, canvas.height);
 	    cellStatus = defineCellStatus(numCell, windowStatus);
@@ -446,16 +475,48 @@ function mapDesign() {
 	imgs.click(function(e) {
 		$(this).addClass("selected"); 
 		$(this).siblings('img.icon.selected').removeClass("selected");
+		index = $(this).index();
 	});
 	
 	imgs.mouseover(function(){
 		$(this).attr("style", "border: 2px solid white");
 		$(this).siblings('img.icon').removeAttr( "style" );
 	});
+	
+	document.getElementById("test").addEventListener("click", function(){
+		writeMapContentValues(mapContent, cellStatus);
+	});
 
     drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
     writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
 
+}
+
+function isFullScreen(){
+	if (document.fullscreenElement) {
+        return true;
+    }
+    else if (document.webkitFullscreenElement) {
+        return true;
+    }
+    else if (document.mozFullScreenElement) {
+        return true;
+    }
+    else {
+    	return false;
+    }
+}
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+    rawFile.send(rawFile.responseText);
 }
 
 function playing() {
@@ -464,56 +525,86 @@ function playing() {
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
 	
-	setCanvasSize(canvas, parent.width(), parent.height());
+	setCanvasSize(canvas, parent.width(), parent.width());
+	
+	/*
+	readTextFile("/static/test.json", function(text){
+	    var data = JSON.parse(text);
+	    for (let i = 0; i < data.numCell.x; i++){
+	    	for (let j = 0; j < data.numCell.y; j++){
+	    		a += data.data[i][j] + " ";
+	    	}
+	    	a += "\n";
+	    }
+		console.log(a);
+	});
+	 */
 
 	let numCell = {
 		x : 100,
 	    y : 100
 	}
-
+	
+	let data = '{ "cellDim" : { "x" : 10, "y" : 10 }, "data" :' +
+			'[[206, 206, 205, 205, 205, 205, 205, 205, 205, 205],' +
+			'[206, 205, 205, 205, 205, 205, 205, 205, 205, 205],' +
+			'[206, 205, 207, 207, 207, 206, 206, 206, 205, 205],' +
+			'[206, 205, 207, 207, 207, 206, 206, 206, 205, 205],' +
+			'[206, 205, 207, 207, 207, 206, 206, 206, 205, 205],' +
+			'[206, 205, 207, 207, 207, 205, 205, 205, 205, 205],' +
+			'[206, 205, 207, 207, 207, 205, 205, 205, 205, 205],' +
+			'[206, 205, 207, 207, 207, 205, 205, 205, 205, 205],' +
+			'[206, 206, 206, 207, 207, 205, 205, 205, 205, 205],' +
+			'[206, 206, 206, 207, 207, 205, 205, 205, 205, 205]]}';
+	data = JSON.parse(data);
+/*
+	let numCell = {
+		x : data.cellDim.x,
+	    y : data.cellDim.y
+	}
+*/
 	let windowStatus = defineWindowStatus(canvas.width, canvas.height);
 	let cellStatus = defineCellStatus(numCell, windowStatus);
 	let mapStatus = defineMapStatus(cellStatus, windowStatus);
 	let mapFeature = defineMapFeature(mapStatus, windowStatus);
 	let mapContent = createArray(cellStatus.number.x, cellStatus.number.y);
+	/*
+	for (let i = 0; i < numCell.x; i++){
+    	for (let j = 0; j < numCell.y; j++){
+    		mapContent[i][j] = {
+    			image : undefined,
+    			index : data.data[i][j] + 1
+    		}
+    		let img = document.createElement("img");
+    		img.src = "/static/img/map2/component (" + mapContent[i][j].index + ").png";
+    		mapContent[i][j].image = img;
+    	}
+    }
+	console.log(mapContent);*/
+	
 	let mouseAt = {
 		windowPosition: { x: "x", y: "y" },
 		mapPosition: { x: "x", y: "y" },
 		cellPosition: { x: "x", y: "y" }
 	}
 
-	let drag = false;
-	let fullScreen = false;
-
 	canvas.addEventListener('mousemove', function(event) {
 		mouseAt = defineMouseAt(event, canvas, mapFeature, cellStatus);
-	    
-	    if (drag && 0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y){
-	    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = 1;
-	    }
 		
 	    clearCanvasContext(ctx, canvas);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
-	    drawMapContentColour(ctx, mapContent, cellStatus, mapFeature);
+	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
 	    
 	    event.returnValue = false;
 	});
 
 	canvas.addEventListener('mousedown', function(event) {
-
-		drag = true;
-	    
-	    if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y){
-	    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = 1;
-	    }
 	    
 	    event.returnValue = false;
 	})
 
 	canvas.addEventListener('mouseup',function(event){
-
-	    drag = false;
 	    
 	    event.returnValue = false;
 	    
@@ -527,7 +618,7 @@ function playing() {
         mapStatus = defineMapStatus(cellStatus, mapStatus);
     	mapFeature = defineMapFeature(mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
-	    drawMapContentColour(ctx, mapContent, cellStatus, mapFeature);
+	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
 	    
 	    event.returnValue = false;
@@ -536,20 +627,19 @@ function playing() {
 
 	window.onresize = function() {
 		
-		if (fullScreen){
+		if (isFullScreen()){
 			setCanvasSize(canvas, window.innerWidth, window.innerHeight);
 		}
 		else {
-			setCanvasSize(canvas, parent.width(), parent.height());
+			setCanvasSize(canvas, parent.width(), parent.width());
 		}
 		
-		fullScreen = false;
 	    windowStatus = defineWindowStatus(canvas.width, canvas.height);
 	    cellStatus = defineCellStatus(numCell, windowStatus);
 		mapStatus = defineMapStatus(cellStatus, windowStatus);
     	mapFeature = defineMapFeature(mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
-	    drawMapContentColour(ctx, mapContent, cellStatus, mapFeature);
+	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
     
     };
 	
@@ -561,8 +651,6 @@ function playing() {
 		else {
 			canvas.mozRequestFullScreen();
 		}
-		
-		fullScreen = true;
 		
 	}
 
