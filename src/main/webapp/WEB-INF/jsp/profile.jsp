@@ -88,9 +88,17 @@
                     Trending
                 </h3>
                 <ul>
-	                <c:forEach var="code" items="${codes}">
-						<li class="btn neutralColourLightBg">${code.name}</li>
-					</c:forEach>
+                	<c:choose>
+						<c:when test="${codeListSize > 0}">
+							<c:forEach var="code" items="${codes}">
+								<li class="btn neutralColourLightBg">${code.name}</li>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<p> No codes uploaded yet!
+						</c:otherwise>
+					</c:choose>
+	                
 				</ul>
 	            
             </div>

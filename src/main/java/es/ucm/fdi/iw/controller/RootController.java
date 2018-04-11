@@ -184,8 +184,9 @@ public class RootController {
                 .setParameter("id",  u).getResultList());
 		
 		List<Code> lista = (List<Code>) s.getAttribute("codes");
-		Code code = lista.get(0);
-		log.info(code.getName());
+		int size = lista.size();
+		s.setAttribute("codeListSize", size);
+		
 		return "/profile";
 	}
 	
