@@ -10,7 +10,7 @@
     <div class="row">
         <ul class="list-group list-group-flush">
         	<c:forEach var="user" items="${users}" varStatus="status">
-				<li class="list-group-item d-flex justify-content-between align-items-center">${status.index} - ${user.nickname}
+				<li class="list-group-item d-flex justify-content-between align-items-center">${status.index+1} - ${user.nickname}
                 	<span class="badge badge-primary badge-pill">${user.score}</span>
             	</li>
 			</c:forEach>
