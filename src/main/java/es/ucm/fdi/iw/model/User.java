@@ -19,6 +19,7 @@ public class User {
 	private int win;
 	private int lose;
 	private int draw;
+	private int score;
 
 	private byte enabled;
 	private String roles; // split by , to separate roles
@@ -121,7 +122,17 @@ public class User {
 
 	public void setEnabled(byte enabled) {
 		this.enabled = enabled;
-	}	
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	
 
 }
 

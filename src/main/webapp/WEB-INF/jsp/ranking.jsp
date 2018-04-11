@@ -9,24 +9,11 @@
     <hr class="my-4">
     <div class="row">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between align-items-center">1 - Zihao
-                <span class="badge badge-primary badge-pill">4334634</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">2 - Lorenzo
-                <span class="badge badge-primary badge-pill">234435</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">3 - Cesar
-                <span class="badge badge-primary badge-pill">143463</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">4 - AAAA
-                <span class="badge badge-primary badge-pill">43123</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">5 - BBBB
-                <span class="badge badge-primary badge-pill">35223</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">6 - CCCC
-                <span class="badge badge-primary badge-pill">2233</span>
-            </li>
+        	<c:forEach var="user" items="${users}" varStatus="status">
+				<li class="list-group-item d-flex justify-content-between align-items-center">${status.index} - ${user.nickname}
+                	<span class="badge badge-primary badge-pill">${user.score}</span>
+            	</li>
+			</c:forEach>
         </ul>
     </div>
     <div class="row">

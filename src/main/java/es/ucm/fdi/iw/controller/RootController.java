@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -186,7 +187,7 @@ public class RootController {
 		int size = lista.size();
 		s.setAttribute("codeListSize", size);
 		
-		return "/profile";
+		return "profile";
 	}
 	
 	@GetMapping("/settings")
@@ -195,8 +196,16 @@ public class RootController {
 	}
 	
 	@GetMapping("/ranking")
-	public String ranking() {
+	public String ranking(HttpSession s) {
+		s.setAttribute("users", entityManager
+				.createQuery("from User", User.class)
+                .getResultList());
+		
+	
+		
 		return "ranking";
 	}
+	
+	
 	
 }
