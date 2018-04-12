@@ -383,7 +383,7 @@ function mapDesign() {
 	
 	let windowStatus = new Rectangle(canvas.width, canvas.height);
 	let cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
-	let mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+	let mapStatus = new Rectangle(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
 	let mapCenter = mapStatus.center;
 	let mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	let mapContent = createArray(cellStatus.columns, cellStatus.rows);
@@ -446,7 +446,7 @@ function mapDesign() {
 	    
         clearCanvasContext(ctx, canvas);
         let oldMapStatus = mapStatus;
-        mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+        mapStatus = new Rectangle(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
     	mapCenter.relativeLocation(oldMapStatus, mapStatus);
         mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
@@ -464,7 +464,7 @@ function mapDesign() {
 		grid.style.height = canvas.height + "px";
 	    windowStatus = new Rectangle(canvas.width, canvas.height);
 	    cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
-		mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+		mapStatus = new Rectangle(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
     	mapCenter = mapStatus.center;
 		mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
@@ -574,7 +574,7 @@ function playing() {
 */
 	let windowStatus = new Rectangle(canvas.width, canvas.height);
 	let cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
-	let mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+	let mapStatus = new Rectangle(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
 	let mapCenter = mapStatus.center;
 	let mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	let mapContent = createArray(cellStatus.columns, cellStatus.rows);
@@ -626,7 +626,7 @@ function playing() {
 	    
         clearCanvasContext(ctx, canvas);
         let oldMapStatus = mapStatus;
-        mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+        mapStatus = new Rectangle(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
     	mapCenter.relativeLocation(oldMapStatus, mapStatus);
         mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
@@ -648,7 +648,7 @@ function playing() {
 		
 		windowStatus = new Rectangle(canvas.width, canvas.height);
 	    cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
-		mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+		mapStatus = new Rectangle(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
     	mapCenter = mapStatus.center;
 		mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
