@@ -94,115 +94,119 @@ function profile() {
     ); 
 }
 
-function getCanvas() {
-	return document.getElementById("canvas");
-}
-
 function setCanvasSize(canvas, width, height){
 	canvas.width = width;
 	canvas.height = height;
 }
 
-function defineCellStatus(cellNumber, windowStatus) {
-	let status = {
-		number: undefined,
-		dimension: undefined
+class Point {
+	constructor(x, y){
+		this.x = x;
+		this.y = y;
 	}
 	
-	status.number = {
-		x: cellNumber.x,
-		y: cellNumber.y
+	relativeLocation(oldRectangle, newRectangle){
+		this.x = Math.floor(newRectangle.width * this.x / oldRectangle.width),
+		this.y = Math.floor(newRectangle.height * this.y / oldRectangle.height)
 	}
-	
-	status.dimension = {
-		width : Math.floor(windowStatus.dimension.width / status.number.x),
-	    height : Math.floor(windowStatus.dimension.height / status.number.y)
-	}
-
-	status.dimension.width = Math.min(status.dimension.width, status.dimension.height);
-	status.dimension.height = Math.min(status.dimension.width, status.dimension.height);
-	
-	return status;
 }
 
-function defineWindowStatus(width, height) {
-	let status = {
-		dimension: undefined,
-		center: undefined,
-		margin: undefined
-	}
-
-	status.dimension = {
-		width: width,
-		height: height
+class Rectangle {
+	constructor(width, height) {
+		this.width = width;
+		this.height = height;
 	}
 	
-	status.center = {
-		x: Math.floor(status.dimension.width / 2),
-		y: Math.floor(status.dimension.height / 2)
+	get center() {
+		return this.calculateCenter();
 	}
 	
-	status.margin = {
-		left: status.center.x,
-		right: status.dimension.width - status.center.x,
-		top: status.center.y,
-		down: status.dimension.height - status.center.y
+	get area() {
+		return this.calculateArea();
 	}
 	
-	return status;
+	calculateCenter(){
+		return new Point(Math.floor(this.width / 2), Math.floor(this.height / 2));
+	}
+	
+	calculateArea(){
+		return this.width * this.height;
+	}
+	
+	distancesTo(point){
+		return {
+			left: point.x,
+			right: this.width - point.x,
+			top: point.y,
+			down: this.height - point.y
+		};
+	}
+	
+	isMoreThan(rectangle){
+		return this.width > rectangle.width && this.height > rectangle.height;
+	}
+	
+	isLessThan(rectangle){
+		return this.width < rectangle.width && this.height < rectangle.height;
+	}
+	
+	isMoreEqual(rectangle){
+		return this.width >= rectangle.width && this.height >= rectangle.height;
+	}
+	
+	isLessEqual(rectangle){
+		return this.width <= rectangle.width && this.height <= rectangle.height;
+	}
+	
 }
 
-/**
- * 
- * @param cellStatus
- * @param dimensionStatus Could be mapStatus or windowStatus
- * @returns
- */
-function defineMapStatus(cellStatus, dimensionStatus){
-	let status = {
-		dimension: undefined,
-		center: undefined,
-		margin: undefined
+class Square extends Rectangle {
+	constructor(width, height){
+		super(width, height);
+		let min = Math.min(width, height);
+		this.width = min;
+		this.height = min;
 	}
-	
-	status.dimension = {
-		width: cellStatus.number.x * cellStatus.dimension.width,
-		height: cellStatus.number.y * cellStatus.dimension.height
-	}
-	
-	status.center = {
-		x: Math.floor(status.dimension.width * dimensionStatus.center.x / dimensionStatus.dimension.width),
-		y: Math.floor(status.dimension.height * dimensionStatus.center.y / dimensionStatus.dimension.height)
-	}
-	
-	status.margin = {
-		left: status.center.x,
-		right: status.dimension.width - status.center.x,
-		top: status.center.y,
-		down: status.dimension.height - status.center.y
-	}
-	
-	return status;
 }
 
-function defineMapFeature(mapStatus, windowStatus){
+class Cell extends Square {
+	constructor(rows, columns, width, height){
+		super(width, height);
+		this.rows = rows;
+		this.columns = columns;
+	}
+	
+	zoomIn(value){
+		this.width += value;
+		this.height += value;
+	}
+	
+	zoomOut(value){
+		this.width -= value;
+		this.height -= value;
+	}
+}
+
+function defineMapFeature(mapCenter, mapStatus, windowStatus){
 	let feature = {
 		zoomScale: 1,
 		moveScale: 5,
 		lineDash: 0,
 		lineWidth: 1,
+		zoomZone: 0.6,
 		margin: undefined
 	}
 	
-	feature.lineDash = (mapStatus.dimension.width < windowStatus.dimension.width || mapStatus.dimension.height < windowStatus.dimension.height) ? 0 : 1; 
-
-	feature.margin = {
-        left : windowStatus.margin.left - mapStatus.margin.left,
-        right : windowStatus.margin.right - mapStatus.margin.right,
-        top : windowStatus.margin.top - mapStatus.margin.top,
-        down : windowStatus.margin.down - mapStatus.margin.down
-    }
+	feature.lineDash = (mapStatus.width < windowStatus.width || mapStatus.height < windowStatus.height) ? 0 : 1; 
 	
+	let windowDistancesTo = windowStatus.distancesTo(windowStatus.center);
+	let mapDistancesTo = mapStatus.distancesTo(mapCenter);
+	feature.margin = {
+        left : windowDistancesTo.left - mapDistancesTo.left,
+        right : windowDistancesTo.right - mapDistancesTo.right,
+        top : windowDistancesTo.top - mapDistancesTo.top,
+        down : windowDistancesTo.down - mapDistancesTo.down
+    }
 	return feature;
 }
 
@@ -225,8 +229,8 @@ function defineMouseAt(event, canvas, mapFeature, cellStatus){
     }
     
 	mouseAt.cellPosition = {
-    	x: Math.floor(mouseAt.mapPosition.x / cellStatus.dimension.width),
-    	y: Math.floor(mouseAt.mapPosition.y / cellStatus.dimension.height)
+    	x: Math.floor(mouseAt.mapPosition.x / cellStatus.width),
+    	y: Math.floor(mouseAt.mapPosition.y / cellStatus.height)
     }
 	
 	return mouseAt;
@@ -240,34 +244,34 @@ function drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature) {
     
 	let coord = {
     	left : (mapFeature.margin.left > 0) ? mapFeature.margin.left : 0,
-        right : (mapFeature.margin.right > 0) ? windowStatus.dimension.width - mapFeature.margin.right : windowStatus.dimension.width,
+        right : (mapFeature.margin.right > 0) ? windowStatus.width - mapFeature.margin.right : windowStatus.width,
 		up : (mapFeature.margin.top > 0) ? mapFeature.margin.top : 0,
-        down : (mapFeature.margin.down > 0) ? windowStatus.dimension.height - mapFeature.margin.down : windowStatus.dimension.height
+        down : (mapFeature.margin.down > 0) ? windowStatus.height - mapFeature.margin.down : windowStatus.height
 	}
     
-    let i = (mapFeature.margin.left > 0) ? mapFeature.margin.left : cellStatus.dimension.width - Math.abs(mapFeature.margin.left % cellStatus.dimension.width);
-    let j = (mapFeature.margin.top > 0) ? mapFeature.margin.top : cellStatus.dimension.height - Math.abs(mapFeature.margin.top % cellStatus.dimension.height);
+    let i = (mapFeature.margin.left > 0) ? mapFeature.margin.left : cellStatus.width - Math.abs(mapFeature.margin.left % cellStatus.width);
+    let j = (mapFeature.margin.top > 0) ? mapFeature.margin.top : cellStatus.height - Math.abs(mapFeature.margin.top % cellStatus.height);
 
     while (i <= coord.right){
         ctx.moveTo(i + 0.5, coord.up);
         ctx.lineTo(i + 0.5, coord.down);
-        i += cellStatus.dimension.width;
+        i += cellStatus.width;
     }
 
     while (j <= coord.down){
         ctx.moveTo(coord.left, j + 0.5);
         ctx.lineTo(coord.right, j + 0.5);
-        j += cellStatus.dimension.height;
+        j += cellStatus.height;
     }
     
     ctx.stroke();
 }
 
 function drawMapContent(ctx, mapContent, cellStatus, mapFeature){
-    for (let i = 0; i < cellStatus.number.x; i++){
-        for (let j = 0; j < cellStatus.number.y; j++){
+    for (let i = 0; i < cellStatus.columns; i++){
+        for (let j = 0; j < cellStatus.rows; j++){
             if (mapContent[i][j] != undefined) {
-                ctx.drawImage(mapContent[i][j].image, i * cellStatus.dimension.width + mapFeature.margin.left, j * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
+                ctx.drawImage(mapContent[i][j].image, i * cellStatus.width + mapFeature.margin.left, j * cellStatus.height + mapFeature.margin.top, cellStatus.width, cellStatus.height);
             }
         }
     }
@@ -275,8 +279,8 @@ function drawMapContent(ctx, mapContent, cellStatus, mapFeature){
 
 function writeMapContentValues(mapContent, cellStatus){
 	let text = "";
-	for (let i = 0; i < cellStatus.number.x; i++){
-        for (let j = 0; j < cellStatus.number.y; j++){
+	for (let i = 0; i < cellStatus.columns; i++){
+        for (let j = 0; j < cellStatus.rows; j++){
             if (mapContent[i][j] != undefined) {
             	text += mapContent[i][j].index + " ";
             }
@@ -291,10 +295,10 @@ function writeMapContentValues(mapContent, cellStatus){
 
 function drawMapContentColour(ctx, mapContent, cellStatus, mapFeature){
 	ctx.fillStyle = "#FFDC27";
-    for (let ii = 0; ii < cellStatus.number.x; ii++){
-        for (let jj = 0; jj < cellStatus.number.y; jj++){
+    for (let ii = 0; ii < cellStatus.columns; ii++){
+        for (let jj = 0; jj < cellStatus.rows; jj++){
             if (mapContent[ii][jj] != undefined) {
-                ctx.fillRect(ii * cellStatus.dimension.width + mapFeature.margin.left, jj * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
+                ctx.fillRect(ii * cellStatus.width + mapFeature.margin.left, jj * cellStatus.height + mapFeature.margin.top, cellStatus.width, cellStatus.height);
             }
         }
     }
@@ -302,25 +306,29 @@ function drawMapContentColour(ctx, mapContent, cellStatus, mapFeature){
 
 function drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature){
     ctx.fillStyle = "#00FFEE";
-	if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y) {
-        ctx.fillRect(mouseAt.cellPosition.x * cellStatus.dimension.width + mapFeature.margin.left, mouseAt.cellPosition.y * cellStatus.dimension.height + mapFeature.margin.top, cellStatus.dimension.width, cellStatus.dimension.height);
+	if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.columns && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.rows) {
+        ctx.fillRect(mouseAt.cellPosition.x * cellStatus.width + mapFeature.margin.left, mouseAt.cellPosition.y * cellStatus.height + mapFeature.margin.top, cellStatus.width, cellStatus.height);
     }
 }
 
-function writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature){
+function writeText(ctx, mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature){
+	let distancesTo;
 	ctx.fillStyle = "white";
     ctx.font = "20px Arial";
     ctx.fillText("[" + mouseAt.windowPosition.x + ", " + mouseAt.windowPosition.y + "]", 10, 20);
     ctx.fillText("[" + mouseAt.mapPosition.x + ", " + mouseAt.mapPosition.y + "]", 10, 40);
     ctx.fillText("[" + mouseAt.cellPosition.x + ", " + mouseAt.cellPosition.y + "]", 10, 60);
     ctx.font = "15px Arial";
-    ctx.fillText("Dimension win [" + windowStatus.dimension.width + ", " + windowStatus.dimension.height + "]", 10, 80);
-    ctx.fillText("Dimension map [" + mapStatus.dimension.width + ", " + mapStatus.dimension.height + "]", 10, 100);
-    ctx.fillText("Dimension cell [" + cellStatus.dimension.width + ", " + cellStatus.dimension.height + "]", 10, 120);
-    ctx.fillText("Distance win [" + windowStatus.margin.left + ", " + windowStatus.margin.right + ", " + windowStatus.margin.top + ", " + windowStatus.margin.down + "]", 10, 140);
-    ctx.fillText("Distance map [" + mapStatus.margin.left + ", " + mapStatus.margin.right + ", " + mapStatus.margin.top + ", " + mapStatus.margin.down + "]", 10, 160);
-    ctx.fillText("Center [" + mapStatus.center.x + ", " + mapStatus.center.y + "]", 10, 180);
+    ctx.fillText("Dimension win [" + windowStatus.width + ", " + windowStatus.height + "]", 10, 80);
+    ctx.fillText("Dimension map [" + mapStatus.width + ", " + mapStatus.height + "]", 10, 100);
+    ctx.fillText("Dimension cell [" + cellStatus.width + ", " + cellStatus.height + "]", 10, 120);
+	distancesTo = windowStatus.distancesTo(windowStatus.center);
+    ctx.fillText("Distance win [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 140);
+    distancesTo = mapStatus.distancesTo(mapCenter);
+    ctx.fillText("Distance map [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 160);
+    ctx.fillText("Center [" + mapCenter.x + ", " + mapCenter.y + "]", 10, 180);
     ctx.fillText("Margin [" + mapFeature.margin.left + ", " + mapFeature.margin.right + ", " + mapFeature.margin.top + ", " + mapFeature.margin.down + "]", 10, 200);
+    ctx.fillText("Canvas [" + canvas.width + ", " + canvas.height + "]", 10, 220);
 }
 
 function clearCanvasContext(ctx, canvas) {
@@ -331,38 +339,35 @@ function clearCanvasContext(ctx, canvas) {
     ctx.restore();
 }
 
-function zoom(mouseAt, cellStatus, mapStatus, windowStatus, mapFeature){
-	let horizontal = mouseAt.windowPosition.x - windowStatus.center.x;
-	let vertical = mouseAt.windowPosition.y - windowStatus.center.y;
+function zoom(mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature){
+	let windowCenter = windowStatus.center;
+	let horizontal = mouseAt.windowPosition.x - windowCenter.x;
+	let vertical = mouseAt.windowPosition.y - windowCenter.y;
     
-	if (Math.abs(horizontal) < windowStatus.center.x * 0.6 && Math.abs(vertical) < windowStatus.center.y * 0.6){
+	if (Math.abs(horizontal) < windowCenter.x * mapFeature.zoomZone && Math.abs(vertical) < windowCenter.y * mapFeature.zoomZone){
         if (event.deltaY < 0) {
-            cellStatus.dimension.width += mapFeature.zoomScale;
-            cellStatus.dimension.height += mapFeature.zoomScale;
-            if (cellStatus.dimension.width > (windowStatus.dimension.width / 10) || cellStatus.dimension.height > (windowStatus.dimension.height / 10)){
-                cellStatus.dimension.width -= mapFeature.zoomScale;
-                cellStatus.dimension.height -= mapFeature.zoomScale;
+        	cellStatus.zoomIn(mapFeature.zoomScale);
+            if (windowStatus.isLessThan(new Rectangle(cellStatus.width * 10, cellStatus.height * 10))){
+                cellStatus.zoomOut(mapFeature.zoomScale);
             }
         }
         else {
-            cellStatus.dimension.width -= mapFeature.zoomScale;
-            cellStatus.dimension.height -= mapFeature.zoomScale;
-            if (mapStatus.dimension.width < windowStatus.dimension.width || mapStatus.dimension.height < windowStatus.dimension.height){
-                cellStatus.dimension.width += mapFeature.zoomScale;
-                cellStatus.dimension.height += mapFeature.zoomScale;
+        	cellStatus.zoomOut(mapFeature.zoomScale);
+            if (windowStatus.isMoreThan(mapStatus)){
+            	cellStatus.zoomIn(mapFeature.zoomScale);
             }
         }
     }
     else {
     	let zoomValue = (event.deltaY < 0) ? mapFeature.moveScale : mapFeature.moveScale * -1;
-    	mapStatus.center.x += (horizontal > 0) ? zoomValue : zoomValue * -1;
-    	mapStatus.center.y += (vertical > 0) ? zoomValue : zoomValue * -1;
+    	mapCenter.x += (horizontal > 0) ? zoomValue : zoomValue * -1;
+    	mapCenter.y += (vertical > 0) ? zoomValue : zoomValue * -1;
     }
 }
 
 function mapDesign() {
 	
-	let canvas = getCanvas();
+	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
 	let grid = document.getElementById("grid-element");
@@ -376,11 +381,12 @@ function mapDesign() {
 	}
 	var index;
 	
-	let windowStatus = defineWindowStatus(canvas.width, canvas.height);
-	let cellStatus = defineCellStatus(numCell, windowStatus);
-	let mapStatus = defineMapStatus(cellStatus, windowStatus);
-	let mapFeature = defineMapFeature(mapStatus, windowStatus);
-	let mapContent = createArray(cellStatus.number.x, cellStatus.number.y);
+	let windowStatus = new Rectangle(canvas.width, canvas.height);
+	let cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
+	let mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+	let mapCenter = mapStatus.center;
+	let mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
+	let mapContent = createArray(cellStatus.columns, cellStatus.rows);
 	let mouseAt = {
 		windowPosition: { x: "x", y: "y" },
 		mapPosition: { x: "x", y: "y" },
@@ -392,7 +398,7 @@ function mapDesign() {
 	canvas.addEventListener('mousemove', function(event) {
 		mouseAt = defineMouseAt(event, canvas, mapFeature, cellStatus);
 	    
-	    if (drag && 0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y){
+	    if (drag && 0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.columns && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.rows){
 	    	if ($('.selected')[0] != undefined){
 		    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = {
 		    			image: $('.selected')[0],
@@ -404,7 +410,7 @@ function mapDesign() {
 	    clearCanvasContext(ctx, canvas);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
-	    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
+	    writeText(ctx, mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
 	    
 	    event.returnValue = false;
@@ -414,7 +420,7 @@ function mapDesign() {
 
 		drag = true;
 	    
-	    if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.number.x && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.number.y){
+	    if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < cellStatus.columns && 0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < cellStatus.rows){
 	    	if ($('.selected')[0] != undefined){
 		    	mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y] = {
 		    			image: $('.selected')[0],
@@ -436,14 +442,16 @@ function mapDesign() {
 
 	canvas.addEventListener('wheel', function(event){
 
-		zoom(mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
+		zoom(mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature);
 	    
         clearCanvasContext(ctx, canvas);
-        mapStatus = defineMapStatus(cellStatus, mapStatus);
-    	mapFeature = defineMapFeature(mapStatus, windowStatus);
+        let oldMapStatus = mapStatus;
+        mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+    	mapCenter.relativeLocation(oldMapStatus, mapStatus);
+        mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
-	    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
+	    writeText(ctx, mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
 	    
 	    event.returnValue = false;
@@ -454,13 +462,14 @@ function mapDesign() {
 
 		setCanvasSize(canvas, parent.width(), parent.width());
 		grid.style.height = canvas.height + "px";
-	    windowStatus = defineWindowStatus(canvas.width, canvas.height);
-	    cellStatus = defineCellStatus(numCell, windowStatus);
-		mapStatus = defineMapStatus(cellStatus, windowStatus);
-    	mapFeature = defineMapFeature(mapStatus, windowStatus);
+	    windowStatus = new Rectangle(canvas.width, canvas.height);
+	    cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
+		mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+    	mapCenter = mapStatus.center;
+		mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
-	    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
+	    writeText(ctx, mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature);
     
     };
 
@@ -488,7 +497,7 @@ function mapDesign() {
 	});
 
     drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
-    writeText(ctx, mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
+    writeText(ctx, mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature);
 
 }
 
@@ -521,7 +530,7 @@ function readTextFile(file, callback) {
 
 function playing() {
 
-	let canvas = getCanvas();
+	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
 	
@@ -563,11 +572,12 @@ function playing() {
 	    y : data.cellDim.y
 	}
 */
-	let windowStatus = defineWindowStatus(canvas.width, canvas.height);
-	let cellStatus = defineCellStatus(numCell, windowStatus);
-	let mapStatus = defineMapStatus(cellStatus, windowStatus);
-	let mapFeature = defineMapFeature(mapStatus, windowStatus);
-	let mapContent = createArray(cellStatus.number.x, cellStatus.number.y);
+	let windowStatus = new Rectangle(canvas.width, canvas.height);
+	let cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
+	let mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+	let mapCenter = mapStatus.center;
+	let mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
+	let mapContent = createArray(cellStatus.columns, cellStatus.rows);
 	/*
 	for (let i = 0; i < numCell.x; i++){
     	for (let j = 0; j < numCell.y; j++){
@@ -612,11 +622,13 @@ function playing() {
 
 	canvas.addEventListener('wheel', function(event){
 
-		zoom(mouseAt, cellStatus, mapStatus, windowStatus, mapFeature);
+		zoom(mouseAt, mapCenter, cellStatus, mapStatus, windowStatus, mapFeature);
 	    
         clearCanvasContext(ctx, canvas);
-        mapStatus = defineMapStatus(cellStatus, mapStatus);
-    	mapFeature = defineMapFeature(mapStatus, windowStatus);
+        let oldMapStatus = mapStatus;
+        mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+    	mapCenter.relativeLocation(oldMapStatus, mapStatus);
+        mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
 	    drawMouseAtCell(ctx, mouseAt, cellStatus, mapFeature);
@@ -634,10 +646,11 @@ function playing() {
 			setCanvasSize(canvas, parent.width(), parent.width());
 		}
 		
-	    windowStatus = defineWindowStatus(canvas.width, canvas.height);
-	    cellStatus = defineCellStatus(numCell, windowStatus);
-		mapStatus = defineMapStatus(cellStatus, windowStatus);
-    	mapFeature = defineMapFeature(mapStatus, windowStatus);
+		windowStatus = new Rectangle(canvas.width, canvas.height);
+	    cellStatus = new Cell(numCell.y, numCell.x, Math.floor(windowStatus.width / numCell.x), Math.floor(windowStatus.height / numCell.y));
+		mapStatus = new Square(cellStatus.columns * cellStatus.width, cellStatus.rows * cellStatus.height);
+    	mapCenter = mapStatus.center;
+		mapFeature = defineMapFeature(mapCenter, mapStatus, windowStatus);
 	    drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 	    drawMapContent(ctx, mapContent, cellStatus, mapFeature);
     
@@ -659,3 +672,5 @@ function playing() {
 	drawCellMap(ctx, cellStatus, mapStatus, windowStatus, mapFeature);
 
 }
+
+
