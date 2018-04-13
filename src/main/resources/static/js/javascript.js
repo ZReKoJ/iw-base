@@ -167,14 +167,6 @@ class Square extends Rectangle {
 		this.width = min;
 		this.height = min;
 	}
-}
-
-class Cell extends Square {
-	constructor(rows, columns, width, height){
-		super(width, height);
-		this.rows = rows;
-		this.columns = columns;
-	}
 	
 	zoomIn(value){
 		this.width += value;
@@ -196,11 +188,11 @@ class Map {
 		this.rows = numRows;
 		this.cols = numCols;
 		// status 
-		this.windowStatus = new Rectangle(canvas.width, canvas.height);
-		this.cellStatus = new Cell(this.rows, this.cols, Math.floor(this.windowStatus.width / this.cols), Math.floor(this.windowStatus.height / this.rows));
-		this.mapStatus = new Rectangle(this.cellStatus.columns * this.cellStatus.width, this.cellStatus.rows * this.cellStatus.height);
+		this.frame = new Rectangle(canvas.width, canvas.height);
+		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
+		this.table = new Square(this.cols * this.cell.width, this.rows * this.cell.height);
 		// the center of the map
-		this.mapCenter = this.mapStatus.center;
+		this.mapCenter = this.table.center;
 		
 		this.zoomScale = 1,
 		this.moveScale = 5,
@@ -211,7 +203,7 @@ class Map {
 		
 		this.defineMapFeature();
 		
-		this.mapContent = createArray(this.cellStatus.columns, this.cellStatus.rows);
+		this.mapContent = createArray(this.cols, this.rows);
 		
 		this.mouseAt = {
 			windowPosition: { x: "x", y: "y" },
@@ -225,15 +217,15 @@ class Map {
 		this.mouseAt.windowPosition.y = y;
 		this.mouseAt.mapPosition.x = this.mouseAt.windowPosition.x - this.margin.left;
 		this.mouseAt.mapPosition.y = this.mouseAt.windowPosition.y - this.margin.top;
-		this.mouseAt.cellPosition.x = Math.floor(this.mouseAt.mapPosition.x / this.cellStatus.width);
-		this.mouseAt.cellPosition.y = Math.floor(this.mouseAt.mapPosition.y / this.cellStatus.height);
+		this.mouseAt.cellPosition.x = Math.floor(this.mouseAt.mapPosition.x / this.cell.width);
+		this.mouseAt.cellPosition.y = Math.floor(this.mouseAt.mapPosition.y / this.cell.height);
 	}
 	
 	defineMapFeature(){
-		this.lineDash = (this.mapStatus.width < this.windowStatus.width || this.mapStatus.height < this.windowStatus.height) ? 0 : 1; 
+		this.lineDash = (this.table.width < this.frame.width || this.table.height < this.frame.height) ? 0 : 1; 
 		
-		let windowDistancesTo = this.windowStatus.distancesTo(this.windowStatus.center);
-		let mapDistancesTo = this.mapStatus.distancesTo(this.mapCenter);
+		let windowDistancesTo = this.frame.distancesTo(this.frame.center);
+		let mapDistancesTo = this.table.distancesTo(this.mapCenter);
 		this.margin = {
 	        left : windowDistancesTo.left - mapDistancesTo.left,
 	        right : windowDistancesTo.right - mapDistancesTo.right,
@@ -243,13 +235,13 @@ class Map {
 	}
 	
 	zoomIn(){
-		let windowCenter = this.windowStatus.center;
+		let windowCenter = this.frame.center;
 		let horizontal = this.mouseAt.windowPosition.x - windowCenter.x;
 		let vertical = this.mouseAt.windowPosition.y - windowCenter.y;
 		if (Math.abs(horizontal) < windowCenter.x * this.zoomZone && Math.abs(vertical) < windowCenter.y * this.zoomZone){
-			this.cellStatus.zoomIn(this.zoomScale);
-            if (this.windowStatus.isLessThan(new Rectangle(this.cellStatus.width * 10, this.cellStatus.height * 10))){
-                this.cellStatus.zoomOut(this.zoomScale);
+			this.cell.zoomIn(this.zoomScale);
+            if (this.frame.isLessThan(new Rectangle(this.cell.width * 10, this.cell.height * 10))){
+                this.cell.zoomOut(this.zoomScale);
             }
 		}
 		else {
@@ -259,13 +251,13 @@ class Map {
 	}
 	
 	zoomOut(){
-		let windowCenter = this.windowStatus.center;
+		let windowCenter = this.frame.center;
 		let horizontal = this.mouseAt.windowPosition.x - windowCenter.x;
 		let vertical = this.mouseAt.windowPosition.y - windowCenter.y;
 		if (Math.abs(horizontal) < windowCenter.x * this.zoomZone && Math.abs(vertical) < windowCenter.y * this.zoomZone){
-			this.cellStatus.zoomOut(this.zoomScale);
-            if (this.windowStatus.isMoreThan(this.mapStatus)){
-                this.cellStatus.zoomIn(this.zoomScale);
+			this.cell.zoomOut(this.zoomScale);
+            if (this.frame.isMoreThan(this.table)){
+                this.cell.zoomIn(this.zoomScale);
             }
 		}
 		else {
@@ -275,7 +267,7 @@ class Map {
 	}
 	
 	setImageOnCell(x, y, image, index){
-		if (0 <= x && x < this.cellStatus.columns && 0 <= y && y < this.cellStatus.rows){
+		if (0 <= x && x < this.cols && 0 <= y && y < this.rows){
 			this.mapContent[x][y] = {
 	    			image: $('.selected')[0],
 	    			index: index
@@ -285,19 +277,19 @@ class Map {
 	
 	drawCell(x, y, image=undefined){
 	    this.ctx.fillStyle = "#00FFEE";
-		if (0 <= x && x < this.cellStatus.columns && 0 <= y && y < this.cellStatus.rows) {
+		if (0 <= x && x < this.cols && 0 <= y && y < this.rows) {
 			if (image == undefined) {
-				this.ctx.fillRect(x * this.cellStatus.width + this.margin.left, y * this.cellStatus.height + this.margin.top, this.cellStatus.width, this.cellStatus.height);
+				this.ctx.fillRect(x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
 			}
 			else {
-				this.ctx.drawImage(image, x * this.cellStatus.width + this.margin.left, y * this.cellStatus.height + this.margin.top, this.cellStatus.width, this.cellStatus.height);
+				this.ctx.drawImage(image, x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
 			}
 		}
 	}
 	
 	drawMapContent(){
-	    for (let i = 0; i < this.cellStatus.columns; i++){
-	        for (let j = 0; j < this.cellStatus.rows; j++){
+	    for (let i = 0; i < this.cols; i++){
+	        for (let j = 0; j < this.rows; j++){
 	            if (this.mapContent[i][j] != undefined) {
 	                this.drawCell(i, j, this.mapContent[i][j].image);
 	            }
@@ -314,24 +306,24 @@ class Map {
 	    
 		let coord = {
 	    	left : (this.margin.left > 0) ? this.margin.left : 0,
-	        right : (this.margin.right > 0) ? this.windowStatus.width - this.margin.right : this.windowStatus.width,
+	        right : (this.margin.right > 0) ? this.frame.width - this.margin.right : this.frame.width,
 			up : (this.margin.top > 0) ? this.margin.top : 0,
-	        down : (this.margin.down > 0) ? this.windowStatus.height - this.margin.down : this.windowStatus.height
+	        down : (this.margin.down > 0) ? this.frame.height - this.margin.down : this.frame.height
 		}
 	    
-	    let i = (this.margin.left > 0) ? this.margin.left : this.cellStatus.width - Math.abs(this.margin.left % this.cellStatus.width);
-	    let j = (this.margin.top > 0) ? this.margin.top : this.cellStatus.height - Math.abs(this.margin.top % this.cellStatus.height);
+	    let i = (this.margin.left > 0) ? this.margin.left : this.cell.width - Math.abs(this.margin.left % this.cell.width);
+	    let j = (this.margin.top > 0) ? this.margin.top : this.cell.height - Math.abs(this.margin.top % this.cell.height);
 
 	    while (i <= coord.right){
 	    	this.ctx.moveTo(i + 0.5, coord.up);
 	    	this.ctx.lineTo(i + 0.5, coord.down);
-	        i += this.cellStatus.width;
+	        i += this.cell.width;
 	    }
 
 	    while (j <= coord.down){
 	    	this.ctx.moveTo(coord.left, j + 0.5);
 	    	this.ctx.lineTo(coord.right, j + 0.5);
-	        j += this.cellStatus.height;
+	        j += this.cell.height;
 	    }
 	    
 	    this.ctx.stroke();
@@ -346,12 +338,12 @@ class Map {
 		this.ctx.fillText("[" + this.mouseAt.mapPosition.x + ", " + this.mouseAt.mapPosition.y + "]", 10, 40);
 		this.ctx.fillText("[" + this.mouseAt.cellPosition.x + ", " + this.mouseAt.cellPosition.y + "]", 10, 60);
 		this.ctx.font = "15px Arial";
-		this.ctx.fillText("Dimension win [" + this.windowStatus.width + ", " + this.windowStatus.height + "]", 10, 80);
-		this.ctx.fillText("Dimension map [" + this.mapStatus.width + ", " + this.mapStatus.height + "]", 10, 100);
-		this.ctx.fillText("Dimension cell [" + this.cellStatus.width + ", " + this.cellStatus.height + "]", 10, 120);
-		distancesTo = this.windowStatus.distancesTo(this.windowStatus.center);
+		this.ctx.fillText("Dimension win [" + this.frame.width + ", " + this.frame.height + "]", 10, 80);
+		this.ctx.fillText("Dimension map [" + this.table.width + ", " + this.table.height + "]", 10, 100);
+		this.ctx.fillText("Dimension cell [" + this.cell.width + ", " + this.cell.height + "]", 10, 120);
+		distancesTo = this.frame.distancesTo(this.frame.center);
 		this.ctx.fillText("Distance win [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 140);
-		distancesTo = this.mapStatus.distancesTo(this.mapCenter);
+		distancesTo = this.table.distancesTo(this.mapCenter);
 		this.ctx.fillText("Distance map [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 160);
 		this.ctx.fillText("Center [" + this.mapCenter.x + ", " + this.mapCenter.y + "]", 10, 180);
 		this.ctx.fillText("Margin [" + this.margin.left + ", " + this.margin.right + ", " + this.margin.top + ", " + this.margin.down + "]", 10, 200);
@@ -387,10 +379,10 @@ class Map {
 	
 	reset(canvas){
 		this.canvas = canvas;
-		this.windowStatus = new Rectangle(canvas.width, canvas.height);
-		this.cellStatus = new Cell(this.rows, this.cols, Math.floor(this.windowStatus.width / this.cols), Math.floor(this.windowStatus.height / this.rows));
-		this.mapStatus = new Rectangle(this.cellStatus.columns * this.cellStatus.width, this.cellStatus.rows * this.cellStatus.height);
-		this.mapCenter = this.mapStatus.center;
+		this.frame = new Rectangle(canvas.width, canvas.height);
+		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
+		this.table = new Square(this.cols * this.cell.width, this.rows * this.cell.height);
+		this.mapCenter = this.table.center;
 		this.defineMapFeature();
 	}
 	
@@ -461,9 +453,9 @@ function mapDesign() {
 			map.zoomOut();
 		}
 		
-        let oldMapStatus = map.mapStatus;
-        map.mapStatus = new Rectangle(map.cellStatus.columns * map.cellStatus.width, map.cellStatus.rows * map.cellStatus.height);
-        map.mapCenter.relativeLocation(oldMapStatus, map.mapStatus);
+        let oldTable = map.table;
+        map.table = new Rectangle(map.cols * map.cell.width, map.rows * map.cell.height);
+        map.mapCenter.relativeLocation(oldTable, map.table);
         map.defineMapFeature();
         map.clear().drawCellMap().drawMapContent().writeInfo();
 	    map.drawCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y);
@@ -707,9 +699,9 @@ function playing() {
 			map.zoomOut();
 		}
 		
-        let oldMapStatus = map.mapStatus;
-        map.mapStatus = new Rectangle(map.cellStatus.columns * map.cellStatus.width, map.cellStatus.rows * map.cellStatus.height);
-        map.mapCenter.relativeLocation(oldMapStatus, map.mapStatus);
+        let oldTable = map.table;
+        map.table = new Rectangle(map.cols * map.cell.width, map.rows * map.cell.height);
+        map.mapCenter.relativeLocation(oldTable, map.table);
         map.defineMapFeature();
         map.clear().drawMapContent();
 	    map.drawCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y);
