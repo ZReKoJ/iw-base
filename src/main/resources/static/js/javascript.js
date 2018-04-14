@@ -179,7 +179,7 @@ class Square extends Rectangle {
 	}
 }
 
-class Map {
+class BattleGround {
 	constructor(canvas, numRows, numCols){
 		// canvas 
 		this.canvas = canvas;
@@ -191,7 +191,7 @@ class Map {
 		this.frame = new Rectangle(canvas.width, canvas.height);
 		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
 		this.table = new Square(this.cols * this.cell.width, this.rows * this.cell.height);
-		// the center of the map
+		// the center of the battleGround
 		this.mapCenter = this.table.center;
 		
 		this.zoomScale = 1,
@@ -240,9 +240,8 @@ class Map {
 		let vertical = this.mouseAt.windowPosition.y - windowCenter.y;
 		if (Math.abs(horizontal) < windowCenter.x * this.zoomZone && Math.abs(vertical) < windowCenter.y * this.zoomZone){
 			this.cell.zoomIn(this.zoomScale);
-            if (this.frame.isLessThan(new Rectangle(this.cell.width * 10, this.cell.height * 10))){
+            if (this.frame.isLessThan(new Rectangle(this.cell.width * 10, this.cell.height * 10)))
                 this.cell.zoomOut(this.zoomScale);
-            }
 		}
 		else {
 			this.mapCenter.x += (horizontal > 0) ? this.moveScale : this.moveScale * -1;
@@ -256,9 +255,8 @@ class Map {
 		let vertical = this.mouseAt.windowPosition.y - windowCenter.y;
 		if (Math.abs(horizontal) < windowCenter.x * this.zoomZone && Math.abs(vertical) < windowCenter.y * this.zoomZone){
 			this.cell.zoomOut(this.zoomScale);
-            if (this.frame.isMoreThan(this.table)){
+            if (this.frame.isMoreThan(this.table))
                 this.cell.zoomIn(this.zoomScale);
-            }
 		}
 		else {
 			this.mapCenter.x += (horizontal > 0) ? this.moveScale * -1 : this.moveScale;
@@ -278,23 +276,17 @@ class Map {
 	drawCell(x, y, image=undefined){
 	    this.ctx.fillStyle = "#00FFEE";
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows) {
-			if (image == undefined) {
+			if (image == undefined)
 				this.ctx.fillRect(x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
-			}
-			else {
-				this.ctx.drawImage(image, x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
-			}
+			else this.ctx.drawImage(image, x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
 		}
 	}
 	
 	drawMapContent(){
-	    for (let i = 0; i < this.cols; i++){
-	        for (let j = 0; j < this.rows; j++){
-	            if (this.mapContent[i][j] != undefined) {
+	    for (let i = 0; i < this.cols; i++)
+	        for (let j = 0; j < this.rows; j++)
+	            if (this.mapContent[i][j] != undefined)
 	                this.drawCell(i, j, this.mapContent[i][j].image);
-	            }
-	        }
-	    }
 	    return this;
 	}
 	
@@ -339,12 +331,12 @@ class Map {
 		this.ctx.fillText("[" + this.mouseAt.cellPosition.x + ", " + this.mouseAt.cellPosition.y + "]", 10, 60);
 		this.ctx.font = "15px Arial";
 		this.ctx.fillText("Dimension win [" + this.frame.width + ", " + this.frame.height + "]", 10, 80);
-		this.ctx.fillText("Dimension map [" + this.table.width + ", " + this.table.height + "]", 10, 100);
+		this.ctx.fillText("Dimension battleGround [" + this.table.width + ", " + this.table.height + "]", 10, 100);
 		this.ctx.fillText("Dimension cell [" + this.cell.width + ", " + this.cell.height + "]", 10, 120);
 		distancesTo = this.frame.distancesTo(this.frame.center);
 		this.ctx.fillText("Distance win [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 140);
 		distancesTo = this.table.distancesTo(this.mapCenter);
-		this.ctx.fillText("Distance map [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 160);
+		this.ctx.fillText("Distance battleGround [" + distancesTo.left + ", " + distancesTo.right + ", " + distancesTo.top + ", " + distancesTo.down + "]", 10, 160);
 		this.ctx.fillText("Center [" + this.mapCenter.x + ", " + this.mapCenter.y + "]", 10, 180);
 		this.ctx.fillText("Margin [" + this.margin.left + ", " + this.margin.right + ", " + this.margin.top + ", " + this.margin.down + "]", 10, 200);
 		this.ctx.fillText("Canvas [" + this.canvas.width + ", " + this.canvas.height + "]", 10, 220);
@@ -366,12 +358,9 @@ class Map {
 		
 		for (let i = 0; i < this.cols; i++){
 	        for (let j = 0; j < this.rows; j++){
-	            if (this.mapContent[i][j] != undefined) {
+	            if (this.mapContent[i][j] != undefined) 
 	            	result.data[i][j] = this.mapContent[i][j].index;
-	            }
-	            else {
-	            	result.data[i][j] = 0;
-	            }
+	            else result.data[i][j] = 0;
 	        }
 		}
 		return JSON.stringify(result);
@@ -406,7 +395,7 @@ function mapDesign() {
 	setCanvasSize(canvas, parent.width(), parent.width());
 	grid.style.height = canvas.height + "px";
 	
-	let map = new Map(canvas, 100, 100);
+	let battleGround = new BattleGround(canvas, 100, 100);
 	
 	let index;
 	let drag = false;
@@ -415,14 +404,12 @@ function mapDesign() {
 		let rect = canvas.getBoundingClientRect();
 		let x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
-		map.defineMouseAt(x, y);
+		battleGround.defineMouseAt(x, y);
 		
-	    if (drag) {
-	    	map.setImageOnCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y, $('.selected')[0], index);
-	    }
+	    if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
 	    
-	    map.clear().drawCellMap().drawMapContent().writeInfo();
-	    map.drawCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y);
+	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
 	});
@@ -431,7 +418,7 @@ function mapDesign() {
 
 		drag = true;
 	    
-	    map.setImageOnCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y, $('.selected')[0], index);
+	    battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
 	    
 	    event.returnValue = false;
 	})
@@ -446,19 +433,15 @@ function mapDesign() {
 
 	canvas.addEventListener('wheel', function(event){
 		
-		if (event.deltaY < 0){
-			map.zoomIn();
-		}
-		else {
-			map.zoomOut();
-		}
+		if (event.deltaY < 0) battleGround.zoomIn();
+		else battleGround.zoomOut();
 		
-        let oldTable = map.table;
-        map.table = new Rectangle(map.cols * map.cell.width, map.rows * map.cell.height);
-        map.mapCenter.relativeLocation(oldTable, map.table);
-        map.defineMapFeature();
-        map.clear().drawCellMap().drawMapContent().writeInfo();
-	    map.drawCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y);
+        let oldTable = battleGround.table;
+        battleGround.table = new Rectangle(battleGround.cols * battleGround.cell.width, battleGround.rows * battleGround.cell.height);
+        battleGround.mapCenter.relativeLocation(oldTable, battleGround.table);
+        battleGround.defineMapFeature();
+        battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
 	    
@@ -468,8 +451,8 @@ function mapDesign() {
 
 		setCanvasSize(canvas, parent.width(), parent.width());
 		grid.style.height = canvas.height + "px";
-		map.reset(canvas);
-	    map.clear().drawCellMap().drawMapContent().writeInfo();
+		battleGround.reset(canvas);
+	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
     
     };
 
@@ -493,36 +476,25 @@ function mapDesign() {
 	});
 	
 	document.getElementById("test").addEventListener("click", function(){
-		console.log(map.json());
+		console.log(battleGround.json());
 	});
 
 	
-    map.drawCellMap().writeInfo();
+    battleGround.drawCellMap().writeInfo();
 }
 
 function isFullScreen(){
-	if (document.fullscreenElement) {
-        return true;
-    }
-    else if (document.webkitFullscreenElement) {
-        return true;
-    }
-    else if (document.mozFullScreenElement) {
-        return true;
-    }
-    else {
-    	return false;
-    }
+	if (document.fullscreenElement) return true;
+    else if (document.webkitFullscreenElement) return true;
+    else if (document.mozFullScreenElement) return true;
+    else return false;
 }
 
 function fullscreen(){
     
-	if(canvas.webkitRequestFullScreen) {
+	if(canvas.webkitRequestFullScreen) 
 		canvas.webkitRequestFullScreen();
-	}
-	else {
-		canvas.mozRequestFullScreen();
-	}
+	else canvas.mozRequestFullScreen();
 	
 }
 
@@ -531,9 +503,8 @@ function readTextFile(file, callback) {
     rawFile.overrideMimeType("application/json");
     rawFile.open("GET", file, true);
     rawFile.onreadystatechange = function() {
-        if (rawFile.readyState === 4 && rawFile.status == "200") {
+        if (rawFile.readyState === 4 && rawFile.status == "200")
             callback(rawFile.responseText);
-        }
     }
     rawFile.send(rawFile.responseText);
 }
@@ -559,8 +530,6 @@ function playing() {
 		console.log(a);
 	});
 	 */
-
-	let map = new Map(canvas, 100, 100);
 	
 	let data = '{"cellDim":{"x":100,"y":100},"data":' +
 	'[[0,0,0,0,0,0,0,0,0,0,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],' +
@@ -665,46 +634,58 @@ function playing() {
 	'[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207]]}';
 	data = JSON.parse(data);
 
-	for (let i = 0; i < map.cols; i++){
-    	for (let j = 0; j < map.rows; j++){
-    		map.mapContent[i][j] = {
+	let battleGround = new BattleGround(canvas, data.cellDim.x, data.cellDim.y);
+	
+	let set = new Set();
+	for (let i = 0; i < data.cellDim.x; i++)
+    	for (let j = 0; j < data.cellDim.y; j++)
+    		set.add(data.data[i][j]);
+	
+	let dict = new Map();
+	let imagesLoaded = 0;
+	for (let item of set){
+		let img = document.createElement("img");
+		img.onload = function(){
+			imagesLoaded++;
+			if (imagesLoaded == set.size)  battleGround.drawMapContent();
+		}
+		img.src = "/static/img/map2/component (" + item + ").png";
+		dict.set(item, img);
+	}
+	
+	for (let i = 0; i < battleGround.cols; i++){
+    	for (let j = 0; j < battleGround.rows; j++){
+    		battleGround.mapContent[i][j] = {
     			image : undefined,
     			index : data.data[i][j]
     		}
-    		let img = document.createElement("img");
-    		img.src = "/static/img/map2/component (" + map.mapContent[i][j].index + ").png";
-    		map.mapContent[i][j].image = img;
+    		battleGround.mapContent[i][j].image = dict.get(data.data[i][j]);
     	}
     }
-	console.log(map.mapContent);
 
 	canvas.addEventListener('mousemove', function(event) {
 		let rect = canvas.getBoundingClientRect();
 		let x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
-		map.defineMouseAt(x, y);
+		battleGround.defineMouseAt(x, y);
 
-	    map.clear().drawMapContent();
-	    map.drawCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y);
+	    battleGround.clear().drawMapContent();
+	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
 	});
 
 	canvas.addEventListener('wheel', function(event){
 		
-		if (event.deltaY < 0){
-			map.zoomIn();
-		}
-		else {
-			map.zoomOut();
-		}
+		if (event.deltaY < 0) battleGround.zoomIn();
+		else battleGround.zoomOut();
 		
-        let oldTable = map.table;
-        map.table = new Rectangle(map.cols * map.cell.width, map.rows * map.cell.height);
-        map.mapCenter.relativeLocation(oldTable, map.table);
-        map.defineMapFeature();
-        map.clear().drawMapContent();
-	    map.drawCell(map.mouseAt.cellPosition.x, map.mouseAt.cellPosition.y);
+        let oldTable = battleGround.table;
+        battleGround.table = new Rectangle(battleGround.cols * battleGround.cell.width, battleGround.rows * battleGround.cell.height);
+        battleGround.mapCenter.relativeLocation(oldTable, battleGround.table);
+        battleGround.defineMapFeature();
+        battleGround.clear().drawMapContent();
+	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
 	    
@@ -712,20 +693,14 @@ function playing() {
 
 	window.onresize = function() {
 		
-		if (isFullScreen()){
-			setCanvasSize(canvas, window.innerWidth, window.innerHeight);
-		}
-		else {
-			setCanvasSize(canvas, parent.width(), parent.width());
-		}
+		if (isFullScreen()) setCanvasSize(canvas, window.innerWidth, window.innerHeight);
+		else setCanvasSize(canvas, parent.width(), parent.width());
 		
-		map.reset(canvas);
-	    map.clear().drawMapContent();
+		battleGround.reset(canvas);
+	    battleGround.clear().drawMapContent();
     
     };
 
 	document.getElementById("full-screen").addEventListener("click", fullscreen);
-	
-    map.drawMapContent();
 
 }
