@@ -5,17 +5,18 @@
 <%@ include file="../jspf/header.jspf"%>
 	
 <link href="${s}/css/home.css" rel="stylesheet">
-
-
-<div class='menu closed'>
-  <a href="profile" class='profile button'></a>
-  <a href="ranking" class='ranking button'></a>
-  <a href="playing" class='play button'> Play </a>
-  <a href="code-design" class='code button'></a>
-  <a href="map-design" class='mapd button'></a>
-  <div class='main button'> Menu </div>
+	<div class='menu closed'>
+	  <a class='profile button'></a>
+	  <a class='ranking button'></a>
+	  <a href="playing" class='play button'> Play </a>
+	  <a class='code button'></a>
+	  <a class='mapd button'></a>
+	  <div class='main button'> Menu </div>
+	</div>
+<div class="titlecontainer">
+	<div class="titlename"> ROBOTRON 2000 </div>
+	<div class="titletext"> Develop a robot to battle against other robots. Show off your mad Javascript skills, try yourself against the best of the best.</div>
 </div>
-
 <script>
     $(".main.button").mousedown(function(){
 	$(".menu").toggleClass("closed");
@@ -26,17 +27,26 @@
 		$(".ranking.button").text(" ");
 		$(".code.button").text(" ");
 		$(".mapd.button").text(" ");
+		$(".profile.button").removeAttr("href");
+		$(".ranking.button").removeAttr("href");
+		$(".code.button").removeAttr("href");
+		$(".mapd.button").removeAttr("href");
 	} else {
 		$(".main.button").text("Close");
 		$(".profile.button").text("Profile");
 		$(".ranking.button").text("Ranking");
 		$(".code.button").text("Code Design");
 		$(".mapd.button").text("Map Design");
+		$(".profile.button").attr("href", "profile");
+		$(".ranking.button").attr("href", "ranking");
+		$(".code.button").attr("href", "code-design");
+		$(".mapd.button").attr("href", "map-design");
+		
 	}
 })
 </script>
-
-<!--<div class="jumbotron">
+<!--
+<div class="jumbotron">
   <h1 class="display-4">Welcome to Robotrón 2000!</h1>
   <p>A simple game where you can have fun and learn Javascript at the same time</p>
   <p class="lead">

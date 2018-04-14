@@ -1,12 +1,16 @@
 @import "https://fonts.googleapis.com/css?family=Alegreya+Sans:400,500";
-html {
-  
-  height: 100%; 
-  background-position: center;
+body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: url("../img/home-bg-img.png");
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  background: #0979B2;
-  background-image: url("../img/home-bg-img.png");
 }
 
 a:link {
@@ -73,11 +77,11 @@ a:active {
 }
 
 .main {
-  color: #f8f7f2;
+  color: #bdbcae;
   text-align: center;
   mix-blend-mode: normal;
   line-height: 100px;
-  box-shadow: 0 0 0 5px rgba(70, 14, 19, 0.3);
+  box-shadow: 0 0 0 5px rgba(255, 249, 51, 0.1);
   -webkit-transition: border-color 0.75s, color 0.75s;
   transition: border-color 0.75s, color 0.75s;
   will-change: color, border-color, background;
@@ -151,4 +155,31 @@ a:active {
 .closed .mapd {
   -webkit-transform: translate3d(-9.51056%, -228.09016%, 0) rotate(-180deg);
           transform: translate3d(-9.51056%, -228.09016%, 0) rotate(-180deg);
+}
+
+.titlecontainer {
+  position: relative;
+  float: right;
+  transform: translate(0%, 200%);
+  color: white;
+  width: 50%;
+  height: 100%;
+}
+
+.titlename {
+  font: 80px/70px Alegreya Sans, sans-serif;
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%);
+}
+
+.titletext{
+  font: 21px/20px Alegreya Sans, sans-serif;
+  position: relative;
+  float: bottom;
+  top: 70%;
+  left: 52%;
+  transform: translate(-50%, -40%);
 }
