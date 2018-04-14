@@ -4,18 +4,33 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
+<link href="${s}/css/ranking.css" rel="stylesheet">
+
 <div class="jumbotron">
+
     <h1 class="display-4">Ranking</h1>
     <hr class="my-4">
     <div class="row">
-        <ul class="list-group list-group-flush">
+        <table>
+        	<thead>
+        		<tr>
+					<th class ="rank">Rank</th>
+					<th class ="name">Name</th>
+					<th class="points">Points</th>
+				</tr>
+        	</thead>
+        	<tbody>
         	<c:forEach var="user" items="${users}" varStatus="status">
-				<li class="list-group-item d-flex justify-content-between align-items-center">${status.index+1} - ${user.nickname}
-                	<span class="badge badge-primary badge-pill">${user.score}</span>
-            	</li>
+				<tr>
+					<td class="rank"> ${status.index+1} </td>
+					<td class="name"> ${user.nickname} </td>
+					<td class="points"> ${user.score} </td>
+            	</tr>
 			</c:forEach>
-        </ul>
+			</tbody>
+        </table>
     </div>
+    
     <div class="row">
         <div class="col-sm-5"></div>
         <div class="col-sm-2">
