@@ -210,6 +210,8 @@ class BattleGround {
 			mapPosition: { x: "x", y: "y" },
 			cellPosition: { x: "x", y: "y" }
 		}
+		
+		this.robots = new Map();
 	}
 	
 	defineMouseAt(x, y){
@@ -264,6 +266,10 @@ class BattleGround {
 		}
 	}
 	
+	addRobot(robot){
+		this.robots.set(robot.name, robot);
+	}
+	
 	setImageOnCell(x, y, image, index){
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows){
 			this.mapContent[x][y] = {
@@ -287,6 +293,15 @@ class BattleGround {
 	        for (let j = 0; j < this.rows; j++)
 	            if (this.mapContent[i][j] != undefined)
 	                this.drawCell(i, j, this.mapContent[i][j].image);
+	    for (let [key, value] of this.robots) {
+		    this.ctx.save();
+	    	this.ctx.translate(
+    			this.margin.left + Math.floor(this.table.width * value.x),
+    			this.margin.top + Math.floor(this.table.height * value.y));
+		    this.ctx.rotate(value.rotation * Math.PI / 360);
+	    	this.ctx.drawImage(value.image, -value.image.width / 2, -value.image.height / 2, this.cell.width, this.cell.height);
+	    	this.ctx.restore();
+	    }
 	    return this;
 	}
 	
@@ -647,7 +662,10 @@ function playing() {
 		let img = document.createElement("img");
 		img.onload = function(){
 			imagesLoaded++;
-			if (imagesLoaded == set.size)  battleGround.drawMapContent();
+			if (imagesLoaded == set.size)  {
+				battleGround.drawMapContent();
+				start(battleGround);
+			}
 		}
 		img.src = "/static/img/map2/component (" + item + ").png";
 		dict.set(item, img);
@@ -701,6 +719,93 @@ function playing() {
     
     };
 
-	document.getElementById("full-screen").addEventListener("click", fullscreen);
+	document.getElementById("fullscreen").addEventListener("click", fullscreen);
 
+}
+
+function start(battleGround){
+	let robots = [];
+	robots.push(new Robot("Zihao", "path", battleGround));
+	
+	let imagesLoaded = 0;
+	robots.forEach(function(entry){
+		let img = document.createElement("img");
+		img.onload = function(){
+			imagesLoaded++;
+			if (imagesLoaded == robots.length){
+				robots.forEach(function(entry){
+					battleGround.addRobot(entry);
+					battleGround.clear().drawMapContent();
+				});
+			}
+		}
+		img.src = "/static/img/map2/component (132).png";
+		entry.image = img;
+	});
+	
+	window.onkeydown = function(e) {
+		let key = e.keyCode ? e.keyCode : e.which;
+		    
+		switch (key){
+		case 37: 
+			robots.forEach(function(entry){
+				entry.moveToLeft();
+				battleGround.clear().drawMapContent();
+			});
+		break;
+		case 38: 
+			robots.forEach(function(entry){
+				entry.moveToUp();
+				battleGround.clear().drawMapContent();
+			});
+		break;
+		case 39: 
+			robots.forEach(function(entry){
+				entry.moveToRight();
+				battleGround.clear().drawMapContent();
+			});
+		break;
+		case 40: 
+			robots.forEach(function(entry){
+				entry.moveToDown();
+				battleGround.clear().drawMapContent();
+			});
+		break;
+		default: break;
+		}
+	}
+}
+
+class Robot {
+	constructor(name, path, battleGround){
+		this.name = name;
+		this.path = path;
+		this.image = undefined;
+		this.battleGround = battleGround;
+		this.proportionX = 1 / battleGround.table.width;
+		this.proportionY = 1 / battleGround.table.height;
+		this.rotation = 0;
+		this.x = 0.50;
+		this.y = 0.50;
+	}
+	
+	moveToLeft(){
+		//this.x -= this.proportionX;
+		this.rotation += 5;
+	}
+	
+	moveToUp(){
+		this.y -= this.proportionY;
+	}
+	
+	moveToRight(){
+		//this.x += this.proportionX;
+		this.rotation -= 5;
+	}
+	
+	moveToDown(){
+		this.y += this.proportionY;
+	}
+	
+	makeMove() {}
 }
