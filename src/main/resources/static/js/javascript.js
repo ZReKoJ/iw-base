@@ -299,7 +299,7 @@ class BattleGround {
     			this.margin.left + Math.floor(this.table.width * value.x),
     			this.margin.top + Math.floor(this.table.height * value.y));
 		    this.ctx.rotate(value.rotation * Math.PI / 360);
-	    	this.ctx.drawImage(value.image, -value.image.width / 2, -value.image.height / 2, this.cell.width, this.cell.height);
+	    	this.ctx.drawImage(value.image, -this.cell.width / 2, -this.cell.height / 2, this.cell.width, this.cell.height);
 	    	this.ctx.restore();
 	    }
 	    return this;
