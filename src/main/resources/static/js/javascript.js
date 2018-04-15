@@ -757,7 +757,8 @@ function start(battleGround){
 	
 	window.onkeydown = function(e) {
 		let key = e.keyCode ? e.keyCode : e.which;
-		    
+		event.returnValue = false;
+		
 		switch (key){
 		case 37: 
 			robots.forEach(function(entry){
@@ -783,10 +784,8 @@ function start(battleGround){
 				battleGround.clear().drawMapContent();
 			});
 		break;
-		default: break;
+		default: event.returnValue = true; break;
 		}
-		
-		event.returnValue = false;
 	}
 }
 
