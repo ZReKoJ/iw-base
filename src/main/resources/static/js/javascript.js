@@ -298,8 +298,8 @@ class BattleGround {
 	    	this.ctx.translate(
     			this.margin.left + Math.floor(this.table.width * value.x),
     			this.margin.top + Math.floor(this.table.height * value.y));
-		    this.ctx.rotate(value.rotation * Math.PI / 360);
-	    	this.ctx.drawImage(value.image, -this.cell.width / 2, -this.cell.height / 2, this.cell.width, this.cell.height);
+		    this.ctx.rotate(toRadians(value.rotation));
+	    	this.ctx.drawImage(value.image, -this.cell.center.x, -this.cell.center.y, this.cell.width, this.cell.height);
 	    	this.ctx.restore();
 	    }
 	    return this;
@@ -723,6 +723,10 @@ function playing() {
 
 }
 
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
 function start(battleGround){
 	let robots = [];
 	robots.push(new Robot("Zihao", "path", battleGround));
@@ -787,24 +791,27 @@ class Robot {
 		this.rotation = 0;
 		this.x = 0.50;
 		this.y = 0.50;
+		this.a = undefined;
+		this.b = undefined;
+		console.log(this.proportionX + " " + this.proportionY);
 	}
 	
 	moveToLeft(){
-		//this.x -= this.proportionX;
-		this.rotation += 5;
-	}
-	
-	moveToUp(){
-		this.y -= this.proportionY;
-	}
-	
-	moveToRight(){
-		//this.x += this.proportionX;
 		this.rotation -= 5;
 	}
 	
+	moveToUp(){
+		this.x += this.proportionX * Math.sin(toRadians(this.rotation));
+		this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
+	}
+	
+	moveToRight(){
+		this.rotation += 5;
+	}
+	
 	moveToDown(){
-		this.y += this.proportionY;
+		this.x -= this.proportionX * Math.sin(toRadians(this.rotation));
+		this.y += this.proportionY * Math.cos(toRadians(this.rotation));
 	}
 	
 	makeMove() {}
