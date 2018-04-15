@@ -64,11 +64,11 @@ function login(){
 function profile() {
 	
     let buttons = $('#responsive');
-    let links = buttons.find('a');
+    let links = buttons.find('topRightCorner');
  
     links.click(function(e) {
     	
-        $(this).siblings('a.active').removeClass("active");
+        $(this).siblings('topRightCorner.active').removeClass("active");
         $(this).addClass("active");
         
         let index = $(this).index();
@@ -125,12 +125,20 @@ class Rectangle {
 		return this.calculateArea();
 	}
 	
+	get diagonal() {
+		return this.calculateDiagonal();
+	}
+	
 	calculateCenter(){
 		return new Point(Math.floor(this.width / 2), Math.floor(this.height / 2));
 	}
 	
 	calculateArea(){
 		return this.width * this.height;
+	}
+	
+	calculateDiagonal(){
+		return Math.sqrt(this.width * this.width + this.height * this.height);
 	}
 	
 	distancesTo(point){
@@ -538,11 +546,11 @@ function playing() {
 	    var data = JSON.parse(text);
 	    for (let i = 0; i < data.numCell.x; i++){
 	    	for (let j = 0; j < data.numCell.y; j++){
-	    		a += data.data[i][j] + " ";
+	    		topRightCorner += data.data[i][j] + " ";
 	    	}
-	    	a += "\n";
+	    	topRightCorner += "\n";
 	    }
-		console.log(a);
+		console.log(topRightCorner);
 	});
 	 */
 	
@@ -686,7 +694,7 @@ function playing() {
 		let x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
 		battleGround.defineMouseAt(x, y);
-
+		
 	    battleGround.clear().drawMapContent();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
@@ -777,6 +785,8 @@ function start(battleGround){
 		break;
 		default: break;
 		}
+		
+		event.returnValue = false;
 	}
 }
 
@@ -788,16 +798,41 @@ class Robot {
 		this.battleGround = battleGround;
 		this.proportionX = 1 / battleGround.table.width;
 		this.proportionY = 1 / battleGround.table.height;
+		this.rotationScale = 10;
 		this.rotation = 0;
 		this.x = 0.50;
 		this.y = 0.50;
-		this.a = undefined;
-		this.b = undefined;
-		console.log(this.proportionX + " " + this.proportionY);
+		this.topRightCorner = undefined;
+		this.downRightCorner = undefined;
+		this.downLeftCorner = undefined;
+		this.topLeftCorner = undefined;
+		this.diagonal = this.battleGround.cell.diagonal / 2;
+		this.calculateCorners();
+	}
+	
+	calculateCorners(){
+		this.diagonal = this.battleGround.cell.diagonal / 2;
+		this.topRightCorner = new Point(
+				this.diagonal * Math.cos(toRadians(this.rotation + 315)),
+				this.diagonal * Math.sin(toRadians(this.rotation + 315)));
+		this.downRightCorner = new Point(
+				this.diagonal * Math.cos(toRadians(this.rotation + 45)),
+				this.diagonal * Math.sin(toRadians(this.rotation + 45)));
+		this.downLeftCorner = new Point(
+				this.diagonal * Math.cos(toRadians(this.rotation + 135)),
+				this.diagonal * Math.sin(toRadians(this.rotation + 135)));
+		this.topLeftCorner = new Point(
+				this.diagonal * Math.cos(toRadians(this.rotation + 225)),
+				this.diagonal * Math.sin(toRadians(this.rotation + 225)));
+	}
+	
+	changeRotation(degrees){
+		this.rotation += degrees;
+		this.calculateCorners();
 	}
 	
 	moveToLeft(){
-		this.rotation -= 5;
+		this.changeRotation(-this.rotationScale);
 	}
 	
 	moveToUp(){
@@ -806,7 +841,7 @@ class Robot {
 	}
 	
 	moveToRight(){
-		this.rotation += 5;
+		this.changeRotation(this.rotationScale);
 	}
 	
 	moveToDown(){
