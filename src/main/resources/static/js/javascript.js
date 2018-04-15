@@ -838,6 +838,9 @@ class Robot {
 	moveToUp(){
 		this.x += this.proportionX * Math.sin(toRadians(this.rotation));
 		this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
+		this.battleGround.mapCenter.x = Math.floor(this.battleGround.table.width * this.x);
+		this.battleGround.mapCenter.y = Math.floor(this.battleGround.table.width * this.y);
+		this.battleGround.defineMapFeature();
 	}
 	
 	moveToRight(){
@@ -847,6 +850,9 @@ class Robot {
 	moveToDown(){
 		this.x -= this.proportionX * Math.sin(toRadians(this.rotation));
 		this.y += this.proportionY * Math.cos(toRadians(this.rotation));
+		this.battleGround.mapCenter.x = Math.floor(this.battleGround.table.width * this.x);
+		this.battleGround.mapCenter.y = Math.floor(this.battleGround.table.width * this.y);
+		this.battleGround.defineMapFeature();
 	}
 	
 	makeMove() {}
