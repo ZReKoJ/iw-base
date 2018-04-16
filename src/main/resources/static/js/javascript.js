@@ -444,6 +444,8 @@ function mapDesign() {
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
 		battleGround.mouseAt = battleGround.defineMouseAt(x, y);
 
+		if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
+		
 	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
@@ -453,8 +455,10 @@ function mapDesign() {
 	canvas.addEventListener('mousedown', function(event) {
 
 		drag = true;
-
-	    event.returnValue = false;
+		
+		battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
+	    
+		event.returnValue = false;
 	    
 	});
 
