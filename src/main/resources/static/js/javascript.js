@@ -694,8 +694,6 @@ function playing() {
 		dict.set(item, img);
 	}
 	
-	console.log(BLOCKS);
-	
 	for (let i = 0; i < battleGround.cols; i++){
     	for (let j = 0; j < battleGround.rows; j++){
     		battleGround.mapContent[i][j] = {
@@ -712,7 +710,7 @@ function playing() {
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
         battleGround.mouseAt = battleGround.defineMouseAt(x, y);
 		
-	    battleGround.clear().drawMapContent().writeInfo();
+	    battleGround.clear().drawMapContent();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
