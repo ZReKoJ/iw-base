@@ -713,7 +713,7 @@ function playing() {
         battleGround.mouseAt = battleGround.defineMouseAt(x, y);
 		
 	    battleGround.clear().drawMapContent().writeInfo();
-	    //battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
+	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
 	});
@@ -816,8 +816,8 @@ class Robot {
 		this.proportionY = 1 / battleGround.table.height;
 		this.rotationScale = 10;
 		this.rotation = 0;
-		this.x = 0.50;
-		this.y = 0.50;
+		this.x = 0.35;
+		this.y = 0.35;
 		this.topRightCorner = undefined;
 		this.downRightCorner = undefined;
 		this.downLeftCorner = undefined;
@@ -857,8 +857,14 @@ class Robot {
 		let mouseAt = this.battleGround.defineMouseAt(
 			this.battleGround.margin.left + this.battleGround.table.width * this.x + point.x,
 			this.battleGround.margin.top + this.battleGround.table.height * this.y + point.y);
-		let cell = this.battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y];
-		return cell == BLOCKS.GRASS || cell == BLOCKS.GROUND || cell == BLOCKS.PLATFORM;
+		if (0 <= mouseAt.cellPosition.x && 
+			mouseAt.cellPosition.x < this.battleGround.cols && 
+			0 <= mouseAt.cellPosition.y && 
+			mouseAt.cellPosition.y < this.battleGround.rows) {
+			let cell = this.battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
+			return cell == BLOCKS.GRASS || cell == BLOCKS.GROUND || cell == BLOCKS.PLATFORM;	
+		}
+		else return false;
 	}
 	
 	moveTo(x, y){
@@ -871,7 +877,6 @@ class Robot {
 		availablePosition = availablePosition && this.checkPosition(this.downRightCorner);
 		availablePosition = availablePosition && this.checkPosition(this.downLeftCorner);
 		availablePosition = availablePosition && this.checkPosition(this.topLeftCorner);
-		console.log(availablePosition);
 		if (!availablePosition){
 			this.x -= x;
 			this.y -= y;
