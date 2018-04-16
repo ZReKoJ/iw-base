@@ -9,8 +9,8 @@
 <div class="jumbotron">
 	<div class="row">
 		<div class="column btn-group-vertical pull-right">
-            <a id="full-screen" class="btn btn-primary" href="#" role="button">FullScreen</a>
-            <a class="btn btn-primary" href="results" role="button">Results</a>
+            <a class="btn btn-primary disabled" href="results" role="button">Results</a>
+            <a id="fullscreen" class="btn btn-primary" href="#" role="button">FullScreen</a>
 		</div>
 		<div class="map-content">
         	<canvas id="canvas"></canvas>

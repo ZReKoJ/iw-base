@@ -1,0 +1,61 @@
+body {
+	font-family: Alegreya Sans, sans-serif;
+	color: #525655;
+}
+
+.container > header {
+	margin: 0 auto;
+	padding: 1em;
+	text-align: center;
+}
+
+.container > header h1 {
+  font-weight: 600;
+	font-size: 3em;
+	margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background: #fff;
+}
+
+th {
+    background-color: #326295;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}
+
+td, th {
+    padding: 1em 1.5em;
+    text-align: left;
+}
+
+tbody th {
+	background-color: #a9c1eb;
+}
+tbody tr:nth-child(2n-1) {
+    background-color: #efefef;
+    transition: all .125s ease-in-out;
+}
+tbody tr:hover {
+    background-color: rgba(50,98,149,.3);
+}
+
+td.rank {
+	text-transform: capitalize;
+}
+
+.rank {
+	text-align: left;
+}
+
+.name {
+	text-align: left;
+}
+
+.points {
+	text-align: right;
+}
