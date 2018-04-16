@@ -386,8 +386,8 @@ function mapDesign() {
 	grid.style.height = canvas.height + "px";
 	
 	numCell = {
-		x: 100,
-		y: 100
+		x: 3,
+		y: 3
 	}
 	var index;
 	

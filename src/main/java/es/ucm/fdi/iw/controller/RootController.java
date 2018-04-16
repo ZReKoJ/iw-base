@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Code;
+import es.ucm.fdi.iw.model.Map;
 import es.ucm.fdi.iw.model.User;
 
 @Controller	
@@ -81,8 +82,7 @@ public class RootController {
     		HttpSession s,
     		Model m){
     	response.setHeader("X-XSS-Protection", "0");
-    	log.info(codeFileName);
-    	log.info(code);
+    	
 		String error = "";
         if (code.isEmpty()) {
         	error = "You failed to upload a photo for " 
@@ -96,7 +96,6 @@ public class RootController {
 	    		codeObject.setCreator(u);
 	    		codeObject.setDescription("");
 	    		codeObject.setName(codeFileName);
-	    		codeObject.setCodeText(code);
 	    		codeObject.setCreationTime(Calendar.getInstance().getTime());
 
 	    		entityManager.persist(codeObject);
@@ -118,6 +117,51 @@ public class RootController {
 	  
 	            return "/code-design";
 	            
+        }
+        // exit with error, blame user
+    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return error;
+	}
+    
+    @RequestMapping(value="/createMap", method=RequestMethod.POST)
+    public String handleFileUpload(
+    		HttpServletResponse response,
+    		@RequestParam("dataToJSon") MultipartFile canvas,
+    		HttpSession s){
+
+    	
+    	log.info(canvas);
+    	String error = "";
+        if (canvas.isEmpty()) {
+        	
+        	error = "You failed to upload the map";     
+        	log.info(error);
+        } else {
+        	
+	    		Map map= new Map();
+	    		User u = new User();
+	    		u.setId(Long.parseLong(s.getAttribute("user").toString()));
+	    		map.setCreator(u);
+	    		map.setDescription("");
+	    		map.setName("pruebaCanvas.png");
+	    		map.setCreationTime(Calendar.getInstance().getTime());
+
+	    		entityManager.persist(map);
+	    		
+	    		entityManager.flush();
+	    		
+	    		File f = localData.getFile("maps", String.valueOf(map.getId()));
+	    		try (BufferedOutputStream stream =
+		                new BufferedOutputStream(
+		                		new FileOutputStream(f)
+		                )
+		        )
+	    		{
+	    			stream.write(canvas.getBytes());
+	     
+	    		} catch (Exception e) {
+	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
+	    		}
         }
         // exit with error, blame user
     	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -200,9 +244,7 @@ public class RootController {
 		s.setAttribute("users", entityManager
 				.createQuery("from User", User.class)
                 .getResultList());
-		
 	
-		
 		return "ranking";
 	}
 	
