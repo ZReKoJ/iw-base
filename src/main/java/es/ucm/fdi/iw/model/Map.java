@@ -15,7 +15,7 @@ public class Map {
 	private String description;
 	private Date creationTime;
 	// definitions JSON??
-	private User owner;
+	private User creator;
 	private byte enabled;
 	
 	@Id
@@ -53,12 +53,12 @@ public class Map {
 	}
 	
 	@ManyToOne(targetEntity=User.class)
-	public User getOwner() {
-		return owner;
+	public User getCreator() {
+		return creator;
 	}
 	
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 	
 	public byte getEnabled() {

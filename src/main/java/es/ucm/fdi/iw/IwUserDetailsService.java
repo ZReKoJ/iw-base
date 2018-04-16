@@ -25,7 +25,7 @@ public class IwUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String nickname){
     	try {
-    		log.info("No such user: " + nickname);
+    		
 	        User u = entityManager.createQuery("from User where nickname = :nickname", User.class)
 	                            .setParameter("nickname", nickname)
 	                            .getSingleResult();

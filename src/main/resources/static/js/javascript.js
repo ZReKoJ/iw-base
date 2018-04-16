@@ -433,7 +433,15 @@ function mapDesign() {
 	setCanvasSize(canvas, parent.width(), parent.width());
 	grid.style.height = canvas.height + "px";
 	
+<<<<<<< HEAD
+	numCell = {
+		x: 3,
+		y: 3
+	}
+	var index;
+=======
 	let battleGround = new BattleGround(canvas, 100, 100);
+>>>>>>> branch 'master' of https://github.com/ZReKoJ/iw-base
 	
 	let index;
 	let drag = false;
