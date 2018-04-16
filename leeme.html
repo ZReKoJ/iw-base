@@ -3,24 +3,30 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style>
+            .centeredText {
+                margin-top: 15px;
+                margin-bottom: 15px;
+                margin-right: 40px;
+                margin-left: 40px;
+            }
+        </style>
     </head>
     <body>
         <h1 align="center">Robotron 2000</h1>
         
         <h2 align="center">Descripción</h2>
         <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
         <ul class="list-unstyled">
-        <li>Robotron 2000 es un juego para el navegador, en el que programas el comportamiento de un robot para competir contra robots programados por otros usuarios.</li>
-        <li style="color : red">Falta concretar las mecánicas del juego, y el cómo se debe estructurar el código de los robots.</li>
-        <li>Diseña, edita y guarda los <a href="#code-design">códigos</a> de tus robots.</li>
-        <li>Diseña, edita y guarda tus <a href="#map-design">mapas</a> personalizados.</li>
-        <li><a href="#zona-juego">Juega</a> y compite contra los robots de otros usuarios en mapas prediseñados, o en mapas creados por ti o por otros usuarios.</li>
-        <li>Gana partidas y escala posiciones en el <a href="#ranking">ranking</a>.</li>
-        </ul>
+        <div class="centeredText">
+            <li>Robotron 2000 es un juego para el navegador, en el que programas el comportamiento de un robot en Javascript para competir contra robots programados por otros usuarios.</li>
+            <li>Define que acciones debe tomar tu robot para explorar el mapa, buscar a tu enemigo y derrotarlo.</li>
+            <li>Diseña, edita y guarda los <a href="#code-design">códigos</a> de tus robots.</li>
+            <li>Diseña, edita y guarda tus <a href="#map-design">mapas</a> personalizados.</li>
+            <li><a href="#zona-juego">Juega</a> y compite contra los robots de otros usuarios en mapas prediseñados, o en mapas creados por ti o por otros usuarios.</li>
+            <li>Gana partidas y escala posiciones en el <a href="#ranking">ranking</a>.</li>
         </div>
-        <div class="col-sm-2"></div>
+        </ul>
         </div>
         
         <h2 align="center">Integrantes</h2>
@@ -60,317 +66,125 @@
         </div>
         
         <h2 align="center">Comentarios al profesor</h2>
-        <p style="color : red">Falta por comentar</p>
-        
+        <div class="centeredText">
+            <p>Aun no es 100% funcional, las transiciones las vistas se hacen perfectamente, menos la parte del juego que falta por acabar.
+            Faltaría completar funcionalidades como el guardado de un código escrito en el code-design o un mapa diseñado en map-design.</p>
+            <p>Por otra parte, nos queda también mejorar la presentación de las vistas que están como mitad bien mitad soso.</p>
+            <p>En la parte del juego por ahora nos hemos decidido hacer la movilidad del robot continua, que será más difícil de implementar pero merece la pena. Esto puede cambiar segun avance el proyecto.</p>
+            <p>La distribución del trabajo dentro del equipo la hemos decidido hacer de la siguiente forma. Podemos dividir más o menos el proyecto en tres partes:</p>
+            <ul>
+                <li> Presentación: Los cuales son las vistas, y se encarga Lorenzo, cuyo tarea también incluye en escribir y reorganizar los archivos css.</li>
+                <li> Negocio: Se encarga Zihao, haciéndose responsable de conectar lógicamente las distintas partes del proyecto y escribiendo los archivos js.</li>
+                <li> Integración: Parte donde se hace el intercambio de datos entre la aplicación y base de datos. Se responsabiliza César, el cual crea en código el modelo de dominio y hace sus conexiones.</li>
+            </ul>
+            <p>Lo decidimos así para que podamos trabajar en paralelo y así minimizar lo máximo los conflictos, a parte de que si uno se encarga de una capa no se vería diferencias de estilo de código en un mismo fichero.
+            A medida que vamos avanzando, cada uno enseña a los otro dos como está haciendo su parte.</p>
+        </div>
         <h2 align="center">Vistas</h2>
         <div class="list-group">
-            <a href="#main-page" id="main-page" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a target="_blank"  href="http://localhost:8080/" target="_blank" id="main-page" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Main Page</h4>
                     <small class="text-muted">http://localhost:8080/</small>
                 </div>
-                
-				<ul>
-                    <li>
-                        <h5>Título del juego.</h5>
-                    </li>
-                    <li>
-                        <h5>Breve descripción del juego.</h5>
-                    </li>
-                    <li>
-                        <h5>Botones:</h5>
-                        <ul>
-                            <li>
-                                <h6>Play: este botón te permite llegar a la zona de juego, donde se simulará el enfrentamiento usando los códigos de los usuarios.</h6>
-                            </li>
-                            <li>
-                                <h6>Menu: Despliega el resto de las opciones.</h6>
-                            </li>
-                            <li>
-                                <h6>Ranking: muestra la página con la lista de los usuarios con mejores puntuaciones.</h6>
-                            </li>
-                            <li>
-                                <h6>Profile: redirige al perfil del usuario.</h6>
-                            </li>
-                            <li>
-                                <h6>Code Design: te redirige a la página donde se crean y editan los códigos de tus robots.</h6>
-                            </li>
-                            <li>
-                                <h6>Map Design: te envía a la página de diseño de mapas.</h6>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h5>Información: En esta sección aparecen las alertas que avisan a los usuarios de las novedades del juego.</h5>
-                    </li>
-                </ul>
+                <div style = "margin-top:20px">
+                    <p> Página principal del juego. Los elementos principales de esta página son los botones de Menu y Play y el nombre y breve descripción del juego. Al hacer click en el botón de menú se mostrarán el resto de partes de la aplicación a las que se podrá navegar desde aquí:</p>
+                    <ul>
+                        <li> Play </li>
+                        <li> Ranking </li>
+                        <li> Profile </li>
+                        <li> Code Design </li>
+                        <li> Map Design </li>
+                     </ul>
+                </div>
             </a>
             
         
-            <a href="#zona-juego" id="zona-juego" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a target="_blank"  href="http://localhost:8080/playing" id="zona-juego" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
-                    <h4 class="mb-1">Zona de Juego</h4>
+                    <h4 class="mb-1">Play</h4>
                     <small class="text-muted">http://localhost:8080/playing</small>
              </div>
-             
-        <ul>
-                    <li>
-                        <h5>Título del enfrentamiento. En el aparecen los usuarios que se están enfrentando.</h5>
-                    </li>
-                    <li>
-                        <h5>Mapa e iconos del juego.</h5>
-                    </li>
-                    <li>
-                        <h5>Información sobre el juego de ambos jugadores entre los que se incluye:</h5>
-                        <ul>
-                            <li>
-                                <h6>Vida actual del robot.</h6>
-                            </li>
-                            <li>
-                                <h6>Objetos recogidos.</h6>
-                            </li>
-                            <li>
-                                <h6>Número de golpes propinados al adversario.</h6>
-                            </li>
-                            <li>
-                                <h6>Habilidades usadas.</h6>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h5>Botón que permite llegar a la pantalla de resultados.</h5>
-                    </li>
-                </ul>
+
+             <div style = "margin-top:20px">
+                    <p> Zona de juego. En esta vista se verá el transcurso de una partida donde dos o más robots explorarán el mapa y se enfrentarán. Se mostrarán tambien datos relevantes en cuantro vaya transcurriendo la partida como nombres de los usuarios y robots que están compitiendo, puntos acumulados, vida restante, etc.</p>
+                    <p> Por ahora no cumple la funcionalidad objetivo. Actuamente se puede ver un mapa prediseñado con un robot el cual puede ser controlado para navegar por el mapa utulizando las teclas de direcciones del teclado: Arriba y abajo para hacer que el robot vaya hacia alante o hacia atras respectivamente, y las flechas de izquierda y derecha para girar el robot sobre su eje. Además se detectan las colisiones del robot con los límites del mapa, paredes, etc.</p>
+                    <p>También hacer zoom y navegar por el mapa con la rueda del ratón.</p>
+                    <p> Después de que acabe la partida se pasará a la vista de resultados.</p>
+                </div>
        </a>
        
-            <a href="#resultados" id="resultados" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a target="_blank"  href="http://localhost:8080/results" id="resultados" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Resultados</h4>
                     <small class="text-muted">http://localhost:8080/results</small>
              </div>
-             
-                <ul>
-                    <li>
-                        <h5>Título de ganador en el que aparece el nombre del ganador del enfrentamiento.</h5>
-                    </li>
-                    <li>
-                        <h5>Información final del juego para ambos jugadores entre los que se incluye:</h5>
-                        <ul>
-                            <li>
-                                <h6>Vida final del robot.</h6>
-                            </li>
-                            <li>
-                                <h6>Objetos recogidos.</h6>
-                            </li>
-                            <li>
-                                <h6>Número de golpes propinados al adversario.</h6>
-                            </li>
-                            <li>
-                                <h6>Habilidades usadas.</h6>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h5>Botón que redirige a la página principal para poder modificar el código si has perdido o mirar el score si has ganado.</h5>
-                    </li>
-                </ul>
+
+             <div style = "margin-top:20px">
+                    <p> Al finalizar las partidas, en la pantalla de resultados se mostrarán las estadisticas de cada uno de los robots participando, como puntos obtenidos, vida restante, quien es el ganador, etc.</p>
+                    <p> Esta vista es por ahora es un prototipo estático provisional el cual muestra algunos datos ejemplo de dos supuestos competidores.</p>
+             </div>
        </a>
        
        
-       <a href="#code-design" id="code-design" class="list-group-item list-group-item-action flex-column align-items-start">
+       <a target="_blank"  href="http://localhost:8080/code-design" id="code-design" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Code Design</h4>
                     <small class="text-muted">http://localhost:8080/code-design</small>
              </div>
-       
-                <ul>
-                    <li>
-                        <h5>
-                        Your codes: es una lista con todos los códigos que el usuario ha subido con
-                        anterioridad. El elemento que se encuentra en azul es el que se está usando
-                        actualmente. Además, el botón “Use this code” lleva a la página principal para
-                        permitir al usuario iniciar una nueva partida una vez le ha dicho a su robot qué
-                        código es el que debe usar.
-                        <h5>
-                    </li>
-                    <li>
-                        <h5>Upload new code: esta sección permite subir un nuevo código de
-                            comportamiento del robot de dos maneras diferentes:
-                        </h5>
-                        <ul>
-                            <li>
-                                <h5>From file: </h5>
-                                <ul>
-                                    <li>
-                                        <h6>Título</h6>
-                                    </li>
-                                    <li>
-                                        <h6>Input “Name”. Este input se utiliza para establecer un nombre
-                                            con el que el nuevo código aparecerá en “Your codes”.
-                                        </h6>
-                                    </li>
-                                    <li>
-                                        <h6>Input del archivo para seleccionar el archivo deseado desde el
-                                            almacenamiento local
-                                        </h6>
-                                    </li>
-                                    <li>
-                                        <h6>Botón de subida. Este botón mantiene a usuario en la misma
-                                            página. Lo que hace es recargarla para que aparezca el nuevo
-                                            código en la lista “Your codes”.
-                                        </h6>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <h5>Writing: </h5>
-                                <ul>
-                                    <li>
-                                        <h6>
-                                            Título
-                                        </h6>
-                                    </li>
-                                    <li>
-                                        <h6>
-                                            Input “Name”. Este input se utiliza para establecer un nombre
-                                            con el que el nuevo código aparecerá en “Your codes”.
-                                        </h6>
-                                    </li>
-                                    <li>
-                                        <h6>
-                                            Área de texto donde se puede escribir el nuevo código a subir.
-                                        </h6>
-                                    </li>
-                                    <li>
-                                        <h6>
-                                            Botón de subida. Este botón mantiene a usuario en la misma
-                                            página. Lo que hace es recargarla para que aparezca el nuevo
-                                            código en la lista “Your codes”.
-                                        </h6>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+             <div style = "margin-top:20px">
+                    <p> En esta vista cada usuario podrá editar, cargar, y guardar sus códigos, los cuales serán los que determinarán el comportamiento de sus robots en partida. Aquí los codigos se mostrarán resaltando los elementos de la sintaxis Javascript.</p>
+                    <p> Se puede editar código directamente en esta vista o subir código desde tu ordenador.</p>
+             </div>
             </a>
-            <a href="#map-design" id="map-design" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a target="_blank"  href="http://localhost:8080/map-design" id="map-design" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Map Design</h4>
                     <small class="text-muted">http://localhost:8080/map-design</small>
              </div>
-				<ul>
-                    <li>
-                        <h5>
-                        Your maps: es una lista con todos los mapas que el usuario ha creado. El
-                        elemento que se encuentra en azul es el que está seleccionado. Además, el
-                        botón “Use this map” lleva a la página principal para permitir al usuario iniciar
-                        una nueva partida en el mapa seleccionado.
-                        <h5>
-                    </li>
-                    <li>
-                        <h5>Design your map: aquí es donde el usuario podrá editar sus mapas y crear
-                            mapas nuevos, está compuesta por los siguientes elementos:
-                        </h5>
-                        <ul>
-                            <li>
-                                <h6>Lista lateral con los elementos que se pueden añadir. La idea es utilizar
-                                    el mecanismo Drag and Drop.
-                                </h6>
-                            </li>
-                            <li>
-                                <h6>Zona de edición del mapa. </h6>
-                            </li>
-                            <li>
-                                <h6>Botón “Save”. Lleva a la página inicial.</h6>
-                            </li>
-                            <li>
-                                <h6>Botón “Cancel”. Lleva a la página inicial.</h6>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+
+              <div style = "margin-top:20px">
+                    <p> En esta vista cada usuario podrá editar, cargar, y guardar sus mapas, los cuales serán en los que transcurrirán las partidas. Para editar tu mapa deberás seleccionar el tipo de casilla que quieres agregar desde el menú de la derecha y hacer click en las casillas donde quieras colocarlas. Puedes navegar por el mapa al igual que en Play con la rueda del ratón para hacer zoom y desplazarte por el. Actualmente los elementos con los que puedes crear tu mapa no son finales y estan sujetos a cambios.</p>
+             </div>
              </a>
              
-             <a href="#profile" id="profile" class="list-group-item list-group-item-action flex-column align-items-start">
+             <a target="_blank"  href="http://localhost:8080/profile" id="profile" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Profile</h4>
                     <small class="text-muted">http://localhost:8080/profile</small>
              </div>
-                <ul>
-                    <li>
-                        <h5>Información básica del usuario. Nombre, rank, y foto de perfil.</h5>
-                    </li>
-                    <li>
-                        <h5>Número de partidas ganadas, perdidas y empatadas.</h5>
-                    </li>
-                    <li>
-                        <h5>Opciones desplegables:</h5>
-                        	<ul>
-                        		<li>
-                        			<h5>History: últimas acciones del usuario.</h5>
-                    			</li>
-                    			<li>
-                        			<h5>Password: .</h5>
-                    			</li>
-                    			<li>
-                        			<h5>Codes: listado de los códigos de los robots del usuario.</h5>
-                    			</li>
-                    			<li>
-                        			<h5>Maps: listado de los mapas creados por el usuario.</h5>
-                    			</li>
-                    			<li>
-                        			<h5>Logout: opción para cerrar sesión.</h5>
-                    			</li>
-                        	</ul>
-                    </li>
-                    <li>
-                        <h5>Botón “Back”. Lleva a la página inicial.</h5>
-                    </li>
-                </ul>
+
+              <div style = "margin-top:20px">
+                    <p> Aqui cada usuario podrá visualizar y editar su perfil. Se mostrará toda la informacion del usuario, historial de partidas, ranking, foto de perfil, códigos creados por el usuario, mapas creados por el usuario, etc.</p>
+             </div>
 			</a>
 			
-			<a href="#settings" id="settings" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="http://localhost:8080/settings" id="settings" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Settings</h4>
                     <small class="text-muted">http://localhost:8080/settings</small>
              </div>
-                <ul>
-                    <li>
-                        <h5>Create new map: redirecciona a la vista de Map Design.</h5>
-                    </li>
-                    <li>
-                        <h5>Create new code: redirecciona a la vista de Code Design.</h5>
-                    </li>
-                    <li>
-                        <h5>Botones extra.</h5>
-                    </li>
-                    <li>
-                        <h5>Botón “Back”. Lleva a la página inicial.</h5>
-                    </li>
-                </ul>
+                 <div style = "margin-top:20px">
+                    <p> Esta vista la utilizábamos en versiones anteriores pero actualmente no tiene uso.</p>
+                </div>
 			</a>
 			
 
-			<a href="#ranking" id="ranking" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="http://localhost:8080/ranking" id="ranking" class="list-group-item list-group-item-action flex-column align-items-start">
              <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">Ranking</h4>
                     <small class="text-muted">http://localhost:8080/ranking</small>
              </div>
-                <ul>
-                    <li>
-                        <h5>Lista de los usuarios con mejores puntuaciones ordenados de mayor a menor.</h5>
-                    </li>
-                    <li>
-                        <h5>Botón “Back”. Lleva a la página inicial.</h5>
-                    </li>
-                </ul>
+
+              <div style = "margin-top:20px">
+                    <p> Vista funcional. Muestra una lista de los usuarios con mejores puntuaciones ordenados de mayor a menor.</p>
+             </div>
 			</a>
         
         </div>
         <h2 align="center">Recursos</h2>
         <div class="list-group">
-			<a href="https://bootsnipp.com/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://bootsnipp.com/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Bootsnipp</h5>
                     <small class="text-muted">Sitio con ejemplos de códigos en .html .css y .js</small>
@@ -378,7 +192,7 @@
                 <p class="mb-1">En muchas vistas hemos tomado como ejemplo los códigos en Bootsnipp y lo hemos adaptado al nuestro.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://getbootstrap.com/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://getbootstrap.com/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Bootstrap</h5>
                     <small class="text-muted">Librería de .html .css y .js que usamos en el proyecto</small>
@@ -386,7 +200,7 @@
                 <p class="mb-1">Es la principal librería que se usa en el proyecto para la presentación.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://code.jquery.com/jquery-3.1.1.min.js" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://code.jquery.com/jquery-3.1.1.min.js" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">JQuery</h5>
                     <small class="text-muted">librería javascript para simplificar la aplicación de comportamientos</small>
@@ -394,7 +208,7 @@
                 <p class="mb-1">Lo usamos para realizar lo que queremos hacer con javascript.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>	
-			<a href="https://codemirror.net/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://codemirror.net/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Codemirror</h5>
                     <small class="text-muted">librería de un editor de código</small>
@@ -402,7 +216,7 @@
                 <p class="mb-1">Lo hemos usado para la vista de code-design para poder escribir el código del robot.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://jsfiddle.net/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://jsfiddle.net/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">JsFiddle</h5>
                     <small class="text-muted">Simulador de html, css, js</small>
@@ -410,7 +224,7 @@
                 <p class="mb-1">Lo hemos usado probar algunas funcionalidades en vez de probarlo en el proyecto porque es más lento en eclipse.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://www.freeformatter.com/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://www.freeformatter.com/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Free Formatter</h5>
                     <small class="text-muted">Formateo de código</small>
@@ -418,7 +232,7 @@
                 <p class="mb-1">Para cuando nuestro código está muy mal indentado.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://github.com/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://github.com/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">GitHub</h5>
                     <small class="text-muted">Repositorio de la aplicación</small>
@@ -426,7 +240,7 @@
                 <p class="mb-1">Lugar donde guardamos nuestro aplicación y para el gestión del proyecto.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://web.telegram.org/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://web.telegram.org/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Telegram</h5>
                     <small class="text-muted">Aplicación para la comunicación</small>
@@ -434,7 +248,7 @@
                 <p class="mb-1">Donde establecemos la comunicación entre los desarrolladores.</p>
 				<small class="text-muted">Click para redirigir a la página</small>
             </a>
-			<a href="https://drive.google.com/" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a target="_blank"  href="https://drive.google.com/" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Google Drive</h5>
                     <small class="text-muted">Nube para guardar cosas</small>
