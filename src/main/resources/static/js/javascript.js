@@ -64,11 +64,11 @@ function login(){
 function profile() {
 	
     let buttons = $('#responsive');
-    let links = buttons.find('topRightCorner');
+    let links = buttons.find('a');
  
     links.click(function(e) {
     	
-        $(this).siblings('topRightCorner.active').removeClass("active");
+        $(this).siblings('a.active').removeClass("active");
         $(this).addClass("active");
         
         let index = $(this).index();
@@ -223,12 +223,18 @@ class BattleGround {
 	}
 	
 	defineMouseAt(x, y){
-		this.mouseAt.windowPosition.x = x;
-		this.mouseAt.windowPosition.y = y;
-		this.mouseAt.mapPosition.x = this.mouseAt.windowPosition.x - this.margin.left;
-		this.mouseAt.mapPosition.y = this.mouseAt.windowPosition.y - this.margin.top;
-		this.mouseAt.cellPosition.x = Math.floor(this.mouseAt.mapPosition.x / this.cell.width);
-		this.mouseAt.cellPosition.y = Math.floor(this.mouseAt.mapPosition.y / this.cell.height);
+		let mouseAt = {
+			windowPosition: { x: "x", y: "y" },
+			mapPosition: { x: "x", y: "y" },
+			cellPosition: { x: "x", y: "y" }
+		}
+		mouseAt.windowPosition.x = x;
+		mouseAt.windowPosition.y = y;
+		mouseAt.mapPosition.x = mouseAt.windowPosition.x - this.margin.left;
+		mouseAt.mapPosition.y = mouseAt.windowPosition.y - this.margin.top;
+		mouseAt.cellPosition.x = Math.floor(mouseAt.mapPosition.x / this.cell.width);
+		mouseAt.cellPosition.y = Math.floor(mouseAt.mapPosition.y / this.cell.height);
+		return mouseAt;
 	}
 	
 	defineMapFeature(){
@@ -408,6 +414,15 @@ class BattleGround {
 	}
 }
 
+var BLOCKS = Object.freeze({
+	"NOTHING": 0,
+	"PLATFORM": 205,
+	"GROUND": 206,
+	"GRASS": 207,
+	"WATER": 208,
+	"BARRIER": 195
+	});
+
 function mapDesign() {
 	
 	let canvas = document.getElementById("canvas");
@@ -427,10 +442,8 @@ function mapDesign() {
 		let rect = canvas.getBoundingClientRect();
 		let x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
-		battleGround.defineMouseAt(x, y);
-		
-	    if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
-	    
+		battleGround.mouseAt = battleGround.defineMouseAt(x, y);
+
 	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
@@ -440,11 +453,10 @@ function mapDesign() {
 	canvas.addEventListener('mousedown', function(event) {
 
 		drag = true;
-	    
-	    battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
-	    
+
 	    event.returnValue = false;
-	})
+	    
+	});
 
 	canvas.addEventListener('mouseup',function(event){
 
@@ -531,7 +543,6 @@ function readTextFile(file, callback) {
     }
     rawFile.send(rawFile.responseText);
 }
-
 
 function playing() {
 
@@ -679,6 +690,8 @@ function playing() {
 		dict.set(item, img);
 	}
 	
+	console.log(BLOCKS);
+	
 	for (let i = 0; i < battleGround.cols; i++){
     	for (let j = 0; j < battleGround.rows; j++){
     		battleGround.mapContent[i][j] = {
@@ -693,10 +706,10 @@ function playing() {
 		let rect = canvas.getBoundingClientRect();
 		let x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
-		battleGround.defineMouseAt(x, y);
+        battleGround.mouseAt = battleGround.defineMouseAt(x, y);
 		
-	    battleGround.clear().drawMapContent();
-	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
+	    battleGround.clear().drawMapContent().writeInfo();
+	    //battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
 	});
@@ -737,7 +750,7 @@ function toRadians (angle) {
 
 function start(battleGround){
 	let robots = [];
-	robots.push(new Robot("Zihao", "path", battleGround));
+	robots.push(new Robot("Zihao", "path", battleGround).setFollow(true));
 	
 	let imagesLoaded = 0;
 	robots.forEach(function(entry){
@@ -806,6 +819,7 @@ class Robot {
 		this.downLeftCorner = undefined;
 		this.topLeftCorner = undefined;
 		this.diagonal = this.battleGround.cell.diagonal / 2;
+		this.follow = false;
 		this.calculateCorners();
 	}
 	
@@ -825,9 +839,45 @@ class Robot {
 				this.diagonal * Math.sin(toRadians(this.rotation + 225)));
 	}
 	
+	setFollow(follow){
+		this.follow = follow;
+		return this;
+	}
+	
 	changeRotation(degrees){
 		this.rotation += degrees;
 		this.calculateCorners();
+	}
+	
+	checkPosition(point){
+		let mouseAt = this.battleGround.defineMouseAt(
+			this.battleGround.margin.left + this.battleGround.table.width * this.x + point.x,
+			this.battleGround.margin.top + this.battleGround.table.height * this.y + point.y);
+		let cell = this.battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y];
+		return cell == BLOCKS.GRASS || cell == BLOCKS.GROUND || cell == BLOCKS.PLATFORM;
+	}
+	
+	moveTo(x, y){
+		this.x += x;
+		this.y += y;
+		
+		this.calculateCorners();
+		let availablePosition = true;
+		availablePosition = availablePosition && this.checkPosition(this.topRightCorner);
+		availablePosition = availablePosition && this.checkPosition(this.downRightCorner);
+		availablePosition = availablePosition && this.checkPosition(this.downLeftCorner);
+		availablePosition = availablePosition && this.checkPosition(this.topLeftCorner);
+		console.log(availablePosition);
+		if (!availablePosition){
+			this.x -= x;
+			this.y -= y;
+		}
+		
+		if (this.follow){
+			this.battleGround.mapCenter.x = Math.floor(this.battleGround.table.width * this.x);
+			this.battleGround.mapCenter.y = Math.floor(this.battleGround.table.width * this.y);
+			this.battleGround.defineMapFeature();
+		}
 	}
 	
 	moveToLeft(){
@@ -835,11 +885,9 @@ class Robot {
 	}
 	
 	moveToUp(){
-		this.x += this.proportionX * Math.sin(toRadians(this.rotation));
-		this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
-		this.battleGround.mapCenter.x = Math.floor(this.battleGround.table.width * this.x);
-		this.battleGround.mapCenter.y = Math.floor(this.battleGround.table.width * this.y);
-		this.battleGround.defineMapFeature();
+		this.moveTo(
+			this.proportionX * Math.sin(toRadians(this.rotation)),
+			-this.proportionY * Math.cos(toRadians(this.rotation)));
 	}
 	
 	moveToRight(){
@@ -847,11 +895,9 @@ class Robot {
 	}
 	
 	moveToDown(){
-		this.x -= this.proportionX * Math.sin(toRadians(this.rotation));
-		this.y += this.proportionY * Math.cos(toRadians(this.rotation));
-		this.battleGround.mapCenter.x = Math.floor(this.battleGround.table.width * this.x);
-		this.battleGround.mapCenter.y = Math.floor(this.battleGround.table.width * this.y);
-		this.battleGround.defineMapFeature();
+		this.moveTo(
+			-this.proportionX * Math.sin(toRadians(this.rotation)),
+			this.proportionY * Math.cos(toRadians(this.rotation)));
 	}
 	
 	makeMove() {}
