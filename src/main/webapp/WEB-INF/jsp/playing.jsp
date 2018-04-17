@@ -4,8 +4,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
-<!--  <script> setInitialContents(${misDatosSacadosDelControlador})</script> -->
-
 <div class="jumbotron">
 	<div class="row">
 		<div class="column btn-group-vertical pull-right">
