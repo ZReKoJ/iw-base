@@ -85,7 +85,7 @@
             </div>
             <div class="user-menu-content">
                 <h3>
-                    Trending
+                    Codes
                 </h3>
                 <ul>
                 	<c:choose>
@@ -104,17 +104,20 @@
             </div>
             <div class="user-menu-content">
                 <h2 class="text-center">
-                    START SHARING
+                   Maps
                 </h2>
-                <center><i class="fa fa-cloud-upload fa-4x"></i></center>
-                <div class="share-links">
-                    <center><button type="button" class="btn btn-lg btn-labeled btn-success" href="#" style="margin-bottom: 15px;">
-                            <span class="btn-label"><i class="fa fa-bell-o"></i></span>A FINISHED PROJECT
-                    </button></center>
-                    <center><button type="button" class="btn btn-lg btn-labeled btn-warning" href="#">
-                            <span class="btn-label"><i class="fa fa-bell-o"></i></span>A WORK IN PROGRESS
-                    </button></center>
-                </div>
+                <ul>
+                <c:choose>
+						<c:when test="${mapListSize > 0}">
+							<c:forEach var="map" items="${maps}">
+								<li class="btn neutralColourLightBg">${map.name}</li>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<p> No maps uploaded yet!
+						</c:otherwise>
+					</c:choose>
+                </ul>
             </div>
         </div>
     </div>

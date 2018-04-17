@@ -7,10 +7,12 @@
 <div class="jumbotron">
     <h1 class="display-4">Design your map</h1>
     <hr class="my-4">
+   		      	<input type="text" id="mapFileName" name="mapFileName" class="form-control" placeholder="Set the name for your map">
    
 		    <div class="row">
 		        <div id="grid-element">
 		        </div>
+		        
 		        <div class="map-content">
 		            <canvas id="canvas" name="canvas"></canvas>
 		            <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
