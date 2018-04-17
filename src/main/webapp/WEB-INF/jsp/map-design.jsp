@@ -19,8 +19,8 @@
 		    <div class="row">
 		    
 		        <div class="btn-toolbar pull-right">
-		            <button class="btn btn-primary" role="button" onClick="mapUpload()">Upload</button>
-		            <a class="btn btn-primary" href="/settings" role="button">Cancel</a>
+		            <a id="upload" class="btn btn-primary" href="#" role="button">Upload</a>
+		            <a class="btn btn-primary" href="/home" role="button">Cancel</a>
 		            <a id="test" class="btn btn-primary" href="#" onclick="javascript:alert('this is a test');" role="button">Test</a>
 		        </div>
 		    </div>

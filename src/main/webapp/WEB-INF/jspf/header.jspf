@@ -16,7 +16,6 @@
         <link href="${s}/css/stylesheet.css" rel="stylesheet">
         <!-- JQuery -->
         <script src="${s}/js/jquery.min.js"></script>
-        <script src="${s}/js/mapUpload.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top">
