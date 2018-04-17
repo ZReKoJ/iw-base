@@ -313,7 +313,7 @@ class BattleGround {
     			this.margin.left + Math.floor(this.table.width * value.x),
     			this.margin.top + Math.floor(this.table.height * value.y));
 		    this.ctx.rotate(toRadians(value.rotation));
-	    	this.ctx.drawImage(value.image, -this.cell.center.x, -this.cell.center.y, this.cell.width, this.cell.height);
+	    	this.ctx.drawImage(value.image, -this.cell.center.x / 2, -this.cell.center.y / 2, this.cell.width / 2, this.cell.height / 2);
 	    	this.ctx.restore();
 	    }
 	    return this;
@@ -517,7 +517,11 @@ function mapDesign() {
 	document.getElementById("test").addEventListener("click", function(){
 		console.log(battleGround.json());
 	});
-
+	
+	document.getElementById("upload").addEventListener("click", function(){
+		$.post("/createMap", battleGround.json());
+		console.log(battleGround.json());
+	});
 	
     battleGround.drawCellMap().writeInfo();
 }
@@ -777,25 +781,25 @@ function start(battleGround){
 		switch (key){
 		case 37: 
 			robots.forEach(function(entry){
-				entry.moveToLeft();
+				entry.moveToLeft(battleGround);
 				battleGround.clear().drawMapContent();
 			});
 		break;
 		case 38: 
 			robots.forEach(function(entry){
-				entry.moveToUp();
+				entry.moveToUp(battleGround);
 				battleGround.clear().drawMapContent();
 			});
 		break;
 		case 39: 
 			robots.forEach(function(entry){
-				entry.moveToRight();
+				entry.moveToRight(battleGround);
 				battleGround.clear().drawMapContent();
 			});
 		break;
 		case 40: 
 			robots.forEach(function(entry){
-				entry.moveToDown();
+				entry.moveToDown(battleGround);
 				battleGround.clear().drawMapContent();
 			});
 		break;
@@ -809,7 +813,6 @@ class Robot {
 		this.name = name;
 		this.path = path;
 		this.image = undefined;
-		this.battleGround = battleGround;
 		this.proportionX = 1 / battleGround.table.width;
 		this.proportionY = 1 / battleGround.table.height;
 		this.rotationScale = 10;
@@ -820,13 +823,13 @@ class Robot {
 		this.downRightCorner = undefined;
 		this.downLeftCorner = undefined;
 		this.topLeftCorner = undefined;
-		this.diagonal = this.battleGround.cell.diagonal / 2;
+		this.diagonal = battleGround.cell.diagonal / 4;
 		this.follow = false;
-		this.calculateCorners();
+		this.calculateCorners(battleGround);
 	}
 	
-	calculateCorners(){
-		this.diagonal = this.battleGround.cell.diagonal / 2;
+	calculateCorners(battleGround){
+		this.diagonal = battleGround.cell.diagonal / 4;
 		this.topRightCorner = new Point(
 				this.diagonal * Math.cos(toRadians(this.rotation + 315)),
 				this.diagonal * Math.sin(toRadians(this.rotation + 315)));
@@ -846,68 +849,68 @@ class Robot {
 		return this;
 	}
 	
-	changeRotation(degrees){
+	changeRotation(degrees, battleGround){
 		this.rotation += degrees;
-		this.calculateCorners();
+		this.calculateCorners(battleGround);
 	}
 	
-	checkPosition(point){
-		let mouseAt = this.battleGround.defineMouseAt(
-			this.battleGround.margin.left + this.battleGround.table.width * this.x + point.x,
-			this.battleGround.margin.top + this.battleGround.table.height * this.y + point.y);
+	checkPosition(point, battleGround){
+		let mouseAt = battleGround.defineMouseAt(
+			battleGround.margin.left + battleGround.table.width * this.x + point.x,
+			battleGround.margin.top + battleGround.table.height * this.y + point.y);
 		if (0 <= mouseAt.cellPosition.x && 
-			mouseAt.cellPosition.x < this.battleGround.cols && 
+			mouseAt.cellPosition.x < battleGround.cols && 
 			0 <= mouseAt.cellPosition.y && 
-			mouseAt.cellPosition.y < this.battleGround.rows) {
-			let cell = this.battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
+			mouseAt.cellPosition.y < battleGround.rows) {
+			let cell = battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
 			return cell == BLOCKS.GRASS || cell == BLOCKS.GROUND || cell == BLOCKS.PLATFORM;	
 		}
 		else return false;
 	}
 	
-	moveTo(x, y){
+	moveTo(x, y, battleGround){
 		this.x += x;
 		this.y += y;
 		
-		this.calculateCorners();
+		this.calculateCorners(battleGround);
 		let availablePosition = true;
-		availablePosition = availablePosition && this.checkPosition(this.topRightCorner);
-		availablePosition = availablePosition && this.checkPosition(this.downRightCorner);
-		availablePosition = availablePosition && this.checkPosition(this.downLeftCorner);
-		availablePosition = availablePosition && this.checkPosition(this.topLeftCorner);
+		availablePosition = availablePosition && this.checkPosition(this.topRightCorner, battleGround);
+		availablePosition = availablePosition && this.checkPosition(this.downRightCorner, battleGround);
+		availablePosition = availablePosition && this.checkPosition(this.downLeftCorner, battleGround);
+		availablePosition = availablePosition && this.checkPosition(this.topLeftCorner, battleGround);
 		if (!availablePosition){
 			this.x -= x;
 			this.y -= y;
 		}
 		
 		if (this.follow){
-			this.battleGround.mapCenter.x = Math.floor(this.battleGround.table.width * this.x);
-			this.battleGround.mapCenter.y = Math.floor(this.battleGround.table.width * this.y);
-			this.battleGround.defineMapFeature();
+			battleGround.mapCenter.x = Math.floor(battleGround.table.width * this.x);
+			battleGround.mapCenter.y = Math.floor(battleGround.table.width * this.y);
+			battleGround.defineMapFeature();
 		}
 	}
 	
-	moveToLeft(){
-		this.changeRotation(-this.rotationScale);
+	moveToLeft(battleGround){
+		this.changeRotation(-this.rotationScale, battleGround);
 	}
 	
-	moveToUp(){
+	moveToUp(battleGround){
 		this.moveTo(
 			this.proportionX * Math.sin(toRadians(this.rotation)),
-			-this.proportionY * Math.cos(toRadians(this.rotation)));
+			-this.proportionY * Math.cos(toRadians(this.rotation)),
+			battleGround);
 	}
 	
-	moveToRight(){
-		this.changeRotation(this.rotationScale);
+	moveToRight(battleGround){
+		this.changeRotation(this.rotationScale, battleGround);
 	}
 	
-	moveToDown(){
+	moveToDown(battleGround){
 		this.moveTo(
 			-this.proportionX * Math.sin(toRadians(this.rotation)),
-			this.proportionY * Math.cos(toRadians(this.rotation)));
+			this.proportionY * Math.cos(toRadians(this.rotation)),
+			battleGround);
 	}
-	
-	makeMove() {}
 }
 
 $(".main.button.homeMenu").mousedown(function(){
