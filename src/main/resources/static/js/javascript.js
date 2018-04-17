@@ -519,7 +519,9 @@ function mapDesign() {
 	});
 	
 	document.getElementById("upload").addEventListener("click", function(){
-		$.post("/createMap", battleGround.json());
+		$.post("/createMap", {
+			"_csrf" : csrf_data.token, 
+			"json" : battleGround.json()});
 		console.log(battleGround.json());
 	});
 	
@@ -542,7 +544,7 @@ function fullscreen(){
 }
 
 function readTextFile(file, callback) {
-    var rawFile = new XMLHttpRequest();
+    let rawFile = new XMLHttpRequest();
     rawFile.overrideMimeType("application/json");
     rawFile.open("GET", file, true);
     rawFile.onreadystatechange = function() {
@@ -559,20 +561,25 @@ function playing() {
 	let parent = $(canvas).parent();
 	
 	setCanvasSize(canvas, parent.width(), parent.width());
-	
 	/*
-	readTextFile("/static/test.json", function(text){
-	    var data = JSON.parse(text);
-	    for (let i = 0; i < data.numCell.x; i++){
-	    	for (let j = 0; j < data.numCell.y; j++){
-	    		topRightCorner += data.data[i][j] + " ";
-	    	}
-	    	topRightCorner += "\n";
-	    }
-		console.log(topRightCorner);
-	});
-	 */
+	let something = undefined;
 	
+	readTextFile("/static/json/test100.json", function(text){
+	    let data = JSON.parse(text);
+	    let a = "";
+	    for (let i = 0; i < data.cellDim.x; i++){
+	    	for (let j = 0; j < data.cellDim.y; j++){
+	    		a += data.data[i][j] + " ";
+	    	}
+	    	a += "\n";
+	    }
+	    something = a;
+	});
+	something.onload = function(){
+
+		console.log(this);
+	}
+	*/
 	let data = '{"cellDim":{"x":100,"y":100},"data":' +
 	'[[0,0,0,0,0,0,0,0,0,0,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],' +
 	'[0,0,0,0,0,0,0,0,0,0,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],' +
@@ -774,37 +781,46 @@ function start(battleGround){
 		entry.image = img;
 	});
 	
+	let left = false, right = false, up = false, down = false;
+	
 	window.onkeydown = function(e) {
 		let key = e.keyCode ? e.keyCode : e.which;
 		event.returnValue = false;
 		
 		switch (key){
-		case 37: 
-			robots.forEach(function(entry){
-				entry.moveToLeft(battleGround);
-				battleGround.clear().drawMapContent();
-			});
-		break;
-		case 38: 
-			robots.forEach(function(entry){
-				entry.moveToUp(battleGround);
-				battleGround.clear().drawMapContent();
-			});
-		break;
-		case 39: 
-			robots.forEach(function(entry){
-				entry.moveToRight(battleGround);
-				battleGround.clear().drawMapContent();
-			});
-		break;
-		case 40: 
-			robots.forEach(function(entry){
-				entry.moveToDown(battleGround);
-				battleGround.clear().drawMapContent();
-			});
-		break;
+		case 37: left = true; break;
+		case 38: up = true; break;
+		case 39: right = true; break;
+		case 40: down = true; break;
 		default: event.returnValue = true; break;
 		}
+		
+		moving();
+	}
+	
+	window.onkeyup = function(e) {
+		let key = e.keyCode ? e.keyCode : e.which;
+		event.returnValue = false;
+		
+		switch (key){
+		case 37: left = false; break;
+		case 38: up = false; break;
+		case 39: right = false; break;
+		case 40: down = false; break;
+		default: event.returnValue = true; break;
+		}
+		
+		moving();
+	}
+	
+	function moving(){
+		robots.forEach(function(entry){
+			if (left) entry.moveToLeft(battleGround);
+			if (right) entry.moveToRight(battleGround);
+			if (up) entry.moveToUp(battleGround);
+			if (down) entry.moveToDown(battleGround);
+		});
+		battleGround.clear().drawMapContent();
 	}
 }
 

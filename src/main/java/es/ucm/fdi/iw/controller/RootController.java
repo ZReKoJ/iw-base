@@ -126,13 +126,13 @@ public class RootController {
     @RequestMapping(value="/createMap", method=RequestMethod.POST)
     public String handleFileUpload(
     		HttpServletResponse response,
-    		@RequestParam("dataToJSon") MultipartFile canvas,
+    		@RequestParam String json,
     		HttpSession s){
 
     	
-    	log.info(canvas);
+    	log.info(json);
     	String error = "";
-        if (canvas.isEmpty()) {
+        if (json.isEmpty()) {
         	
         	error = "You failed to upload the map";     
         	log.info(error);
@@ -157,7 +157,7 @@ public class RootController {
 		                )
 		        )
 	    		{
-	    			stream.write(canvas.getBytes());
+	    			stream.write(json.getBytes());
 	     
 	    		} catch (Exception e) {
 	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
