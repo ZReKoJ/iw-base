@@ -17,6 +17,7 @@
 		        </div>
 		    </div>
 		    <div class="row">
+		    
 		        <div class="btn-toolbar pull-right">
 		            <button class="btn btn-primary" role="button" onClick="mapUpload()">Upload</button>
 		            <a class="btn btn-primary" href="/settings" role="button">Cancel</a>

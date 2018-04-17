@@ -3,6 +3,11 @@ package es.ucm.fdi.iw.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,7 +61,7 @@ public class RootController {
 	public String createUser(
 			@RequestParam String nickname, 
 			@RequestParam String password,
-			@RequestParam String confirmPassword, Model m) {
+			@RequestParam String confirmPassword, HttpSession s) {
 		User u = new User();
 		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
@@ -68,7 +73,7 @@ public class RootController {
 		entityManager.persist(u);
 		
 		entityManager.flush();
-		login(m);
+		
 		
 		return "login";
 	}
@@ -129,7 +134,6 @@ public class RootController {
     		@RequestParam("dataToJSon") MultipartFile canvas,
     		HttpSession s){
 
-    	
     	log.info(canvas);
     	String error = "";
         if (canvas.isEmpty()) {
@@ -186,7 +190,7 @@ public class RootController {
 	}
 	
 	@GetMapping("/login")
-	public String login(Model m) {
+	public String login(HttpSession s) {
 		return "login";
 	}
 	
