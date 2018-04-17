@@ -762,24 +762,28 @@ function toRadians (angle) {
 }
 
 function start(battleGround){
-	let robots = [];
-	robots.push(new Robot("Zihao", "path", battleGround).setFollow(true));
+	let robots = new Map();
+	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
+	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
+	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
+	//for (let i = 25; i < 159; i++)
+	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
 	
 	let imagesLoaded = 0;
-	robots.forEach(function(entry){
+	for (let [key, value] of robots) {
 		let img = document.createElement("img");
 		img.onload = function(){
 			imagesLoaded++;
-			if (imagesLoaded == robots.length){
-				robots.forEach(function(entry){
-					battleGround.addRobot(entry);
+			if (imagesLoaded == robots.size){
+				for (let [k, v] of robots) {
+					battleGround.addRobot(v);
 					battleGround.clear().drawMapContent();
-				});
+				}
 			}
 		}
-		img.src = "/static/img/map2/component (132).png";
-		entry.image = img;
-	});
+		img.src = value.path;
+		value.image = img;
+	}
 	
 	let left = false, right = false, up = false, down = false;
 	
@@ -814,14 +818,28 @@ function start(battleGround){
 	}
 	
 	function moving(){
-		robots.forEach(function(entry){
-			if (left) entry.moveToLeft(battleGround);
-			if (right) entry.moveToRight(battleGround);
-			if (up) entry.moveToUp(battleGround);
-			if (down) entry.moveToDown(battleGround);
-		});
+		if (left) robots.get("Zihao").moveToLeft(battleGround);
+		if (right) robots.get("Zihao").moveToRight(battleGround);
+		if (up) robots.get("Zihao").moveToUp(battleGround);
+		if (down) robots.get("Zihao").moveToDown(battleGround);
 		battleGround.clear().drawMapContent();
 	}
+	
+	function loop(timestamp) {
+		var progress = (timestamp - lastRender)
+		
+		for (let [key, value] of robots) {
+			if (key != "Zihao") value.makeMove(battleGround);
+		}
+		
+		battleGround.clear().drawMapContent();
+		  
+		lastRender = timestamp
+		window.requestAnimationFrame(loop);
+	}
+	var lastRender = 0;
+	window.requestAnimationFrame(loop);
+	
 }
 
 class Robot {
@@ -842,6 +860,17 @@ class Robot {
 		this.diagonal = battleGround.cell.diagonal / 4;
 		this.follow = false;
 		this.calculateCorners(battleGround);
+	}
+	
+	makeMove(battleGround){
+		let rand = Math.floor(Math.random() * (2 - 0)) + 0;
+		switch(rand){
+		case 2: this.moveToLeft(battleGround); break;
+		case 0: this.moveToRight(battleGround); break;
+		case 1: this.moveToUp(battleGround); break;
+		case 3: this.moveToDown(battleGround); break;
+		default: alert("error"); break;
+		}
 	}
 	
 	calculateCorners(battleGround){
