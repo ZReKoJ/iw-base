@@ -3,6 +3,11 @@ package es.ucm.fdi.iw.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,7 +61,7 @@ public class RootController {
 	public String createUser(
 			@RequestParam String nickname, 
 			@RequestParam String password,
-			@RequestParam String confirmPassword, Model m) {
+			@RequestParam String confirmPassword, HttpSession s) {
 		User u = new User();
 		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
@@ -68,7 +73,7 @@ public class RootController {
 		entityManager.persist(u);
 		
 		entityManager.flush();
-		login(m);
+		
 		
 		return "login";
 	}
@@ -124,13 +129,13 @@ public class RootController {
 	}
     
     @RequestMapping(value="/createMap", method=RequestMethod.POST)
+    @Transactional
     public String handleFileUpload(
     		HttpServletResponse response,
     		@RequestParam String json,
+    		@RequestParam String mapFileName,
     		HttpSession s){
 
-    	
-    	log.info(json);
     	String error = "";
         if (json.isEmpty()) {
         	
@@ -143,7 +148,9 @@ public class RootController {
 	    		u.setId(Long.parseLong(s.getAttribute("user").toString()));
 	    		map.setCreator(u);
 	    		map.setDescription("");
-	    		map.setName("pruebaCanvas.png");
+	    		map.setName(mapFileName);
+	    		log.info("Holaaaa");
+	    		log.info(mapFileName);
 	    		map.setCreationTime(Calendar.getInstance().getTime());
 
 	    		entityManager.persist(map);
@@ -163,9 +170,8 @@ public class RootController {
 	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
 	    		}
         }
-        // exit with error, blame user
-    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        return error;
+      
+        return "/settings";
 	}
     
 	@GetMapping({"/", "/index"})
@@ -186,7 +192,7 @@ public class RootController {
 	}
 	
 	@GetMapping("/login")
-	public String login(Model m) {
+	public String login(HttpSession s) {
 		return "login";
 	}
 	
@@ -227,9 +233,18 @@ public class RootController {
 				.createQuery("from Code where creator = :id", Code.class)
                 .setParameter("id",  u).getResultList());
 		
-		List<Code> lista = (List<Code>) s.getAttribute("codes");
-		int size = lista.size();
-		s.setAttribute("codeListSize", size);
+		List<Code> listaCodes = (List<Code>) s.getAttribute("codes");
+		int sizeCodes = listaCodes.size();
+		s.setAttribute("codeListSize", sizeCodes);
+		
+		s.setAttribute("maps", entityManager
+				.createQuery("from Map where creator = :id", Map.class)
+                .setParameter("id",  u).getResultList());
+		
+		List<Map> listaMaps = (List<Map>) s.getAttribute("maps");
+		int sizeMaps = listaMaps.size();
+		s.setAttribute("mapListSize", sizeMaps);
+		log.info(s.getAttribute("mapListSize"));
 		
 		return "profile";
 	}

@@ -7,16 +7,19 @@
 <div class="jumbotron">
     <h1 class="display-4">Design your map</h1>
     <hr class="my-4">
+   		      	<input type="text" id="mapFileName" name="mapFileName" class="form-control" placeholder="Set the name for your map">
    
 		    <div class="row">
 		        <div id="grid-element">
 		        </div>
+		        
 		        <div class="map-content">
 		            <canvas id="canvas" name="canvas"></canvas>
 		            <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 		        </div>
 		    </div>
 		    <div class="row">
+		    
 		        <div class="btn-toolbar pull-right">
 		            <a id="upload" class="btn btn-primary" href="#" role="button">Upload</a>
 		            <a class="btn btn-primary" href="/home" role="button">Cancel</a>

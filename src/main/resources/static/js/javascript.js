@@ -521,7 +521,8 @@ function mapDesign() {
 	document.getElementById("upload").addEventListener("click", function(){
 		$.post("/createMap", {
 			"_csrf" : csrf_data.token, 
-			"json" : battleGround.json()});
+			"json" : battleGround.json(),
+			"mapFileName": document.getElementById("mapFileName").value});
 		console.log(battleGround.json());
 	});
 	

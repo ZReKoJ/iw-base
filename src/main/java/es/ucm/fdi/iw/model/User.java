@@ -27,15 +27,16 @@ public class User {
 	private List<Code> ownedCodes;
 	
 	
-	@OneToMany(targetEntity=Map.class)
-	@JoinColumn(name="user_name") // <-- avoids creating an extra User_Map table
+	@OneToMany(targetEntity=Map.class, fetch = FetchType.EAGER)
+	@JoinColumn(name="nickname")
 	public List<Map> getOwnedMaps() {
 		return ownedMaps;
 	}
 	
-	public void setOwnedBooks(List<Map> ownedMaps) {
-		this.ownedMaps = ownedMaps;
-
+	@OneToMany(targetEntity=Code.class)
+	@JoinColumn(name="nickname") // <-- avoids creating an extra User_Map table
+	public List<Code> getOwnedCodes() {
+		return ownedCodes;
 	}
 	
 	@Id
@@ -74,11 +75,7 @@ public class User {
 		this.ownedMaps = ownedMaps;
 	}
 
-	@OneToMany(targetEntity=Code.class, fetch = FetchType.EAGER)
-	@JoinColumn(name="nickname") // <-- avoids creating an extra User_Map table
-	public List<Code> getOwnedCodes() {
-		return ownedCodes;
-	}
+	
 
 	public void setOwnedCodes(List<Code> ownedCodes) {
 		this.ownedCodes = ownedCodes;

@@ -28,7 +28,7 @@
 	        </div>
 	    </div>
 	    <div class="row">
-	        <textarea id="codeText" name="code" type="text" class="codemirror-textarea"></textarea> 
+	        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
 	    </div>
 	    <div class="btn-toolbar pull-right">
 	    	<button class="btn btn-primary" role="button" type="submit">Upload</button>

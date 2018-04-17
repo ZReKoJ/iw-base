@@ -14,7 +14,6 @@ public class Map {
 	private String name;
 	private String description;
 	private Date creationTime;
-	// definitions JSON??
 	private User creator;
 	private byte enabled;
 	

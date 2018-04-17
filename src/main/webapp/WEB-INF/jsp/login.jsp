@@ -44,7 +44,7 @@
                         <a href="#" tabindex="5" class="forgot-password">Forgot Password?</a>
                     </div>
                 </form>
-                <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">
+                <form id="register-form" action="login" method="post" role="form" style="display: none;">
                     <div class="form-group">
                         <input class="form-control" type="text" name="nickname" placeholder="Username"/>
                     </div>
