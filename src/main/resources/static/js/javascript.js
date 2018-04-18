@@ -315,6 +315,17 @@ class BattleGround {
 		    this.ctx.rotate(toRadians(value.rotation));
 	    	this.ctx.drawImage(value.image, -this.cell.center.x / 2, -this.cell.center.y / 2, this.cell.width / 2, this.cell.height / 2);
 	    	this.ctx.restore();
+	    	for (let x in value.bullets) {
+	    		value.bullets[x].next();
+	    	    this.ctx.save();
+		    	this.ctx.translate(
+	    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
+	    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
+			    this.ctx.rotate(toRadians(value.bullets[x].rotation));
+			    this.ctx.drawImage(value.image, -this.cell.center.x / 4, -this.cell.center.y / 4, this.cell.width / 4, this.cell.height / 4);
+		    	this.ctx.restore();
+	    	}
+
 	    }
 	    return this;
 	}
@@ -786,13 +797,14 @@ function start(battleGround){
 		value.image = img;
 	}
 	
-	let left = false, right = false, up = false, down = false;
+	let left = false, right = false, up = false, down = false, space = false;
 	
 	window.onkeydown = function(e) {
 		let key = e.keyCode ? e.keyCode : e.which;
 		event.returnValue = false;
 		
 		switch (key){
+		case 32: space = true; break;
 		case 37: left = true; break;
 		case 38: up = true; break;
 		case 39: right = true; break;
@@ -808,6 +820,7 @@ function start(battleGround){
 		event.returnValue = false;
 		
 		switch (key){
+		case 32: space = false; break;
 		case 37: left = false; break;
 		case 38: up = false; break;
 		case 39: right = false; break;
@@ -819,6 +832,10 @@ function start(battleGround){
 	}
 	
 	function moving(){
+		if (space) {
+			robots.get("Zihao").fireBullet(battleGround);
+			space = false;
+		}
 		if (left) robots.get("Zihao").moveToLeft(battleGround);
 		if (right) robots.get("Zihao").moveToRight(battleGround);
 		if (up) robots.get("Zihao").moveToUp(battleGround);
@@ -861,6 +878,11 @@ class Robot {
 		this.diagonal = battleGround.cell.diagonal / 4;
 		this.follow = false;
 		this.calculateCorners(battleGround);
+		this.bullets = [];
+	}
+	
+	fireBullet(){
+		this.bullets.push(new Bullet(this));
 	}
 	
 	makeMove(battleGround){
@@ -956,6 +978,21 @@ class Robot {
 			-this.proportionX * Math.sin(toRadians(this.rotation)),
 			this.proportionY * Math.cos(toRadians(this.rotation)),
 			battleGround);
+	}
+}
+
+class Bullet {
+	constructor(robot) {
+		this.x = robot.x;
+		this.y = robot.y;
+		this.rotation = robot.rotation;
+		this.proportionX = robot.proportionX * 2;
+		this.proportionY = robot.proportionY * 2;
+	}
+	
+	next(){
+		this.x += this.proportionX * Math.sin(toRadians(this.rotation));
+		this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
 	}
 }
 
