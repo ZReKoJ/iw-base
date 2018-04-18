@@ -58,17 +58,18 @@
 			<a href="#v1.2.0" id="v1.2.0" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Version 1.2.0</h5>
-                    <small class="text-muted">...</small>
+                    <small class="text-muted">18 de abril de 2018</small>
                 </div>
-                <p class="mb-1">Hacer funcional el programa y mejorar vistas</p>
-                <small class="text-muted">En proceso</small>
+                <p class="mb-1">Hacer funcional el programa, por ahora el robot se mueve y dispara, también lo hace de forma automática.</p>
+                <p class="mb-1">Mejorar partes de las vistas: Main Page, Results, Header, Zona de Juego</p>
+                <p class="mb-1">Conexión con base de datos, subir y coger datos</p>
+                <small class="text-muted">Terminado</small>
             </a>
         </div>
         
         <h2 align="center">Comentarios al profesor</h2>
         <div class="centeredText">
-            <p>Aun no es 100% funcional, las transiciones las vistas se hacen perfectamente, menos la parte del juego que falta por acabar.
-            Faltaría completar funcionalidades como el guardado de un código escrito en el code-design o un mapa diseñado en map-design.</p>
+            <p>Aun no es 100% funcional, las transiciones las vistas se hacen perfectamente, menos la parte del juego que falta por acabar, por ahora dispara y se mueve, también lo hace de forma automático pero aleatoriamente.</p>
             <p>Por otra parte, nos queda también mejorar la presentación de las vistas que están como mitad bien mitad soso.</p>
             <p>En la parte del juego por ahora nos hemos decidido hacer la movilidad del robot continua, que será más difícil de implementar pero merece la pena. Esto puede cambiar segun avance el proyecto.</p>
             <p>La distribución del trabajo dentro del equipo la hemos decidido hacer de la siguiente forma. Podemos dividir más o menos el proyecto en tres partes:</p>
@@ -95,7 +96,7 @@
                         <li> Profile </li>
                         <li> Code Design </li>
                         <li> Map Design </li>
-                     </ul>
+                    </ul>
                 </div>
             </a>
             
@@ -108,8 +109,16 @@
 
              <div style = "margin-top:20px">
                     <p> Zona de juego. En esta vista se verá el transcurso de una partida donde dos o más robots explorarán el mapa y se enfrentarán. Se mostrarán tambien datos relevantes en cuantro vaya transcurriendo la partida como nombres de los usuarios y robots que están compitiendo, puntos acumulados, vida restante, etc.</p>
-                    <p> Por ahora no cumple la funcionalidad objetivo. Actuamente se puede ver un mapa prediseñado con un robot el cual puede ser controlado para navegar por el mapa utulizando las teclas de direcciones del teclado: Arriba y abajo para hacer que el robot vaya hacia alante o hacia atras respectivamente, y las flechas de izquierda y derecha para girar el robot sobre su eje. Además se detectan las colisiones del robot con los límites del mapa, paredes, etc.</p>
-                    <p>También hacer zoom y navegar por el mapa con la rueda del ratón.</p>
+                    <p> Por ahora no cumple la funcionalidad objetivo. Actuamente se puede ver un mapa prediseñado con un robot el cual puede ser controlado para navegar por el mapa utulizando las teclas de direcciones del teclado:</p>
+                    <ul>
+                        <li> Arriba para hacer que el robot vaya hacia delante </li>
+                        <li> Abajo para hacer que el robot vaya hacia atrás </li>
+                        <li> Izquierda para girar el robot sobre su eje hacia izquierda </li>
+                        <li> Derecha para girar el robot sobre su eje hacia derecha</li>
+                        <li> Espacio para que el robot dispare (por ahora el imagen de la bala es el mismo del robot pero más pequeño pero en un futuro se cambiará)</li>
+                     </ul>
+					 <p>Además se detectan las colisiones del robot con los límites del mapa, paredes, etc.</p>
+					<p>También hacer zoom y navegar por el mapa con la rueda del ratón.</p>
                     <p> Después de que acabe la partida se pasará a la vista de resultados.</p>
                 </div>
        </a>
