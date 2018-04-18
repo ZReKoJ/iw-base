@@ -145,6 +145,12 @@ class Point {
 		this.x = Math.floor(newRectangle.width * this.x / oldRectangle.width),
 		this.y = Math.floor(newRectangle.height * this.y / oldRectangle.height)
 	}
+	
+	distanceTo(point){
+		let x = this.x - point.x;
+		let y = this.y - point.y;
+		return Math.sqrt(x * x + y * y);
+	}
 }
 
 class Rectangle {
@@ -373,13 +379,17 @@ class BattleGround {
 		return null;
 	}
 	
-	checkPosition(point){
+	getCellPosition(point){
 		let mouseAt = this.defineMouseAt(
 			this.margin.left + this.table.width * point.x,
 			this.margin.top + this.table.height * point.y);
-		if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < this.cols && 
-			0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < this.rows) {
-			return this.mapContent[mouseAt.cellPosition.y][mouseAt.cellPosition.x].index;
+		return new Point(mouseAt.cellPosition.x, mouseAt.cellPosition.y);
+	}
+	
+	checkPosition(point){
+		point = this.getCellPosition(point);
+		if (0 <= point.x && point.x < this.cols && 0 <= point.y && point.y < this.rows) {
+			return this.mapContent[point.y][point.x].index;
 		}
 		else return this.BLOCKS.NOTHING;
 	}
@@ -1131,6 +1141,7 @@ class Robot {
 		this.hp = 100;
 		this.atk = 100;
 		this.numBullets = 5;
+		this.closeRobots = [];
 		
 		this.abstraction = new RobotAbstraction(code);
 	}
@@ -1165,9 +1176,37 @@ class Robot {
 		if (this.moveCounter % 10 == 0) {
 			this.numBullets++;
 		}
-		let command = this.abstraction.makeMove();
-		command = "this." + command + "(battleGround);";
-		eval(command);
+		
+		let position = battleGround.getCellPosition(new Point(this.x, this.y));
+		console.log(position);
+		position = new Point(position.x - 2, position.y - 2);
+		let mapContent = battleGround.mapContent;
+		let mapData = createArray(5, 5);
+		for (let i = 0; i < 5; ++i){
+			for (let j = 0; j < 5; ++j){
+				if (0 < position.y + i && position.y + i < battleGround.rows
+					&& 0 < position.x + j && position.x + j < battleGround.cols){
+					mapData[i][j] = mapContent[position.x + j][position.y + i].index;
+				}
+				else mapData[j][i] = battleGround.BLOCKS.NOTHING;
+			}
+		}
+		position = new Point(position.x + 2, position.y + 2);
+		
+		let data = {
+			atk : this.atk,
+			hp : this.hp,
+			bullets : this.numBullets,
+			position : position,
+			robots : this.closeRobots,
+			mapData : mapData
+		}
+		
+		let command = this.abstraction.makeMove(data);
+		if (command != "") {
+			command = "this." + command + "(battleGround);";
+			eval(command);
+		}
 	}
 	
 	calculateCorners(battleGround){
@@ -1216,24 +1255,39 @@ class Robot {
 			this.moveToRight(battleGround);
 		}
 		
+		let move = true;
+		
 		if (!(movementsAvailable.topRight &&
 			movementsAvailable.downRight &&
 			movementsAvailable.downLeft &&
 			movementsAvailable.topLeft)){
+			move = false;
+		}
+		
+		let dist = undefined;
+		this.closeRobots = [];
+		for (let [key, value] of battleGround.robots) {
+			if (this.name != value.name) {
+				dist = new Point(this.x, this.y).distanceTo(new Point(value.x, value.y));
+				if (dist < (25 * this.proportionX)){
+					this.closeRobots.push({
+						name : value.name,
+						distance : dist
+					});
+				}
+				
+				if (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner)) {
+					move = false;
+				}
+			}
+		}
+		
+		if (!move){
 			this.x -= x;
 			this.y -= y;
-		}
-		else {
-			for (let [key, value] of battleGround.robots) {
-    			if (value.name != this.name
-    				&& (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
-    				|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
-    				|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
-    				|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
-    				this.x -= x;
-    				this.y -= y;
-    			}
-    		}
 		}
 		
 		if (this.follow){

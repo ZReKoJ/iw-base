@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -212,6 +214,14 @@ public class RootController{
 	public String login(HttpSession s) {
 		return "login";
 	}
+
+	@GetMapping("/chat")
+	public String chat(Model model, HttpServletRequest request) {
+		model.addAttribute("endpoint", request.getRequestURL().toString()
+				.replaceFirst("[^:]*", "ws")
+				.replace("chat", "chatsocket"));
+		return "chat";
+	}	
 	
 	@GetMapping("/logout")
 	public String logout() {
