@@ -887,11 +887,11 @@ class Robot {
 	
 	makeMove(battleGround){
 		let rand = Math.random();
-		if (0 <= rand && rand < 0.4) this.moveToUp(battleGround);
-		else if (0.4 <= rand && rand < 0.7) this.moveToLeft(battleGround);
-		else if (0.7 <= rand && rand < 0.99) this.moveToRight(battleGround);
-		else if (1.25 <= rand && rand < 1.26) this.moveToRight(battleGround);
-		else if (0.99 <= rand && rand < 1) this.fireBullet(battleGround);
+		if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);
+		else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);
+		else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);
+		else if (0.9 <= rand && rand < 0.95) this.moveToRight(battleGround);
+		else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);
 		else alert("error");
 	}
 	
