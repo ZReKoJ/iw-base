@@ -886,14 +886,13 @@ class Robot {
 	}
 	
 	makeMove(battleGround){
-		let rand = Math.floor(Math.random() * (2 - 0)) + 0;
-		switch(rand){
-		case 2: this.moveToLeft(battleGround); break;
-		case 0: this.moveToRight(battleGround); break;
-		case 1: this.moveToUp(battleGround); break;
-		case 3: this.moveToDown(battleGround); break;
-		default: alert("error"); break;
-		}
+		let rand = Math.random();
+		if (0 <= rand && rand < 0.4) this.moveToUp(battleGround);
+		else if (0.4 <= rand && rand < 0.7) this.moveToLeft(battleGround);
+		else if (0.7 <= rand && rand < 0.99) this.moveToRight(battleGround);
+		else if (1.25 <= rand && rand < 1.26) this.moveToRight(battleGround);
+		else if (0.99 <= rand && rand < 1) this.fireBullet(battleGround);
+		else alert("error");
 	}
 	
 	calculateCorners(battleGround){
