@@ -226,6 +226,15 @@ class BattleGround {
 		// numCells
 		this.rows = numRows;
 		this.cols = numCols;
+		// Blocks
+		this.BLOCKS = Object.freeze({
+			"NOTHING": 0,
+			"PLATFORM": 205,
+			"GROUND": 206,
+			"GRASS": 207,
+			"WATER": 208,
+			"BARRIER": 195
+			});
 		// status 
 		this.frame = new Rectangle(canvas.width, canvas.height);
 		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
@@ -315,6 +324,42 @@ class BattleGround {
 		this.robots.set(robot.name, robot);
 	}
 	
+	checkPosition(point){
+		let mouseAt = this.defineMouseAt(
+			this.margin.left + this.table.width * point.x,
+			this.margin.top + this.table.height * point.y);
+		if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < this.cols && 
+			0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < this.rows) {
+			return this.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
+		}
+		else return this.BLOCKS.NOTHING;
+	}
+	
+	canIMoveOn(cell) {
+		let moveOn = [
+			this.BLOCKS.PLATFORM,
+			this.BLOCKS.GRASS,
+			this.BLOCKS.GROUND
+		];
+		let yes = false;
+		for (let i in moveOn) {
+			yes = yes || (cell == moveOn[i]);
+		}
+		return yes;
+	}
+	
+	canIShotBulletOn(cell) {
+		let shotBulletOn = [
+			this.BLOCKS.NOTHING,
+			this.BLOCKS.BARRIER
+		];
+		let yes = false;
+		for (let i in shotBulletOn) {
+			yes = yes || (cell == shotBulletOn[i]);
+		}
+		return yes;
+	}
+	
 	setImageOnCell(x, y, image, index){
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows){
 			this.mapContent[x][y] = {
@@ -347,9 +392,8 @@ class BattleGround {
 	    	this.ctx.drawImage(value.image, -this.cell.center.x / 2, -this.cell.center.y / 2, this.cell.width / 2, this.cell.height / 2);
 	    	this.ctx.restore();
 	    	for (let x in value.bullets) {
-	    		value.bullets[x].next();
-	    		if (0 <= value.bullets[x].x && value.bullets[x].x < 1 &&
-	    			0 <= value.bullets[x].y && value.bullets[x].y < 1) {
+	    		value.bullets[x].next(this);
+	    		if (value.bullets[x].state != value.bullets[x].STATES.DELETE) {
 		    	    this.ctx.save();
 			    	this.ctx.translate(
 		    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
@@ -460,15 +504,6 @@ class BattleGround {
 	    return this;
 	}
 }
-
-var BLOCKS = Object.freeze({
-	"NOTHING": 0,
-	"PLATFORM": 205,
-	"GROUND": 206,
-	"GRASS": 207,
-	"WATER": 208,
-	"BARRIER": 195
-	});
 
 function mapDesign() {
 	
@@ -812,8 +847,8 @@ function toRadians (angle) {
 function start(battleGround){
 	let robots = new Map();
 	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
-	//robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
-	//robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
+	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
+	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
 	//for (let i = 25; i < 159; i++)
 	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
 	
@@ -879,11 +914,19 @@ function start(battleGround){
 		battleGround.clear().drawMapContent();
 	}
 	
+	let code = "let rand = Math.random();\n" + 
+		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
+		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
+		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
+		"else if (0.9 <= rand && rand < 0.95) this.moveToRight(battleGround);\n" + 
+		"else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);\n" + 
+		"else alert('error');";
+	
 	function loop(timestamp) {
 		var progress = (timestamp - lastRender)
 		
 		for (let [key, value] of robots) {
-			if (key != "Zihao") value.makeMove(battleGround);
+			if (key != "Zihao") value.makeMove(battleGround, code);
 		}
 		
 		battleGround.clear().drawMapContent();
@@ -921,14 +964,8 @@ class Robot {
 		this.bullets.push(new Bullet(this));
 	}
 	
-	makeMove(battleGround){
-		let rand = Math.random();
-		if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);
-		else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);
-		else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);
-		else if (0.9 <= rand && rand < 0.95) this.moveToRight(battleGround);
-		else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);
-		else alert("error");
+	makeMove(battleGround, code){
+		eval(code);
 	}
 	
 	calculateCorners(battleGround){
@@ -955,6 +992,19 @@ class Robot {
 	changeRotation(degrees, battleGround){
 		this.rotation += degrees;
 		this.calculateCorners(battleGround);
+		let availablePosition = true;
+		let cell = null;
+		cell = this.checkPosition(this.topRightCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		cell = this.checkPosition(this.downRightCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		cell = this.checkPosition(this.downLeftCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		cell = this.checkPosition(this.topLeftCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		if (!availablePosition){
+			this.rotation -= degrees;
+		}
 	}
 	
 	checkPosition(point, battleGround){
@@ -965,10 +1015,9 @@ class Robot {
 			mouseAt.cellPosition.x < battleGround.cols && 
 			0 <= mouseAt.cellPosition.y && 
 			mouseAt.cellPosition.y < battleGround.rows) {
-			let cell = battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
-			return cell == BLOCKS.GRASS || cell == BLOCKS.GROUND || cell == BLOCKS.PLATFORM;	
+			return battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
 		}
-		else return false;
+		else return null;
 	}
 	
 	moveTo(x, y, battleGround){
@@ -977,10 +1026,15 @@ class Robot {
 		
 		this.calculateCorners(battleGround);
 		let availablePosition = true;
-		availablePosition = availablePosition && this.checkPosition(this.topRightCorner, battleGround);
-		availablePosition = availablePosition && this.checkPosition(this.downRightCorner, battleGround);
-		availablePosition = availablePosition && this.checkPosition(this.downLeftCorner, battleGround);
-		availablePosition = availablePosition && this.checkPosition(this.topLeftCorner, battleGround);
+		let cell = null;
+		cell = this.checkPosition(this.topRightCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		cell = this.checkPosition(this.downRightCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		cell = this.checkPosition(this.downLeftCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
+		cell = this.checkPosition(this.topLeftCorner, battleGround);
+		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
 		if (!availablePosition){
 			this.x -= x;
 			this.y -= y;
@@ -1023,10 +1077,31 @@ class Bullet {
 		this.rotation = robot.rotation;
 		this.proportionX = robot.proportionX * 2;
 		this.proportionY = robot.proportionY * 2;
+		this.STATES = Object.freeze({
+			"MOVING": 1,
+			"EXPLODE": 2,
+			"DELETE": 3
+			});
+		this.state = this.STATES.MOVING;
 	}
 	
-	next(){
-		this.x += this.proportionX * Math.sin(toRadians(this.rotation));
-		this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
+	next(battleGround){
+		switch (this.state){
+		case this.STATES.MOVING:
+			this.x += this.proportionX * Math.sin(toRadians(this.rotation));
+			this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
+			if (battleGround.canIShotBulletOn(battleGround.checkPosition(new Point(this.x, this.y)))){
+				this.state = this.STATES.EXPLODE;
+				this.x -= this.proportionX * Math.sin(toRadians(this.rotation));
+				this.y += this.proportionY * Math.cos(toRadians(this.rotation));
+			}
+			break;
+		case this.STATES.EXPLODE:
+			this.state = this.STATES.DELETE;
+			break;
+		case this.STATES.DELETE:
+			break;
+		default: break;
+		}
 	}
 }
