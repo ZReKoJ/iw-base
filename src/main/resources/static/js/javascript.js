@@ -361,7 +361,6 @@ class BattleGround {
 	    		else {
 	    			value.bullets.splice(x, 1);
 	    		}
-				console.log(value.bullets.length);
 	    	}
 	    }
 	    return this;
