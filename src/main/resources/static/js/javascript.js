@@ -348,15 +348,21 @@ class BattleGround {
 	    	this.ctx.restore();
 	    	for (let x in value.bullets) {
 	    		value.bullets[x].next();
-	    	    this.ctx.save();
-		    	this.ctx.translate(
-	    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
-	    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
-			    this.ctx.rotate(toRadians(value.bullets[x].rotation));
-			    this.ctx.drawImage(value.image, -this.cell.center.x / 4, -this.cell.center.y / 4, this.cell.width / 4, this.cell.height / 4);
-		    	this.ctx.restore();
+	    		if (0 <= value.bullets[x].x && value.bullets[x].x < 1 &&
+	    			0 <= value.bullets[x].y && value.bullets[x].y < 1) {
+		    	    this.ctx.save();
+			    	this.ctx.translate(
+		    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
+		    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
+				    this.ctx.rotate(toRadians(value.bullets[x].rotation));
+				    this.ctx.drawImage(value.image, -this.cell.center.x / 4, -this.cell.center.y / 4, this.cell.width / 4, this.cell.height / 4);
+			    	this.ctx.restore();
+	    		}
+	    		else {
+	    			value.bullets.splice(x, 1);
+	    		}
+				console.log(value.bullets.length);
 	    	}
-
 	    }
 	    return this;
 	}
@@ -807,8 +813,8 @@ function toRadians (angle) {
 function start(battleGround){
 	let robots = new Map();
 	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
-	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
-	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
+	//robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
+	//robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
 	//for (let i = 25; i < 159; i++)
 	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
 	
@@ -900,8 +906,8 @@ class Robot {
 		this.proportionY = 1 / battleGround.table.height;
 		this.rotationScale = 10;
 		this.rotation = 0;
-		this.x = 0.35;
-		this.y = 0.35;
+		this.x = 0.97;
+		this.y = 0.97;
 		this.topRightCorner = undefined;
 		this.downRightCorner = undefined;
 		this.downLeftCorner = undefined;
