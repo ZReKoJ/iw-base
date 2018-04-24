@@ -1,6 +1,12 @@
-body{
-	background: #F8F8F8;
+body {
+  height: 100%;
+  width: 100%;
+  background: url("../img/home-bg-img.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
+
 .wrapper{
 	width:80%;
 	text-align:center;
@@ -261,3 +267,8 @@ label{
 .selected {
     border: 2px solid red;
 }
+
+/* playing*/
+ #game-zone{
+ 	padding-top: 30px;
+ }

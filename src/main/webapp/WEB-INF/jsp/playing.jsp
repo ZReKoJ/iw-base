@@ -5,7 +5,7 @@
 <%@ include file="../jspf/header.jspf"%>
 
 <div class="jumbotron">
-	<div class="row">
+	<div class="row" id="game-zone">
 		<div class="column btn-group-vertical pull-right">
             <a class="btn btn-primary disabled" href="results" role="button">Results</a>
             <a id="fullscreen" class="btn btn-primary" href="#" role="button">FullScreen</a>

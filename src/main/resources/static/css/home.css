@@ -1,17 +1,4 @@
 @import "https://fonts.googleapis.com/css?family=Alegreya+Sans:400,500";
-body {
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  background: url("../img/home-bg-img.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
 
 a:link {
     text-decoration: none;
@@ -184,13 +171,21 @@ a:active {
 .titletext{
   font: 21px/20px Alegreya Sans, sans-serif;
   position: relative;
-  float: bottom;
   top: 70%;
   left: 52%;
   transform: translate(-50%, -40%);
 }
 
 @media only screen and (max-width: 1000px) {
+	
+	.titlecontainer {
+	  float: left;
+	}
+	
+	.titletext{
+	  display: none;
+	}
+	
     .menu{
     	top: 80px;
     }
