@@ -848,7 +848,7 @@ class ImageLoader{
 	constructor(){
 		this.images = new Map();
 		this.imagesLoaded = 0;
-		this.AllLoaded = true;
+		this.loaded = true;
 
 		let bulletPath = "/static/img/map2/component (12).png";
 		let explosionPath = "/static/img/map2/component (2).png";
@@ -857,12 +857,12 @@ class ImageLoader{
 	}
 	
 	loadImage(name, path){
+		let self = this;
 		let img = document.createElement("img");
-		let images = this.images
 		img.onload = function(){
-			this.imagesLoaded++;
-			if (this.imagesLoaded == images.size){
-				this.AllLoaded = true;
+			self.imagesLoaded++;
+			if (self.imagesLoaded == self.images.size){
+				self.loaded = true;
 			}
 		}
 		img.src = path;
@@ -875,8 +875,8 @@ var imageLoader = new ImageLoader();
 function start(battleGround){
 	let robots = new Map();
 	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
-	//robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
-	//robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
+	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
+	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
 	//for (let i = 25; i < 159; i++)
 	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
 	
@@ -943,7 +943,7 @@ function start(battleGround){
 		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
 		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
 		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
-		"else if (0.9 <= rand && rand < 0.95) this.moveToRight(battleGround);\n" + 
+		"else if (0.9 <= rand && rand < 0.95) this.moveToDown(battleGround);\n" + 
 		"else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);\n" + 
 		"else alert('error');";
 	
