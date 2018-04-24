@@ -847,8 +847,8 @@ function toRadians (angle) {
 function start(battleGround){
 	let robots = new Map();
 	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
-	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
-	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
+	//robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
+	//robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
 	//for (let i = 25; i < 159; i++)
 	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
 	
@@ -971,17 +971,17 @@ class Robot {
 	calculateCorners(battleGround){
 		this.diagonal = battleGround.cell.diagonal / 4;
 		this.topRightCorner = new Point(
-				this.diagonal * Math.cos(toRadians(this.rotation + 315)),
-				this.diagonal * Math.sin(toRadians(this.rotation + 315)));
+				this.diagonal / battleGround.table.width * Math.cos(toRadians(this.rotation + 315)) + this.x,
+				this.diagonal / battleGround.table.height * Math.sin(toRadians(this.rotation + 315)) + this.y);
 		this.downRightCorner = new Point(
-				this.diagonal * Math.cos(toRadians(this.rotation + 45)),
-				this.diagonal * Math.sin(toRadians(this.rotation + 45)));
+				this.diagonal / battleGround.table.width * Math.cos(toRadians(this.rotation + 45)) + this.x,
+				this.diagonal / battleGround.table.height * Math.sin(toRadians(this.rotation + 45)) + this.y);
 		this.downLeftCorner = new Point(
-				this.diagonal * Math.cos(toRadians(this.rotation + 135)),
-				this.diagonal * Math.sin(toRadians(this.rotation + 135)));
+				this.diagonal / battleGround.table.width * Math.cos(toRadians(this.rotation + 135)) + this.x,
+				this.diagonal / battleGround.table.height * Math.sin(toRadians(this.rotation + 135)) + this.y);
 		this.topLeftCorner = new Point(
-				this.diagonal * Math.cos(toRadians(this.rotation + 225)),
-				this.diagonal * Math.sin(toRadians(this.rotation + 225)));
+				this.diagonal / battleGround.table.width * Math.cos(toRadians(this.rotation + 225)) + this.x,
+				this.diagonal / battleGround.table.height * Math.sin(toRadians(this.rotation + 225)) + this.y);
 	}
 	
 	setFollow(follow){
@@ -994,30 +994,17 @@ class Robot {
 		this.calculateCorners(battleGround);
 		let availablePosition = true;
 		let cell = null;
-		cell = this.checkPosition(this.topRightCorner, battleGround);
+		cell = battleGround.checkPosition(this.topRightCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = this.checkPosition(this.downRightCorner, battleGround);
+		cell = battleGround.checkPosition(this.downRightCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = this.checkPosition(this.downLeftCorner, battleGround);
+		cell = battleGround.checkPosition(this.downLeftCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = this.checkPosition(this.topLeftCorner, battleGround);
+		cell = battleGround.checkPosition(this.topLeftCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
 		if (!availablePosition){
 			this.rotation -= degrees;
 		}
-	}
-	
-	checkPosition(point, battleGround){
-		let mouseAt = battleGround.defineMouseAt(
-			battleGround.margin.left + battleGround.table.width * this.x + point.x,
-			battleGround.margin.top + battleGround.table.height * this.y + point.y);
-		if (0 <= mouseAt.cellPosition.x && 
-			mouseAt.cellPosition.x < battleGround.cols && 
-			0 <= mouseAt.cellPosition.y && 
-			mouseAt.cellPosition.y < battleGround.rows) {
-			return battleGround.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
-		}
-		else return null;
 	}
 	
 	moveTo(x, y, battleGround){
@@ -1027,13 +1014,13 @@ class Robot {
 		this.calculateCorners(battleGround);
 		let availablePosition = true;
 		let cell = null;
-		cell = this.checkPosition(this.topRightCorner, battleGround);
+		cell = battleGround.checkPosition(this.topRightCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = this.checkPosition(this.downRightCorner, battleGround);
+		cell = battleGround.checkPosition(this.downRightCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = this.checkPosition(this.downLeftCorner, battleGround);
+		cell = battleGround.checkPosition(this.downLeftCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = this.checkPosition(this.topLeftCorner, battleGround);
+		cell = battleGround.checkPosition(this.topLeftCorner);
 		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
 		if (!availablePosition){
 			this.x -= x;
