@@ -399,7 +399,7 @@ class BattleGround {
 		    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
 		    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
 				    this.ctx.rotate(toRadians(value.bullets[x].rotation));
-				    this.ctx.drawImage(value.image, -this.cell.center.x * value.bullets[x].width, -this.cell.center.y * value.bullets[x].height, this.cell.width * value.bullets[x].width, this.cell.height * value.bullets[x].height);
+				    this.ctx.drawImage(value.bullets[x].image, -this.cell.center.x * value.bullets[x].width, -this.cell.center.y * value.bullets[x].height, this.cell.width * value.bullets[x].width, this.cell.height * value.bullets[x].height);
 			    	this.ctx.restore();
 	    		}
 	    		else {
@@ -844,6 +844,34 @@ function toRadians (angle) {
   return angle * (Math.PI / 180);
 }
 
+class ImageLoader{
+	constructor(){
+		this.images = new Map();
+		this.imagesLoaded = 0;
+		this.AllLoaded = true;
+
+		let bulletPath = "/static/img/map2/component (12).png";
+		let explosionPath = "/static/img/map2/component (2).png";
+		this.loadImage("bullet", bulletPath);
+		this.loadImage("explosion", explosionPath);
+	}
+	
+	loadImage(name, path){
+		let img = document.createElement("img");
+		let images = this.images
+		img.onload = function(){
+			this.imagesLoaded++;
+			if (this.imagesLoaded == images.size){
+				this.AllLoaded = true;
+			}
+		}
+		img.src = path;
+		this.images.set(name, img);
+	}
+}
+
+var imageLoader = new ImageLoader();
+
 function start(battleGround){
 	let robots = new Map();
 	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
@@ -1048,8 +1076,8 @@ class Bullet {
 	constructor(robot) {
 		this.x = robot.x;
 		this.y = robot.y;
-		this.width = 0.25;
-		this.height = 0.25;
+		this.width = 0.1;
+		this.height = 0.1;
 		this.rotation = robot.rotation;
 		this.proportionX = robot.proportionX * 2;
 		this.proportionY = robot.proportionY * 2;
@@ -1059,6 +1087,25 @@ class Bullet {
 			"DELETE": 3
 			});
 		this.state = this.STATES.MOVING;
+	}
+	
+	get image(){
+		switch (this.state){
+		case this.STATES.MOVING:
+			return imageLoader.images.get("bullet");
+			break;
+		case this.STATES.EXPLODE:
+			this.width = 0.5;
+			this.height = 0.5;
+			return imageLoader.images.get("explosion");
+			break;
+		case this.STATES.DELETE:
+			this.width = 1;
+			this.height = 1;
+			return imageLoader.images.get("explosion");
+			break;
+		default: break;
+		}
 	}
 	
 	next(battleGround){
