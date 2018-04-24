@@ -389,7 +389,7 @@ class BattleGround {
     			this.margin.left + Math.floor(this.table.width * value.x),
     			this.margin.top + Math.floor(this.table.height * value.y));
 		    this.ctx.rotate(toRadians(value.rotation));
-	    	this.ctx.drawImage(value.image, -this.cell.center.x / 2, -this.cell.center.y / 2, this.cell.width / 2, this.cell.height / 2);
+	    	this.ctx.drawImage(value.image, -this.cell.center.x * value.width, -this.cell.center.y * value.height, this.cell.width * value.width, this.cell.height * value.height);
 	    	this.ctx.restore();
 	    	for (let x in value.bullets) {
 	    		value.bullets[x].next(this);
@@ -399,7 +399,7 @@ class BattleGround {
 		    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
 		    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
 				    this.ctx.rotate(toRadians(value.bullets[x].rotation));
-				    this.ctx.drawImage(value.image, -this.cell.center.x / 4, -this.cell.center.y / 4, this.cell.width / 4, this.cell.height / 4);
+				    this.ctx.drawImage(value.image, -this.cell.center.x * value.bullets[x].width, -this.cell.center.y * value.bullets[x].height, this.cell.width * value.bullets[x].width, this.cell.height * value.bullets[x].height);
 			    	this.ctx.restore();
 	    		}
 	    		else {
@@ -942,6 +942,8 @@ class Robot {
 		this.name = name;
 		this.path = path;
 		this.image = undefined;
+		this.width = 0.5;
+		this.height = 0.5;
 		this.proportionX = 1 / battleGround.table.width;
 		this.proportionY = 1 / battleGround.table.height;
 		this.rotationScale = 5;
@@ -1046,6 +1048,8 @@ class Bullet {
 	constructor(robot) {
 		this.x = robot.x;
 		this.y = robot.y;
+		this.width = 0.25;
+		this.height = 0.25;
 		this.rotation = robot.rotation;
 		this.proportionX = robot.proportionX * 2;
 		this.proportionY = robot.proportionY * 2;
