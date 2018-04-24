@@ -882,8 +882,6 @@ function start(battleGround){
 		case 40: down = true; break;
 		default: event.returnValue = true; break;
 		}
-		
-		moving();
 	}
 	
 	window.onkeyup = function(e) {
@@ -911,7 +909,6 @@ function start(battleGround){
 		if (right) robots.get("Zihao").moveToRight(battleGround);
 		if (up) robots.get("Zihao").moveToUp(battleGround);
 		if (down) robots.get("Zihao").moveToDown(battleGround);
-		battleGround.clear().drawMapContent();
 	}
 	
 	let code = "let rand = Math.random();\n" + 
@@ -928,6 +925,7 @@ function start(battleGround){
 		for (let [key, value] of robots) {
 			if (key != "Zihao") value.makeMove(battleGround, code);
 		}
+		moving();
 		
 		battleGround.clear().drawMapContent();
 		  
@@ -946,7 +944,7 @@ class Robot {
 		this.image = undefined;
 		this.proportionX = 1 / battleGround.table.width;
 		this.proportionY = 1 / battleGround.table.height;
-		this.rotationScale = 10;
+		this.rotationScale = 5;
 		this.rotation = 0;
 		this.x = 0.97;
 		this.y = 0.97;
@@ -992,19 +990,6 @@ class Robot {
 	changeRotation(degrees, battleGround){
 		this.rotation += degrees;
 		this.calculateCorners(battleGround);
-		let availablePosition = true;
-		let cell = null;
-		cell = battleGround.checkPosition(this.topRightCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = battleGround.checkPosition(this.downRightCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = battleGround.checkPosition(this.downLeftCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = battleGround.checkPosition(this.topLeftCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		if (!availablePosition){
-			this.rotation -= degrees;
-		}
 	}
 	
 	moveTo(x, y, battleGround){
