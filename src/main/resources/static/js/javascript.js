@@ -974,7 +974,7 @@ class Robot {
 		this.height = 0.5;
 		this.proportionX = 1 / battleGround.table.width;
 		this.proportionY = 1 / battleGround.table.height;
-		this.rotationScale = 5;
+		this.rotationScale = 3;
 		this.rotation = 0;
 		this.x = 0.97;
 		this.y = 0.97;
@@ -1027,17 +1027,25 @@ class Robot {
 		this.y += y;
 		
 		this.calculateCorners(battleGround);
-		let availablePosition = true;
-		let cell = null;
-		cell = battleGround.checkPosition(this.topRightCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = battleGround.checkPosition(this.downRightCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = battleGround.checkPosition(this.downLeftCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		cell = battleGround.checkPosition(this.topLeftCorner);
-		availablePosition = availablePosition && battleGround.canIMoveOn(cell);
-		if (!availablePosition){
+		
+		let movementsAvailable = {
+			topRight : battleGround.canIMoveOn(battleGround.checkPosition(this.topRightCorner)),
+			downRight : battleGround.canIMoveOn(battleGround.checkPosition(this.downRightCorner)),
+			downLeft : battleGround.canIMoveOn(battleGround.checkPosition(this.downLeftCorner)),
+			topLeft : battleGround.canIMoveOn(battleGround.checkPosition(this.topLeftCorner))
+		}
+		
+		if (!movementsAvailable.topRight || !movementsAvailable.downLeft){
+			this.moveToLeft(battleGround);
+		}
+		else if (!movementsAvailable.downRight || !movementsAvailable.topLeft){
+			this.moveToRight(battleGround);
+		}
+		
+		if (!(movementsAvailable.topRight &&
+			movementsAvailable.downRight &&
+			movementsAvailable.downLeft &&
+			movementsAvailable.topLeft)){
 			this.x -= x;
 			this.y -= y;
 		}
