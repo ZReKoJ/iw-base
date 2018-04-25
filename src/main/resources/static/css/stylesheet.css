@@ -138,6 +138,10 @@ h2{
 	margin-top:15px;
 }
 
+.jumbotron {
+	background: rgba(0, 0, 0, 0);
+}
+
 .jumbotron p{
 	text-align: center;
 }
