@@ -1,3 +1,6 @@
+@import "https://fonts.googleapis.com/css?family=Alegreya+Sans:400,500";
+
+/* General */
 body {
   height: 100%;
   width: 100%;
@@ -7,15 +10,12 @@ body {
   background-size: cover;
 }
 
-.wrapper{
-	width:80%;
-	text-align:center;
-	height: 50px;
-	color: grey;
+.page-title{
+	padding-top: 15px;
 	font-weight: bold;
-	font-style: italic;
-	font-size: 250%;
-	margin:0;
+	color: white;
+	text-align:center;
+	font: 60px Alegreya Sans, sans-serif;
 }
 
 .neutralColourDark {
@@ -66,76 +66,9 @@ body {
 	background-color: #fff!important;
 }
 
-.no_margin{
-	margin:0;
-}
-
-h1{
-	text-align:center;
-}
-
-h2{
-	text-align:center;
-}
-
-.winner{
-	color: green;
-}
-.loser{
-	color: red;
-}
-
 .max_width{
 	width:100%;
 	margin:10px;
-}
-
-
-.max_width_margintop10{
-	width:100%;
-	margin-top:10px;
-}
-
-.width_80{
-	width:80%;
-	margin-right:10%;
-	margin-left: 10%;
-}
-
-
-.map{
-	border: solid 2px;
-	height: 350px;
-	width: 100%;
-}
-
-.map_block{
-	height: 38px;
-	width: 38px;
-	background: black;
-}
-
-.player1{
-	float: left;
-	width: 30px;
-	height: 30px;
-}
-.player2{
-	float: right;
-	width: 30px;
-	height: 30px;
-}
-
-.countdown{
-	line-height:0.5em;
-}
-
-.progress{
-	margin-bottom: 8px;
-}
-
-.results{
-	margin-top:15px;
 }
 
 .jumbotron {
@@ -144,9 +77,6 @@ h2{
 
 .jumbotron p{
 	text-align: center;
-}
-.play-button{
-	width:20%;
 }
 
 .jumbotron a{
@@ -158,19 +88,6 @@ h2{
 	width:24px;
 }
 
-.default-code{
-	 background:#B8CAFF;
-}
-
-.over{
-	overflow-y: scroll;
-    overflow-x: hidden;
-}
-
-textarea{
-	resize:vertical;
-}
-
 label{
 	text-align:center;
 }
@@ -178,40 +95,28 @@ label{
 .row p{
 	text-align:center;
 }
-.width_80{
-	width:80%;
-	margin-right:10%;
-	margin-left: 10%;
-}
-
-.center div{
-	text-align:center;
-}
-
-.tright{
-	text-align: right;
-}
-
-.feature_header{
-	padding-top:9%;
-	font-weight: bold;
-	font-size: 130%;
-	color: grey;
-}
-
-.row_header{
-	 background:black;
-}
 
 .brand_title{
 	font-weight:bold;
 	font-size:145%;
 	font-style: italic;
 	color:black;
-	
 }
-.back_grey{
-	background:#6D6D6D;
+
+/*results*/
+.winner{
+	color: green;
+}
+.loser{
+	color: red;
+}
+
+.progress{
+	margin-bottom: 8px;
+}
+
+.no_margin{
+	margin:0;
 }
 
 /* profile */
@@ -241,6 +146,10 @@ label{
 	cursor: pointer;
 	opacity: 0;
 	filter: alpha(opacity=0);
+}
+
+textarea{
+	resize:vertical;
 }
 
 /* map-design */

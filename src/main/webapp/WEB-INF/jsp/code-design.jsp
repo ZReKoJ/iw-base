@@ -10,7 +10,8 @@
 <link href="${s}/css/codemirror.css" rel="stylesheet">
 
 <div class="jumbotron">
-    <h1 class="display-4">Design your code</h1>
+    <div class="page-title">Design your code</div>
+    <hr class="my-4">
     <form id="code-form" action="/createCode" 
 		enctype="multipart/form-data" method="post" role="form">
 	    <div class="row">

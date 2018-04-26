@@ -103,9 +103,9 @@
 	            
             </div>
             <div class="user-menu-content">
-                <h2 class="text-center">
+                <h3 class="text-center">
                    Maps
-                </h2>
+                </h3>
                 <ul>
                 <c:choose>
 						<c:when test="${mapListSize > 0}">

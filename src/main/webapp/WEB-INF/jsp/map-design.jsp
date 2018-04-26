@@ -5,7 +5,7 @@
 <%@ include file="../jspf/header.jspf"%>
 
 <div class="jumbotron">
-    <h1 class="display-4">Design your map</h1>
+    <div class="page-title">Design your map</div>
     <hr class="my-4">
    		      	<input type="text" id="mapFileName" name="mapFileName" class="form-control" placeholder="Set the name for your map">
    

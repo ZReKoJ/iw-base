@@ -8,7 +8,7 @@
 
 <div class="jumbotron">
 
-    <h1 class="display-4">Ranking</h1>
+    <div class="page-title">Ranking</div>
     <hr class="my-4">
     <div class="row">
         <table>

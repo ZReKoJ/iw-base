@@ -5,7 +5,7 @@
 <%@ include file="../jspf/header.jspf"%>
 
 <div class="jumbotron">
-	<h1 class="display-4">Winner: ZIHAO</h1>
+	<div class="page-title">Winner: ZIHAO</div>
 	<hr class="my-4">
 	<div class = "row">
 		<div class="col-sm-1"></div>
