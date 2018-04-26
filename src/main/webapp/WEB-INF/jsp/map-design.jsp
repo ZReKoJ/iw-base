@@ -22,7 +22,7 @@
 		    
 		        <div class="btn-toolbar pull-right">
 		            <a id="upload" class="btn btn-primary" href="#" role="button">Upload</a>
-		            <a class="btn btn-primary" href="/home" role="button">Cancel</a>
+		            <a class="btn btn-primary" href="/" role="button">Cancel</a>
 		            <a id="test" class="btn btn-primary" href="#" onclick="javascript:alert('this is a test');" role="button">Test</a>
 		        </div>
 		    </div>

@@ -33,7 +33,7 @@
 	    </div>
 	    <div class="btn-toolbar pull-right">
 	    	<button class="btn btn-primary" role="button" type="submit">Upload</button>
-	        <a class="btn btn-primary" href="/home" role="button">Cancel</a>
+	        <a class="btn btn-primary" href="/" role="button">Cancel</a>
 	    </div>
 	    <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 	</form>	    
