@@ -392,7 +392,15 @@ class BattleGround {
 	    	this.ctx.drawImage(value.image, -this.cell.center.x * value.width, -this.cell.center.y * value.height, this.cell.width * value.width, this.cell.height * value.height);
 	    	this.ctx.restore();
 	    	for (let x in value.bullets) {
+	    		let p = new Point(
+	    				value.bullets[x].x,
+	    				value.bullets[x].y);
 	    		value.bullets[x].next(this);
+	    		for (let [key2, value2] of this.robots) {
+	    			if (value2.name != value.name) {
+	    				value2.gotHit(value.bullets[x], new Point(value.bullets[x].x, value.bullets[x].y), p);
+	    			}
+	    		}
 	    		if (value.bullets[x].state != value.bullets[x].STATES.DELETE) {
 		    	    this.ctx.save();
 			    	this.ctx.translate(
@@ -965,6 +973,36 @@ function start(battleGround){
 	
 }
 
+function intersect(topRightCorner, downRightCorner, downLeftCorner, topLeftCorner, a, b){
+	
+	function side(p1, p2, p3, p4) {
+		let d = new Point(p2.x - p1.x, p2.y - p1.y);
+		let d1 = new Point(p3.x - p1.x, p3.y - p1.y);
+		let d2 = new Point(p4.x - p2.x, p4.y - p2.y);
+		return (d.x * d1.y - d.y * d1.x) * (d.x * d2.y - d.y * d2.x);
+	}
+	
+	function between(x1, x2, x3){
+		return ((x1 - x3) * (x2 - x3) <= 0);
+	}
+	
+	function inside(p1, p2, p3, p4){
+		return (between(p1.x, p2.x, p3.x) && between(p1.y, p2.y, p3.y))
+				|| (between(p1.x, p2.x, p4.x) && between(p1.y, p2.y, p4.y));
+	}
+	
+	function cross(p1, p2, p3, p4){
+		let int1 = side(p1, p2, p3, p4);
+		let int2 = side(p3, p4, p1, p2);
+		return ((int1 < 0) && (int2 < 0))
+			|| ((int1 == 0) && (int2 == 0) && inside(p1, p2, p3, p4));	
+	} 
+	
+	return (cross(a, b, topLeftCorner, downLeftCorner) || cross(a, b, downLeftCorner, downRightCorner)
+			|| cross(a, b, downRightCorner, topRightCorner) || cross(a, b, topRightCorner, topLeftCorner)
+			|| inside(topLeftCorner, downRightCorner, a, b));
+}
+
 class Robot {
 	constructor(name, path, battleGround){
 		this.name = name;
@@ -990,6 +1028,12 @@ class Robot {
 	
 	fireBullet(){
 		this.bullets.push(new Bullet(this));
+	}
+	
+	gotHit(bullet, a, b){
+		if (intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b)){
+			console.log(this.name + " got hit");
+		}
 	}
 	
 	makeMove(battleGround, code){
