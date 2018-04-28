@@ -384,35 +384,32 @@ class BattleGround {
 	            if (this.mapContent[i][j] != undefined)
 	                this.drawCell(i, j, this.mapContent[i][j].image);
 	    for (let [key, value] of this.robots) {
-		    this.ctx.save();
-	    	this.ctx.translate(
-    			this.margin.left + Math.floor(this.table.width * value.x),
-    			this.margin.top + Math.floor(this.table.height * value.y));
-		    this.ctx.rotate(toRadians(value.rotation));
-	    	this.ctx.drawImage(value.image, -this.cell.center.x * value.width, -this.cell.center.y * value.height, this.cell.width * value.width, this.cell.height * value.height);
-	    	this.ctx.restore();
-	    	for (let x in value.bullets) {
-	    		let p = new Point(
-	    				value.bullets[x].x,
-	    				value.bullets[x].y);
-	    		value.bullets[x].next(this);
-	    		for (let [key2, value2] of this.robots) {
-	    			if (value2.name != value.name) {
-	    				value2.gotHit(value.bullets[x], new Point(value.bullets[x].x, value.bullets[x].y), p);
-	    			}
-	    		}
-	    		if (value.bullets[x].state != value.bullets[x].STATES.DELETE) {
-		    	    this.ctx.save();
-			    	this.ctx.translate(
-		    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
-		    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
-				    this.ctx.rotate(toRadians(value.bullets[x].rotation));
-				    this.ctx.drawImage(value.bullets[x].image, -this.cell.center.x * value.bullets[x].width, -this.cell.center.y * value.bullets[x].height, this.cell.width * value.bullets[x].width, this.cell.height * value.bullets[x].height);
-			    	this.ctx.restore();
-	    		}
-	    		else {
-	    			value.bullets.splice(x, 1);
-	    		}
+	    	if (value.hp > 0) {
+			    this.ctx.save();
+		    	this.ctx.translate(
+	    			this.margin.left + Math.floor(this.table.width * value.x),
+	    			this.margin.top + Math.floor(this.table.height * value.y));
+			    this.ctx.rotate(toRadians(value.rotation));
+		    	this.ctx.drawImage(value.image, -this.cell.center.x * value.width, -this.cell.center.y * value.height, this.cell.width * value.width, this.cell.height * value.height);
+		    	this.ctx.restore();
+		    	for (let x in value.bullets) {
+		    		value.bullets[x].next(this);
+		    		if (value.bullets[x].state != value.bullets[x].STATES.DELETE) {
+			    	    this.ctx.save();
+				    	this.ctx.translate(
+			    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
+			    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
+					    this.ctx.rotate(toRadians(value.bullets[x].rotation));
+					    this.ctx.drawImage(value.bullets[x].image, -this.cell.center.x * value.bullets[x].width, -this.cell.center.y * value.bullets[x].height, this.cell.width * value.bullets[x].width, this.cell.height * value.bullets[x].height);
+				    	this.ctx.restore();
+		    		}
+		    		else {
+		    			value.bullets.splice(x, 1);
+		    		}
+		    	}
+	    	}
+	    	else {
+	    		this.robots.delete(key);
 	    	}
 	    }
 	    return this;
@@ -882,7 +879,9 @@ var imageLoader = new ImageLoader();
 
 function start(battleGround){
 	let robots = new Map();
-	robots.set("Zihao", new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true));
+	let robot = new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true);
+	robot.numBullets = 99999;
+	robots.set("Zihao", robot);
 	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
 	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
 	//for (let i = 25; i < 159; i++)
@@ -1024,19 +1023,34 @@ class Robot {
 		this.follow = false;
 		this.calculateCorners(battleGround);
 		this.bullets = [];
+		
+		this.moveCounter = 0;
+		this.hp = 100;
+		this.atk = 1;
+		this.numBullets = 5;
 	}
 	
 	fireBullet(){
-		this.bullets.push(new Bullet(this));
-	}
-	
-	gotHit(bullet, a, b){
-		if (intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b)){
-			console.log(this.name + " got hit");
+		if (this.numBullets > 0) {
+			this.bullets.push(new Bullet(this));
+			this.numBullets--;
 		}
 	}
 	
+	gotHit(bullet, a, b){
+		let hit = bullet.owner != this.name && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
+		if (hit) {
+			this.hp -= bullet.atk;
+			console.log(this.name + ": " + this.hp + " hp");
+		}
+		return hit;
+	}
+	
 	makeMove(battleGround, code){
+		this.moveCounter++;
+		if (this.moveCounter % 10 == 0) {
+			this.numBullets++;
+		}
 		eval(code);
 	}
 	
@@ -1093,6 +1107,18 @@ class Robot {
 			this.x -= x;
 			this.y -= y;
 		}
+		else {
+			for (let [key, value] of battleGround.robots) {
+    			if (value.name != this.name
+    				&& (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
+    				|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
+    				|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
+    				|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
+    				this.x -= x;
+    				this.y -= y;
+    			}
+    		}
+		}
 		
 		if (this.follow){
 			battleGround.mapCenter.x = Math.floor(battleGround.table.width * this.x);
@@ -1128,6 +1154,7 @@ class Bullet {
 	constructor(robot) {
 		this.x = robot.x;
 		this.y = robot.y;
+		this.owner = robot.name;
 		this.width = 0.1;
 		this.height = 0.1;
 		this.rotation = robot.rotation;
@@ -1139,6 +1166,8 @@ class Bullet {
 			"DELETE": 3
 			});
 		this.state = this.STATES.MOVING;
+		
+		this.atk = robot.atk;
 	}
 	
 	get image(){
@@ -1163,12 +1192,20 @@ class Bullet {
 	next(battleGround){
 		switch (this.state){
 		case this.STATES.MOVING:
+			let p = new Point(this.x, this.y);
 			this.x += this.proportionX * Math.sin(toRadians(this.rotation));
 			this.y -= this.proportionY * Math.cos(toRadians(this.rotation));
 			if (battleGround.canIShotBulletOn(battleGround.checkPosition(new Point(this.x, this.y)))){
 				this.state = this.STATES.EXPLODE;
 				this.x -= this.proportionX * Math.sin(toRadians(this.rotation));
 				this.y += this.proportionY * Math.cos(toRadians(this.rotation));
+			}
+			else {
+	    		for (let [key, value] of battleGround.robots) {
+	    			if (value.gotHit(this, new Point(this.x, this.y), p)) {
+	    				this.state = this.STATES.EXPLODE;
+	    			}
+	    		}
 			}
 			break;
 		case this.STATES.EXPLODE:
