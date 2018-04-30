@@ -454,7 +454,9 @@ class BattleGround {
 	    	}
 	    	else {
 	    		this.robots.delete(key);
-	    		console.log("Robots: " + this.robots.size);
+	    		if (this.robots.size == 1) {
+	    			window.location.replace("http://localhost:8080/results");
+	    		}
 	    	}
 	    }
 	    return this;
