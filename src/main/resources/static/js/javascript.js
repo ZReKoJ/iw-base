@@ -412,9 +412,13 @@ class BattleGround {
 	drawCell(x, y, image=undefined){
 	    this.ctx.fillStyle = "#00FFEE";
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows) {
-			if (image == undefined)
-				this.ctx.fillRect(x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
-			else this.ctx.drawImage(image, x * this.cell.width + this.margin.left, y * this.cell.height + this.margin.top, this.cell.width, this.cell.height);
+			x = x * this.cell.width + this.margin.left;
+			y = y * this.cell.height + this.margin.top;
+			if (-this.cell.width <= x && x <= this.frame.width && -this.cell.height <= y && y <= this.frame.height){
+				if (image == undefined)
+					this.ctx.fillRect(x, y, this.cell.width, this.cell.height);
+				else this.ctx.drawImage(image, x, y, this.cell.width, this.cell.height);
+			}
 		}
 	}
 	
@@ -897,7 +901,8 @@ var imageLoader = new ImageLoader();
 function start(battleGround){
 	let robots = new Map();
 	let robot = new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true);
-	robot.numBullets = 99999;
+	robot.numBullets = 1000000;
+	robot.hp = 1000000;
 	robots.set("Zihao", robot);
 	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
 	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
@@ -1034,12 +1039,17 @@ class Robot {
 		
 		this.moveCounter = 0;
 		this.hp = 100;
-		this.atk = 1;
+		this.atk = 100;
 		this.numBullets = 5;
 	}
 	
 	get image(){
-		return imageLoader.image("robot_" + this.name);
+		if (this.hp > 0) {
+			return imageLoader.image("robot_" + this.name);
+		}
+		else {
+			return imageLoader.image("explosion");
+		}
 	}
 	
 	fireBullet(){
