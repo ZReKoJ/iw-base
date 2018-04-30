@@ -324,6 +324,46 @@ class BattleGround {
 		this.robots.set(robot.name, robot);
 	}
 	
+	fillContent(data){
+		let set = new Set();
+		for (let i = 0; i < data.cellDim.x; i++)
+	    	for (let j = 0; j < data.cellDim.y; j++)
+	    		set.add(data.data[i][j]);
+		
+		for (let item of set){
+			imageLoader.loadImage("map_" + item, "/static/img/map2/component (" + item + ").png");
+		}
+		
+		for (let i = 0; i < this.cols; i++){
+	    	for (let j = 0; j < this.rows; j++){
+	    		this.mapContent[i][j] = {
+	    			image : imageLoader.image("map_" + data.data[i][j]),
+	    			index : data.data[i][j],
+	    			robot : false
+	    		}
+	    	}
+	    }
+	}
+	
+	findEmptyCell(){
+		let x = Math.floor((Math.random() * (this.cols - 1)));
+		let y = Math.floor((Math.random() * (this.rows - 1)));
+		let block = undefined;
+		for (let i = 0; i < this.cols; i++){
+	    	for (let j = 0; j < this.rows; j++){
+	    		block = this.mapContent[(x + i) % this.cols][(y + j) % this.rows];
+	    		if (this.canIMoveOn(block.index) && !block.robot){
+	    			let pI = (x + i) % this.cols;
+	    			let pJ = (y + j) % this.rows;
+	    			block.robot = true;
+	    			return new Point((pI * this.cell.width + this.cell.center.x) / this.table.width,
+	    					(pJ * this.cell.height + this.cell.center.y) / this.table.height);
+	    		}
+	    	}
+		}
+		return null;
+	}
+	
 	checkPosition(point){
 		let mouseAt = this.defineMouseAt(
 			this.margin.left + this.table.width * point.x,
@@ -410,6 +450,7 @@ class BattleGround {
 	    	}
 	    	else {
 	    		this.robots.delete(key);
+	    		console.log("Robots: " + this.robots.size);
 	    	}
 	    }
 	    return this;
@@ -772,36 +813,8 @@ function playing() {
 	data = JSON.parse(data);
 
 	let battleGround = new BattleGround(canvas, data.cellDim.x, data.cellDim.y);
-	
-	let set = new Set();
-	for (let i = 0; i < data.cellDim.x; i++)
-    	for (let j = 0; j < data.cellDim.y; j++)
-    		set.add(data.data[i][j]);
-	
-	let dict = new Map();
-	let imagesLoaded = 0;
-	for (let item of set){
-		let img = document.createElement("img");
-		img.onload = function(){
-			imagesLoaded++;
-			if (imagesLoaded == set.size)  {
-				battleGround.drawMapContent();
-				start(battleGround);
-			}
-		}
-		img.src = "/static/img/map2/component (" + item + ").png";
-		dict.set(item, img);
-	}
-	
-	for (let i = 0; i < battleGround.cols; i++){
-    	for (let j = 0; j < battleGround.rows; j++){
-    		battleGround.mapContent[i][j] = {
-    			image : undefined,
-    			index : data.data[i][j]
-    		}
-    		battleGround.mapContent[i][j].image = dict.get(data.data[i][j]);
-    	}
-    }
+	battleGround.fillContent(data);
+	start(battleGround);
 
 	canvas.addEventListener('mousemove', function(event) {
 		let rect = canvas.getBoundingClientRect();
@@ -873,6 +886,10 @@ class ImageLoader{
 		img.src = path;
 		this.images.set(name, img);
 	}
+	
+	image(name){
+		return this.images.get(name);
+	}
 }
 
 var imageLoader = new ImageLoader();
@@ -887,20 +904,8 @@ function start(battleGround){
 	//for (let i = 25; i < 159; i++)
 	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
 	
-	let imagesLoaded = 0;
-	for (let [key, value] of robots) {
-		let img = document.createElement("img");
-		img.onload = function(){
-			imagesLoaded++;
-			if (imagesLoaded == robots.size){
-				for (let [k, v] of robots) {
-					battleGround.addRobot(v);
-					battleGround.clear().drawMapContent();
-				}
-			}
-		}
-		img.src = value.path;
-		value.image = img;
+	for (let [k, v] of robots) {
+		battleGround.addRobot(v);
 	}
 	
 	let left = false, right = false, up = false, down = false, space = false;
@@ -1006,15 +1011,18 @@ class Robot {
 	constructor(name, path, battleGround){
 		this.name = name;
 		this.path = path;
-		this.image = undefined;
+		imageLoader.loadImage("robot_" + this.name, this.path)
 		this.width = 0.5;
 		this.height = 0.5;
 		this.proportionX = 1 / battleGround.table.width;
 		this.proportionY = 1 / battleGround.table.height;
 		this.rotationScale = 3;
 		this.rotation = 0;
-		this.x = 0.97;
-		this.y = 0.97;
+		
+		let newPosition = battleGround.findEmptyCell();
+		this.x = newPosition.x;
+		this.y = newPosition.y;
+		
 		this.topRightCorner = undefined;
 		this.downRightCorner = undefined;
 		this.downLeftCorner = undefined;
@@ -1028,6 +1036,10 @@ class Robot {
 		this.hp = 100;
 		this.atk = 1;
 		this.numBullets = 5;
+	}
+	
+	get image(){
+		return imageLoader.image("robot_" + this.name);
 	}
 	
 	fireBullet(){
@@ -1173,17 +1185,17 @@ class Bullet {
 	get image(){
 		switch (this.state){
 		case this.STATES.MOVING:
-			return imageLoader.images.get("bullet");
+			return imageLoader.image("bullet");
 			break;
 		case this.STATES.EXPLODE:
 			this.width = 0.5;
 			this.height = 0.5;
-			return imageLoader.images.get("explosion");
+			return imageLoader.image("explosion");
 			break;
 		case this.STATES.DELETE:
 			this.width = 1;
 			this.height = 1;
-			return imageLoader.images.get("explosion");
+			return imageLoader.image("explosion");
 			break;
 		default: break;
 		}
