@@ -657,7 +657,6 @@ function mapDesign() {
 			"_csrf" : csrf_data.token, 
 			"json" : battleGround.json(),
 			"mapFileName": document.getElementById("mapFileName").value});
-		console.log(battleGround.json());
 	});
 	
     battleGround.drawCellMap().writeInfo();
@@ -678,17 +677,6 @@ function fullscreen(){
 	
 }
 
-function readTextFile(file, callback) {
-    let rawFile = new XMLHttpRequest();
-    rawFile.overrideMimeType("application/json");
-    rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function() {
-        if (rawFile.readyState === 4 && rawFile.status == "200")
-            callback(rawFile.responseText);
-    }
-    rawFile.send(rawFile.responseText);
-}
-
 function playing() {
 
 	let canvas = document.getElementById("canvas");
@@ -696,39 +684,15 @@ function playing() {
 	let parent = $(canvas).parent();
 	
 	setCanvasSize(canvas, parent.width(), parent.width());
-	/*
-	let something = undefined;
 	
-	readTextFile("/static/json/test100.json", function(text){
-	    let data = JSON.parse(text);
-	    let a = "";
-	    for (let i = 0; i < data.cellDim.x; i++){
-	    	for (let j = 0; j < data.cellDim.y; j++){
-	    		a += data.data[i][j] + " ";
-	    	}
-	    	a += "\n";
-	    }
-	    something = a;
-	});
-	something.onload = function(){
-
-		console.log(this);
-	}
-	*/
-	
-	
-	let d;
-	var req = new XMLHttpRequest();
+	let data;
+	let req = new XMLHttpRequest();
 	req.open('GET', 'http://localhost:8080/loadMap', false); 
 	req.send(null);
 	if (req.status == 200)
-		d = req.responseText;
-	else console.log("Oops");
-
-	console.log(d);
-	
-	
-	let data = '{"cellDim":{"x":100,"y":100},"data":' +
+		data = req.responseText;
+	else {
+		data = '{"cellDim":{"x":100,"y":100},"data":' +
 	'[[0,0,0,0,0,0,0,0,0,0,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],' +
 	'[0,0,0,0,0,0,0,0,0,0,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],' +
 	'[0,0,0,0,0,0,0,0,0,0,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],' +
@@ -829,8 +793,8 @@ function playing() {
 	'[0,0,0,0,0,0,205,0,0,0,0,0,0,0,0,0,0,205,0,0,0,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207],' +
 	'[0,0,0,0,0,0,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207],' +
 	'[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207,207]]}';
-	data = JSON.parse(d);
-	console.log(data);
+	}
+	data = JSON.parse(data);
 	
 	let battleGround = new BattleGround(canvas, data.cellDim.x, data.cellDim.y);
 	battleGround.fillContent(data);
@@ -972,13 +936,22 @@ function start(battleGround){
 		if (down) robots.get("Zihao").moveToDown(battleGround);
 	}
 	
-	let code = "let rand = Math.random();\n" + 
+	let code;
+	let req = new XMLHttpRequest();
+	req.open('GET', 'http://localhost:8080/loadCode', false); 
+	req.send(null);
+	if (req.status == 200){
+		code = req.responseText;
+	}
+	else {
+		code = "let rand = Math.random();\n" + 
 		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
 		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
 		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
 		"else if (0.9 <= rand && rand < 0.95) this.moveToDown(battleGround);\n" + 
 		"else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);\n" + 
 		"else alert('error');";
+	}
 	
 	function loop(timestamp) {
 		var progress = (timestamp - lastRender)
