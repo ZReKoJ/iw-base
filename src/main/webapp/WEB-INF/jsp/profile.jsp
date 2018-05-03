@@ -47,7 +47,7 @@
     			<a class="btn neutralColourLightBg" href="#" role="button">Account</a>
     			<a class="btn neutralColourLightBg" href="#" role="button">Codes</a>
     			<a class="btn neutralColourLightBg" href="#" role="button">Maps</a>
-    			<a class="btn neutralColourLightBg" href="login" role="button">Logout</a>
+    			<a class="btn neutralColourLightBg" onclick="logout()" role="button">Logout</a>
     			<a class="btn neutralColourLightBg" href="/" role="button">Back</a>
             </div>
         </div>
