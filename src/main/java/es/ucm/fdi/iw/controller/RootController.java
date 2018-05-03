@@ -196,7 +196,7 @@ public class RootController{
 				User u = (User) s.getAttribute("user");
 				log.info(System.getProperty("user.dir"));
 				File f = localData.getFile("users/" + s.getAttribute("user").toString(),"avatar.png");
-				s.setAttribute("avatar", f.getPath());
+				s.setAttribute("avatar", "users/1/avatar.png");
 				
 			}
 			// org.springframework.security.core.userdetails.User
@@ -307,6 +307,38 @@ public class RootController{
 	    return "playing";
 	    }
 	
+	@GetMapping("/loadCode")
+	public String loadCode(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
+
+	// request is an object of type HttpServletRequest and it's used to obtain information
+	// response is an object of type HttpServletResponse and it's used to generate a response
+	// throws is used to specify the exceptions than a method can throw
+	
+	 {
+		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("codes", "1")));
+		String everything = "";
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    everything = sb.toString();
+		} finally {
+		    br.close();
+		}
+		
+		
+	    response.setContentType("text/plain");
+	    PrintWriter info = response.getWriter();
+	    info.println(everything);
+	    info.close();
+	    return "playing";
+	    }
+	
 	@RequestMapping(value="/saveAvatar", method=RequestMethod.POST)
 	public String handleFileUpload(@RequestParam("photo") MultipartFile photo, HttpSession s, HttpServletResponse response)
 	{
@@ -331,8 +363,7 @@ public class RootController{
 	
 
 	@RequestMapping(value="/getAvatar", 
-	method = RequestMethod.GET, 
-	produces = MediaType.IMAGE_JPEG_VALUE)
+	method = RequestMethod.GET)
 public void userPhoto(HttpSession s,
 	HttpServletResponse response) {
 File f = localData.getFile("user", s.getAttribute("user").toString());
