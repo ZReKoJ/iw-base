@@ -972,7 +972,19 @@ function start(battleGround){
 		if (down) robots.get("Zihao").moveToDown(battleGround);
 	}
 	
-	let code = "let rand = Math.random();\n" + 
+	let code;
+	var req = new XMLHttpRequest();
+	req.open('GET', 'http://localhost:8080/loadCode', false); 
+	req.send(null);
+	if (req.status == 200)
+		code = req.responseText;
+	else console.log("Oops");
+
+	console.log(code);
+	
+	
+	
+	let c = "let rand = Math.random();\n" + 
 		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
 		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
 		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
