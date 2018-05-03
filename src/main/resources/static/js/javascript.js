@@ -352,7 +352,6 @@ class BattleGround {
 		for (let i = 0; i < this.cols; i++){
 	    	for (let j = 0; j < this.rows; j++){
 	    		block = this.mapContent[(x + i) % this.cols][(y + j) % this.rows];
-	    		console.log(block);
 	    		if (this.canIMoveOn(block.index) && !block.robot){
 	    			let pI = (x + i) % this.cols;
 	    			let pJ = (y + j) % this.rows;
@@ -938,24 +937,21 @@ function start(battleGround){
 	}
 	
 	let code;
-	var req = new XMLHttpRequest();
+	let req = new XMLHttpRequest();
 	req.open('GET', 'http://localhost:8080/loadCode', false); 
 	req.send(null);
-	if (req.status == 200)
+	if (req.status == 200){
 		code = req.responseText;
-	else console.log("Oops");
-
-	console.log(code);
-	
-	
-	
-	let c = "let rand = Math.random();\n" + 
+	}
+	else {
+		code = "let rand = Math.random();\n" + 
 		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
 		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
 		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
 		"else if (0.9 <= rand && rand < 0.95) this.moveToDown(battleGround);\n" + 
 		"else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);\n" + 
 		"else alert('error');";
+	}
 	
 	function loop(timestamp) {
 		var progress = (timestamp - lastRender)
