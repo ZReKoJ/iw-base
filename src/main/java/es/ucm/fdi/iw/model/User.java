@@ -23,6 +23,7 @@ public class User {
 
 	private byte enabled;
 	private String roles; // split by , to separate roles
+
 	private List<Map> ownedMaps;
 	private List<Code> ownedCodes;
 	
@@ -128,8 +129,7 @@ public class User {
 	public void setScore(int score) {
 		this.score = score;
 	}
-	
-	
+
 
 }
 

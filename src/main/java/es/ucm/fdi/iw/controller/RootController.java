@@ -1,10 +1,16 @@
 package es.ucm.fdi.iw.controller;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,22 +20,26 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.ucm.fdi.iw.LocalData;
@@ -38,7 +48,7 @@ import es.ucm.fdi.iw.model.Map;
 import es.ucm.fdi.iw.model.User;
 
 @Controller	
-public class RootController {
+public class RootController{
 
 	private static Logger log = Logger.getLogger(RootController.class);
 	
@@ -149,8 +159,7 @@ public class RootController {
 	    		map.setCreator(u);
 	    		map.setDescription("");
 	    		map.setName(mapFileName);
-	    		log.info("Holaaaa");
-	    		log.info(mapFileName);
+	    	
 	    		map.setCreationTime(Calendar.getInstance().getTime());
 
 	    		entityManager.persist(map);
@@ -185,6 +194,10 @@ public class RootController {
 	                    .setParameter("nickname", principal.getName())
 	                    .getSingleResult());
 				User u = (User) s.getAttribute("user");
+				log.info(System.getProperty("user.dir"));
+				File f = localData.getFile("users/" + s.getAttribute("user").toString(),"avatar.png");
+				s.setAttribute("avatar", f.getPath());
+				
 			}
 			// org.springframework.security.core.userdetails.User
 
@@ -244,7 +257,6 @@ public class RootController {
 		List<Map> listaMaps = (List<Map>) s.getAttribute("maps");
 		int sizeMaps = listaMaps.size();
 		s.setAttribute("mapListSize", sizeMaps);
-		log.info(s.getAttribute("mapListSize"));
 		
 		return "profile";
 	}
@@ -263,6 +275,77 @@ public class RootController {
 		return "ranking";
 	}
 	
+	@GetMapping("/loadMap")
+	public String loadMap(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
+
+	// request is an object of type HttpServletRequest and it's used to obtain information
+	// response is an object of type HttpServletResponse and it's used to generate a response
+	// throws is used to specify the exceptions than a method can throw
+	
+	 {
+		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("maps", "1")));
+		String everything = "";
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    everything = sb.toString();
+		} finally {
+		    br.close();
+		}
+		
+		
+	    response.setContentType("application/json");
+	    PrintWriter info = response.getWriter();
+	    info.println(everything);
+	    info.close();
+	    return "playing";
+	    }
+	
+	@RequestMapping(value="/saveAvatar", method=RequestMethod.POST)
+	public String handleFileUpload(@RequestParam("photo") MultipartFile photo, HttpSession s, HttpServletResponse response)
+	{
+		String error = "";
+		if (photo.isEmpty()) {
+			error = "Empty file uploading photo";
+			log.error(error);
+		} else {
+
+			File f = localData.getFile("users/" + s.getAttribute("user").toString(),"avatar.png");
+			try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
+				stream.write(photo.getBytes());
+			} catch (Exception e) {
+				error = "Upload failed " + s.getAttribute("user").toString() + " => " + e.getMessage();
+				log.error(error);
+			}
+		}
+	
+
+		    return  "redirect:/profile";
+	}
+	
+
+	@RequestMapping(value="/getAvatar", 
+	method = RequestMethod.GET, 
+	produces = MediaType.IMAGE_JPEG_VALUE)
+public void userPhoto(HttpSession s,
+	HttpServletResponse response) {
+File f = localData.getFile("user", s.getAttribute("user").toString());
+try (InputStream in = f.exists() ? 
+    	new BufferedInputStream(new FileInputStream(f)) :
+    	new BufferedInputStream(this.getClass().getClassLoader()
+    			.getResourceAsStream("unknown-user.jpg"))) {
+	FileCopyUtils.copy(in, response.getOutputStream());
+} catch (IOException ioe) {
+	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
+	log.info("Error retrieving file: " + f + " -- " + ioe.getMessage());
+}
+}
 	
 	
 }

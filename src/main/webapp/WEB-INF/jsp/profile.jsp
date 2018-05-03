@@ -9,13 +9,22 @@
 <div class="row user-menu-container square whiteBg">
         <div class="col-md-7 user-details">
             <div class="row neutralColourDarkBg white">
-                <img src="${s}/img/avatar.png" class="col-md-5">
+                <img src="${avatar}" class="col-md-5">
                 <div class="col-md-6 no-pad">
                     <div class="user-pad">
                         <h3>Welcome back, ${user.nickname}</h3>
                         <h4 class="white"><i class="fa fa-check-circle-o"></i>Platino</h4>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+           		<form action="/saveAvatar" enctype="multipart/form-data" method="post">
+					<input type="file" name="photo" size="40">
+					<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
+					<div>
+						<input class="btn btn-primary" type="submit" value="Send">
+					</div>
+				</form>
             </div>
             <div class="row overview whiteBg">
                 <div class="col-md-4 user-pad text-center">
