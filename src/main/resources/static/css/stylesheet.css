@@ -18,6 +18,13 @@ body {
 	font: 60px Alegreya Sans, sans-serif;
 }
 
+.page-subtitle{
+	font-weight: bold;
+	color: white;
+	text-align:center;
+	font: 30px Alegreya Sans, sans-serif;
+}
+
 .neutralColourDark {
 	color: #0979B2;
 }
@@ -83,6 +90,10 @@ body {
 	text-decoration:none;
 }
 
+.bigpaddingtop{
+	padding-top: 80px;
+ }
+ 
 .icon{
 	height:24px;
 	width:24px;
@@ -185,3 +196,11 @@ textarea{
  #game-zone{
  	padding-top: 30px;
  }
+ 
+ /* pre-play-screen */
+ .play-select{
+ 	width: 100%;
+ 	background-color: #f5fafe;
+ 	text-align: center;
+ }
+ 

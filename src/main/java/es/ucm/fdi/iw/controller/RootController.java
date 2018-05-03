@@ -239,6 +239,11 @@ public class RootController{
 		return "code-design";
 	}
 	
+	@GetMapping("/play")
+	public String play() {
+		return "play";
+	}
+	
 	@GetMapping("/profile")
 	public String profile(HttpSession s) {
 		User u = (User) s.getAttribute("user");
