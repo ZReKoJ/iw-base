@@ -46,14 +46,14 @@
                 </form>
                 <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">
                     <div class="form-group">
-                        <input class="form-control" type="text" name="nickname" placeholder="Username"/>
+                        <input class="form-control" type="text" name="nickname" placeholder="Username" required />
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="password" name="password" placeholder="Password"/>
+                        <input class="form-control" type="password" name="password" placeholder="Password" required />
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group">
-                        <input type="password" name="confirmPassword" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                        <input type="password" name="confirmPassword" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" required>
                     </div>
                     <div class="form-group">
                         <div class="row">
