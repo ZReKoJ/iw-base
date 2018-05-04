@@ -408,7 +408,7 @@ class BattleGround {
 	setImageOnCell(x, y, image, index){
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows){
 			this.mapContent[x][y] = {
-	    			image: $('.selected')[0],
+	    			image: image,
 	    			index: index
 	    	}
 		}
@@ -430,7 +430,7 @@ class BattleGround {
 	drawMapContent(){
 	    for (let i = 0; i < this.cols; i++)
 	        for (let j = 0; j < this.rows; j++)
-	            if (this.mapContent[i][j] != undefined)
+	            if (this.mapContent[i][j] != undefined && this.mapContent[i][j].image != undefined)
 	                this.drawCell(i, j, this.mapContent[i][j].image);
 	    for (let [key, value] of this.robots) {
 	    	if (value.hp > 0) {
