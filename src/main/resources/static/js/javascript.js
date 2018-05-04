@@ -25,7 +25,12 @@ function codeDesign() {
 		extraKeys: {"Ctrl-Space": "autocomplete"}
 	});
 	
-	codeMirrorEditor.setValue(document.documentElement.innerHTML);
+    let xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+    	codeMirrorEditor.setValue(this.responseText);
+    };
+    xhr.open('GET', "/static/js/example.js");
+    xhr.send();
 	
 	$(".btn-glyphicon-title").change(function() {
 	    let fileInput = document.getElementById('fileSent');
@@ -879,15 +884,32 @@ class ImageLoader{
 var imageLoader = new ImageLoader();
 
 function start(battleGround){
+	let code;
+	let req = new XMLHttpRequest();
+	req.open('GET', 'http://localhost:8080/loadCode', false); 
+	req.send(null);
+	if (req.status == 200){
+		code = req.responseText;
+	}
+	else {
+		code = "let rand = Math.random();\n" + 
+		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
+		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
+		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
+		"else if (0.9 <= rand && rand < 0.95) this.moveToDown(battleGround);\n" + 
+		"else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);\n" + 
+		"else alert('error');";
+	}
+	
 	let robots = new Map();
-	let robot = new Robot("Zihao", "/static/img/map2/component (132).png", battleGround).setFollow(true);
+	let robot = new Robot("Zihao", "/static/img/map2/component (132).png", code, battleGround).setFollow(true);
 	robot.numBullets = 1000000;
 	robot.hp = 1000000;
 	robots.set("Zihao", robot);
-	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", battleGround));
-	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", battleGround));
+	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", code, battleGround));
+	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", code, battleGround));
 	//for (let i = 25; i < 159; i++)
-	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", battleGround));
+	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", code, battleGround));
 	
 	for (let [k, v] of robots) {
 		battleGround.addRobot(v);
@@ -936,28 +958,11 @@ function start(battleGround){
 		if (down) robots.get("Zihao").moveToDown(battleGround);
 	}
 	
-	let code;
-	let req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/loadCode', false); 
-	req.send(null);
-	if (req.status == 200){
-		code = req.responseText;
-	}
-	else {
-		code = "let rand = Math.random();\n" + 
-		"if (0 <= rand && rand < 0.6) this.moveToUp(battleGround);\n" + 
-		"else if (0.6 <= rand && rand < 0.75) this.moveToLeft(battleGround);\n" + 
-		"else if (0.75 <= rand && rand < 0.9) this.moveToRight(battleGround);\n" + 
-		"else if (0.9 <= rand && rand < 0.95) this.moveToDown(battleGround);\n" + 
-		"else if (0.95 <= rand && rand < 1) this.fireBullet(battleGround);\n" + 
-		"else alert('error');";
-	}
-	
 	function loop(timestamp) {
 		var progress = (timestamp - lastRender)
 		
 		for (let [key, value] of robots) {
-			if (key != "Zihao") value.makeMove(battleGround, code);
+			if (key != "Zihao") value.makeMove(battleGround);
 		}
 		moving();
 		
@@ -1001,8 +1006,40 @@ function intersect(topRightCorner, downRightCorner, downLeftCorner, topLeftCorne
 			|| inside(topLeftCorner, downRightCorner, a, b));
 }
 
+class RobotAbstraction {
+	constructor(code) {
+		this.code = code;
+		this.command = "";
+	}
+	
+	fire(){
+		this.command = "fireBullet";
+	}
+	
+	left(){
+		this.command = "moveToDown"
+	}
+	
+	up(){
+		this.command = "moveToUp";
+	}
+	
+	right(){
+		this.command = "moveToRight";
+	}
+	
+	down(){
+		this.command = "moveToDown";
+	}
+	
+	makeMove(data){
+		eval(this.code);
+		return this.command;
+	}
+}
+
 class Robot {
-	constructor(name, path, battleGround){
+	constructor(name, path, code, battleGround){
 		this.name = name;
 		this.path = path;
 		imageLoader.loadImage("robot_" + this.name, this.path)
@@ -1030,6 +1067,8 @@ class Robot {
 		this.hp = 100;
 		this.atk = 100;
 		this.numBullets = 5;
+		
+		this.abstraction = new RobotAbstraction(code);
 	}
 	
 	get image(){
@@ -1057,12 +1096,14 @@ class Robot {
 		return hit;
 	}
 	
-	makeMove(battleGround, code){
+	makeMove(battleGround){
 		this.moveCounter++;
 		if (this.moveCounter % 10 == 0) {
 			this.numBullets++;
 		}
-		eval(code);
+		let command = this.abstraction.makeMove();
+		command = "this." + command + "(battleGround);";
+		eval(command);
 	}
 	
 	calculateCorners(battleGround){
