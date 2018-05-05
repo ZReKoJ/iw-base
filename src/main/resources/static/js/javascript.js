@@ -256,7 +256,7 @@ class BattleGround {
 		
 		this.defineMapFeature();
 		
-		this.mapContent = createArray(this.cols, this.rows);
+		this.mapContent = createArray(this.rows, this.cols);
 		
 		this.mouseAt = {
 			windowPosition: { x: "x", y: "y" },
@@ -279,6 +279,10 @@ class BattleGround {
 		mouseAt.mapPosition.y = mouseAt.windowPosition.y - this.margin.top;
 		mouseAt.cellPosition.x = Math.floor(mouseAt.mapPosition.x / this.cell.width);
 		mouseAt.cellPosition.y = Math.floor(mouseAt.mapPosition.y / this.cell.height);
+		if (0 > mouseAt.mapPosition.x || mouseAt.mapPosition.x > this.table.width) mouseAt.mapPosition.x = "x";
+		if (0 > mouseAt.mapPosition.y || mouseAt.mapPosition.y > this.table.height) mouseAt.mapPosition.y = "y";
+		if (0 > mouseAt.cellPosition.x || mouseAt.cellPosition.x > this.cols) mouseAt.cellPosition.x = "x";
+		if (0 > mouseAt.cellPosition.y || mouseAt.cellPosition.y > this.rows) mouseAt.cellPosition.y = "y";
 		return mouseAt;
 	}
 	
@@ -331,16 +335,16 @@ class BattleGround {
 	
 	fillContent(data){
 		let set = new Set();
-		for (let i = 0; i < data.cellDim.x; i++)
-	    	for (let j = 0; j < data.cellDim.y; j++)
+		for (let i = 0; i < data.cellDim.rows; i++)
+	    	for (let j = 0; j < data.cellDim.cols; j++)
 	    		set.add(data.data[i][j]);
 		
 		for (let item of set){
 			imageLoader.loadImage("map_" + item, "/static/img/map2/component (" + item + ").png");
 		}
 		
-		for (let i = 0; i < this.cols; i++){
-	    	for (let j = 0; j < this.rows; j++){
+		for (let i = 0; i < this.rows; i++){
+	    	for (let j = 0; j < this.cols; j++){
 	    		this.mapContent[i][j] = {
 	    			image : imageLoader.image("map_" + data.data[i][j]),
 	    			index : data.data[i][j],
@@ -351,15 +355,15 @@ class BattleGround {
 	}
 	
 	findEmptyCell(){
-		let x = Math.floor((Math.random() * (this.cols - 1)));
-		let y = Math.floor((Math.random() * (this.rows - 1)));
+		let x = Math.floor((Math.random() * (this.rows - 1)));
+		let y = Math.floor((Math.random() * (this.cols - 1)));
 		let block = undefined;
-		for (let i = 0; i < this.cols; i++){
-	    	for (let j = 0; j < this.rows; j++){
-	    		block = this.mapContent[(x + i) % this.cols][(y + j) % this.rows];
+		for (let i = 0; i < this.rows; i++){
+	    	for (let j = 0; j < this.cols; j++){
+	    		block = this.mapContent[(x + i) % this.rows][(y + j) % this.cols];
 	    		if (this.canIMoveOn(block.index) && !block.robot){
-	    			let pI = (x + i) % this.cols;
-	    			let pJ = (y + j) % this.rows;
+	    			let pI = (y + j) % this.cols;
+	    			let pJ = (x + i) % this.rows;
 	    			block.robot = true;
 	    			return new Point((pI * this.cell.width + this.cell.center.x) / this.table.width,
 	    					(pJ * this.cell.height + this.cell.center.y) / this.table.height);
@@ -375,7 +379,7 @@ class BattleGround {
 			this.margin.top + this.table.height * point.y);
 		if (0 <= mouseAt.cellPosition.x && mouseAt.cellPosition.x < this.cols && 
 			0 <= mouseAt.cellPosition.y && mouseAt.cellPosition.y < this.rows) {
-			return this.mapContent[mouseAt.cellPosition.x][mouseAt.cellPosition.y].index;
+			return this.mapContent[mouseAt.cellPosition.y][mouseAt.cellPosition.x].index;
 		}
 		else return this.BLOCKS.NOTHING;
 	}
@@ -406,7 +410,7 @@ class BattleGround {
 	}
 	
 	setImageOnCell(x, y, image, index){
-		if (0 <= x && x < this.cols && 0 <= y && y < this.rows){
+		if (0 <= x && x < this.rows && 0 <= y && y < this.cols){
 			this.mapContent[x][y] = {
 	    			image: image,
 	    			index: index
@@ -428,10 +432,10 @@ class BattleGround {
 	}
 	
 	drawMapContent(){
-	    for (let i = 0; i < this.cols; i++)
-	        for (let j = 0; j < this.rows; j++)
+	    for (let i = 0; i < this.rows; i++)
+	        for (let j = 0; j < this.cols; j++)
 	            if (this.mapContent[i][j] != undefined && this.mapContent[i][j].image != undefined)
-	                this.drawCell(i, j, this.mapContent[i][j].image);
+	                this.drawCell(j, i, this.mapContent[i][j].image);
 	    for (let [key, value] of this.robots) {
 	    	if (value.hp > 0) {
 			    this.ctx.save();
@@ -503,9 +507,9 @@ class BattleGround {
 		let distancesTo;
 		this.ctx.fillStyle = "white";
 		this.ctx.font = "20px Arial";
-		this.ctx.fillText("[" + this.mouseAt.cellPosition.x + ", " + this.mouseAt.cellPosition.y + "]", 10, 20);
-		this.ctx.fillText("[" + this.mouseAt.mapPosition.x + ", " + this.mouseAt.mapPosition.y + "]", 10, 40);
-		this.ctx.fillText("[" + this.mouseAt.windowPosition.x + ", " + this.mouseAt.windowPosition.y + "]", 10, 60);
+		this.ctx.fillText("[" + this.mouseAt.cellPosition.y + ", " + this.mouseAt.cellPosition.x + "]", 10, 20);
+		this.ctx.fillText("[" + this.mouseAt.mapPosition.y + ", " + this.mouseAt.mapPosition.x + "]", 10, 40);
+		this.ctx.fillText("[" + this.mouseAt.windowPosition.y + ", " + this.mouseAt.windowPosition.x + "]", 10, 60);
 		/*this.ctx.font = "15px Arial";
 		this.ctx.fillText("Dimension win [" + this.frame.width + ", " + this.frame.height + "]", 10, 80);
 		this.ctx.fillText("Dimension battleGround [" + this.table.width + ", " + this.table.height + "]", 10, 100);
@@ -527,14 +531,14 @@ class BattleGround {
 		}
 		
 		result.cellDim = {
-			x : this.cols,
-			y : this.rows
+			rows : this.rows,
+			cols : this.cols
 		}
 		
 		result.data = createArray(this.rows, this.cols);
 		
-		for (let i = 0; i < this.cols; i++){
-	        for (let j = 0; j < this.rows; j++){
+		for (let i = 0; i < this.rows; i++){
+	        for (let j = 0; j < this.cols; j++){
 	            if (this.mapContent[i][j] != undefined) 
 	            	result.data[i][j] = this.mapContent[i][j].index;
 	            else result.data[i][j] = 0;
@@ -646,7 +650,7 @@ function mapDesign() {
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
 		battleGround.mouseAt = battleGround.defineMouseAt(x, y);
 
-		if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
+		if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selected')[0], index);
 		
 	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
@@ -658,7 +662,7 @@ function mapDesign() {
 
 		drag = true;
 		
-		battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y, $('.selected')[0], index);
+		battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selected')[0], index);
 	    
 		event.returnValue = false;
 	    
@@ -861,7 +865,7 @@ function playing() {
 	}
 	data = JSON.parse(data);
 	
-	let battleGround = new BattleGround(canvas, data.cellDim.x, data.cellDim.y);
+	let battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 	battleGround.fillContent(data);
 	start(battleGround);
 
@@ -1105,8 +1109,8 @@ class Robot {
 		imageLoader.loadImage("robot_" + this.name, this.path)
 		this.width = 0.5;
 		this.height = 0.5;
-		this.proportionX = 1 / battleGround.table.width;
-		this.proportionY = 1 / battleGround.table.height;
+		this.proportionX = battleGround.cell.width / battleGround.table.width / 5;
+		this.proportionY = battleGround.cell.height / battleGround.table.height / 5;
 		this.rotationScale = 3;
 		this.rotation = 0;
 		
@@ -1234,7 +1238,7 @@ class Robot {
 		
 		if (this.follow){
 			battleGround.mapCenter.x = Math.floor(battleGround.table.width * this.x);
-			battleGround.mapCenter.y = Math.floor(battleGround.table.width * this.y);
+			battleGround.mapCenter.y = Math.floor(battleGround.table.height * this.y);
 			battleGround.defineMapFeature();
 		}
 	}
