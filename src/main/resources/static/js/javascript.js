@@ -243,7 +243,7 @@ class BattleGround {
 		// status 
 		this.frame = new Rectangle(canvas.width, canvas.height);
 		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
-		this.table = new Square(this.cols * this.cell.width, this.rows * this.cell.height);
+		this.table = new Rectangle(this.cols * this.cell.width, this.rows * this.cell.height);
 		// the center of the battleGround
 		this.mapCenter = this.table.center;
 		
@@ -503,10 +503,10 @@ class BattleGround {
 		let distancesTo;
 		this.ctx.fillStyle = "white";
 		this.ctx.font = "20px Arial";
-		this.ctx.fillText("[" + this.mouseAt.windowPosition.x + ", " + this.mouseAt.windowPosition.y + "]", 10, 20);
+		this.ctx.fillText("[" + this.mouseAt.cellPosition.x + ", " + this.mouseAt.cellPosition.y + "]", 10, 20);
 		this.ctx.fillText("[" + this.mouseAt.mapPosition.x + ", " + this.mouseAt.mapPosition.y + "]", 10, 40);
-		this.ctx.fillText("[" + this.mouseAt.cellPosition.x + ", " + this.mouseAt.cellPosition.y + "]", 10, 60);
-		this.ctx.font = "15px Arial";
+		this.ctx.fillText("[" + this.mouseAt.windowPosition.x + ", " + this.mouseAt.windowPosition.y + "]", 10, 60);
+		/*this.ctx.font = "15px Arial";
 		this.ctx.fillText("Dimension win [" + this.frame.width + ", " + this.frame.height + "]", 10, 80);
 		this.ctx.fillText("Dimension battleGround [" + this.table.width + ", " + this.table.height + "]", 10, 100);
 		this.ctx.fillText("Dimension cell [" + this.cell.width + ", " + this.cell.height + "]", 10, 120);
@@ -517,7 +517,7 @@ class BattleGround {
 		this.ctx.fillText("Center [" + this.mapCenter.x + ", " + this.mapCenter.y + "]", 10, 180);
 		this.ctx.fillText("Margin [" + this.margin.left + ", " + this.margin.right + ", " + this.margin.top + ", " + this.margin.down + "]", 10, 200);
 		this.ctx.fillText("Canvas [" + this.canvas.width + ", " + this.canvas.height + "]", 10, 220);
-		return this;
+		*/return this;
 	}
 	
 	json(){
@@ -547,7 +547,7 @@ class BattleGround {
 		this.canvas = canvas;
 		this.frame = new Rectangle(canvas.width, canvas.height);
 		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
-		this.table = new Square(this.cols * this.cell.width, this.rows * this.cell.height);
+		this.table = new Rectangle(this.cols * this.cell.width, this.rows * this.cell.height);
 		this.mapCenter = this.table.center;
 		this.defineMapFeature();
 	}
@@ -572,7 +572,70 @@ function mapDesign() {
 	setCanvasSize(canvas, parent.width(), parent.width());
 	grid.style.height = canvas.height + "px";
 	
-	let battleGround = new BattleGround(canvas, 100, 100);
+	$('.btn-number').click(function(e){
+	    e.preventDefault();
+	    
+	    fieldName = $(this).attr('data-field');
+	    type      = $(this).attr('data-type');
+	    var input = $("input[name='" + fieldName + "']");
+	    var currentVal = parseInt(input.val());
+	    if (!isNaN(currentVal)) {
+	        if(type == 'minus') {
+	            
+	            if(currentVal > input.attr('min')) {
+	                input.val(currentVal - 1).change();
+	            } 
+	            if(parseInt(input.val()) == input.attr('min')) {
+	                $(this).attr('disabled', true);
+	            }
+
+	        } else if(type == 'plus') {
+
+	            if(currentVal < input.attr('max')) {
+	                input.val(currentVal + 1).change();
+	            }
+	            if(parseInt(input.val()) == input.attr('max')) {
+	                $(this).attr('disabled', true);
+	            }
+
+	        }
+	    } else {
+	        input.val(0);
+	    }
+	});
+	$('.input-number').focusin(function(){
+	   $(this).data('oldValue', $(this).val());
+	});
+	$('.input-number').change(function() {
+	    
+	    minValue =  parseInt($(this).attr('min'));
+	    maxValue =  parseInt($(this).attr('max'));
+	    valueCurrent = parseInt($(this).val());
+	    
+	    name = $(this).attr('name');
+	    if(valueCurrent >= minValue) {
+	        $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+	    } else {
+	        alert('Sorry, the minimum value was reached');
+	        $(this).val($(this).data('oldValue'));
+	    }
+	    if(valueCurrent <= maxValue) {
+	        $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+	    } else {
+	        alert('Sorry, the maximum value was reached');
+	        $(this).val($(this).data('oldValue'));
+	    }
+	    
+	    
+	});
+	
+	let battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
+	
+	document.getElementById("resize").addEventListener("click", function(){
+		battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
+		battleGround.reset(canvas);
+	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+	});
 	
 	let index;
 	let drag = false;
@@ -653,11 +716,8 @@ function mapDesign() {
 		$(this).siblings('img.icon').removeAttr( "style" );
 	});
 	
-	document.getElementById("test").addEventListener("click", function(){
-		console.log(battleGround.json());
-	});
-	
 	document.getElementById("upload").addEventListener("click", function(){
+		console.log(battleGround.json());
 		$.post("/createMap", {
 			"_csrf" : csrf_data.token, 
 			"json" : battleGround.json(),
