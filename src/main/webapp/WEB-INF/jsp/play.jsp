@@ -9,21 +9,16 @@
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Your Robot</h3>
 	  		<select class="custom-select play-select" size="14">
-			  <option value="1">One</option>
-			  <option value="2">Two</option>
-			  <option value="3">Three</option>
-			  <option value="1">One</option>
-			  <option value="2">Two</option>
-			  <option value="3">Three</option>
-			  <option value="1">One</option>
-			  <option value="2">Two</option>
-			  <option value="3">Three</option>
-			  <option value="1">One</option>
-			  <option value="2">Two</option>
-			  <option value="3">Three</option>
-			  <option value="1">One</option>
-			  <option value="2">Two</option>
-			  <option value="3">Three</option>
+			  <c:choose>
+				<c:when test="${codeListSize > 0}">
+					<c:forEach var="code" items="${codes}">
+						<option value="${code.name}">${code.name}</option>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<option> No codes uploaded yet! </option>
+				</c:otherwise>
+			  </c:choose>
 			</select>
 		</div>
 		
@@ -31,16 +26,23 @@
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Map</h3>
 	  		<select class="custom-select play-select" size="14">
-			  <option value="1">One</option>
-			  <option value="2">Two</option>
-			  <option value="3">Three</option>
+				 <c:choose>
+					<c:when test="${mapListSize > 0}">
+						<c:forEach var="map" items="${maps}">
+							<option value="${map.name}">${map.name}</option>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<option> No maps uploaded yet! </option>
+					</c:otherwise>
+				</c:choose>
 			</select>
 		</div>
 		
 		
 		<div class="col-sm-4 no_margin">
-	   		<h3 class="page-subtitle">Select Enemy Robot</h3>
-	  		<select class="custom-select play-select" size="14">
+	   		<h3 class="page-subtitle">Select Enemy Robots</h3>
+	  		<select class="custom-select play-select" size="14" multiple>
 			  <option value="1">One</option>
 			  <option value="2">Two</option>
 			  <option value="3">Three</option>
