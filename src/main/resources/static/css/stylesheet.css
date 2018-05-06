@@ -147,7 +147,16 @@ label{
 }
 
 /* code-design */
-.btn-glyphicon-title input[type=file] {
+#fileButton {
+    position: relative;
+	overflow: hidden;
+	margin: 0px;    
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;    
+}
+
+#fileButton input[type=file] {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -157,10 +166,6 @@ label{
 	cursor: pointer;
 	opacity: 0;
 	filter: alpha(opacity=0);
-}
-
-textarea{
-	resize:vertical;
 }
 
 /* map-design */

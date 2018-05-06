@@ -32,7 +32,7 @@ function codeDesign() {
     xhr.open('GET', "/static/js/example.js");
     xhr.send();
 	
-	$(".btn-glyphicon-title").change(function() {
+	$("#fileButton").change(function() {
 	    let fileInput = document.getElementById('fileSent');
 	    let file = fileInput.files[0];
 	    $("#codeFileName").val(file.name);

@@ -16,16 +16,14 @@
 		enctype="multipart/form-data" method="post" role="form">
 	    <div class="row">
 	        <div class="input-group">
-	        	
-		            <input type="text" id="codeFileName" name="codeFileName" class="form-control" placeholder="Set the name for your code">
-		            <span class="input-group-btn">
-		                <div class="btn btn-default btn-glyphicon-title">
-		                    <span class="glyphicon glyphicon-folder-open"></span>
-		                    <span class="button-text">Browse</span>
-		                    <input type="file" id="fileSent" class="file" data-error="No has especificado el fichero">
-		                </div>
-		            </span>
-		           
+				<input type="text" id="codeFileName" name="codeFileName" class="form-control" placeholder="Set the name for your code">
+				<span class="input-group-btn">
+					<div id="fileButton" class="btn btn-default">
+						<span class="glyphicon glyphicon-folder-open"></span>
+						<span>Browse</span>
+						<input type="file" id="fileSent" class="file" data-error="No has especificado el fichero">
+					</div>
+				</span>
 	        </div>
 	    </div>
 	    <div class="row">
