@@ -650,7 +650,7 @@ function mapDesign() {
         let y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
 		battleGround.mouseAt = battleGround.defineMouseAt(x, y);
 
-		if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selected')[0], index);
+		if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selection')[0], index);
 		
 	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
@@ -662,7 +662,7 @@ function mapDesign() {
 
 		drag = true;
 		
-		battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selected')[0], index);
+		battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selection')[0], index);
 	    
 		event.returnValue = false;
 	    
@@ -710,8 +710,8 @@ function mapDesign() {
 	let imgs = $('#grid-element').find('img');
 	
 	imgs.click(function(e) {
-		$(this).addClass("selected"); 
-		$(this).siblings('img.icon.selected').removeClass("selected");
+		$(this).addClass("selection"); 
+		$(this).siblings('img.icon.selection').removeClass("selection");
 		index = $(this).index();
 	});
 	

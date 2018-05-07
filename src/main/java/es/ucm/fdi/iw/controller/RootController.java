@@ -18,7 +18,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -281,9 +284,9 @@ public class RootController{
 	
 	@GetMapping("/ranking")
 	public String ranking(HttpSession s) {
-		s.setAttribute("users", entityManager
-				.createQuery("from User", User.class)
-                .getResultList());
+		List<User> users = entityManager.createQuery("from User", User.class).getResultList();
+		users = users.stream().sorted((user1, user2) -> new Integer(user2.getScore()).compareTo(new Integer(user1.getScore()))).collect(Collectors.toList());
+		s.setAttribute("users", users);
 	
 		return "ranking";
 	}
