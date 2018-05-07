@@ -60,7 +60,7 @@ div.btn-group-vertical>a:hover {
 }
 
 div.btn-group-vertical>a.active {
-    background: #FA396f;
+    background: #ef6568;
     box-shadow: none;
     color: white;
 }
