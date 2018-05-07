@@ -240,7 +240,24 @@ public class RootController{
 	}
 	
 	@GetMapping("/play")
-	public String play() {
+	public String play(HttpSession s) {
+		User u = (User) s.getAttribute("user");
+		s.setAttribute("codes", entityManager
+				.createQuery("from Code where creator = :id", Code.class)
+                .setParameter("id",  u).getResultList());
+		
+		List<Code> listaCodes = (List<Code>) s.getAttribute("codes");
+		int sizeCodes = listaCodes.size();
+		s.setAttribute("codeListSize", sizeCodes);
+		
+		s.setAttribute("maps", entityManager
+				.createQuery("from Map where creator = :id", Map.class)
+                .setParameter("id",  u).getResultList());
+		
+		List<Map> listaMaps = (List<Map>) s.getAttribute("maps");
+		int sizeMaps = listaMaps.size();
+		s.setAttribute("mapListSize", sizeMaps);
+		
 		return "play";
 	}
 	

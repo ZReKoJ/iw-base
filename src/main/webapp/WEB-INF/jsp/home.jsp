@@ -9,7 +9,7 @@
 <div class='menu closed'>
     <a class='profile button'></a>
     <a class='ranking button'></a>
-    <a href="playing" class='play button'> Play </a>
+    <a href="play" class='play button'> Play </a>
     <a class='code button'></a>
     <a class='mapd button'></a>
     <div class='main button homeMenu'> Menu </div>

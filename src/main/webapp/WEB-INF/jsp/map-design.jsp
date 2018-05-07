@@ -13,7 +13,7 @@
         <span class="glyphicon glyphicon-minus"></span>
         </button>
         </span>
-        <input type="text" name="rows" class="form-control input-number" value="100" min="10" max="500">
+        <input type="text" name="rows" class="form-control input-number" value="10" min="10" max="100">
         <span class="input-group-btn">
         <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="rows">
         <span class="glyphicon glyphicon-plus"></span>
@@ -27,7 +27,7 @@
         <span class="glyphicon glyphicon-minus"></span>
         </button>
         </span>
-        <input type="text" name="cols" class="form-control input-number" value="100" min="10" max="500">
+        <input type="text" name="cols" class="form-control input-number" value="10" min="10" max="100">
         <span class="input-group-btn">
         <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="cols">
         <span class="glyphicon glyphicon-plus"></span>

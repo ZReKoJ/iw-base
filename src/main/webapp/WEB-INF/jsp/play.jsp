@@ -72,7 +72,7 @@
 	<div class="row">
 		<div class="col-sm-5"></div>
 		<div class="col-sm-2">
-			<a href="playing"><button type="button" class="btn btn-primary max_width">Pay</button></a>
+			<a href="playing"><button type="button" class="btn btn-primary max_width">Play</button></a>
 		</div>
 		<div class="col-sm-5"></div>
 	</div>
