@@ -12,9 +12,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +63,9 @@ public class RootController{
     
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	@Transactional
-	public String createUser(
-			@RequestParam String nickname, 
-			@RequestParam String password,
-			@RequestParam String confirmPassword, HttpSession s) {
+	public String handleCreateUser(@RequestParam String nickname, @RequestParam String password) 
+    {
+    	
 		User u = new User();
 		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
@@ -80,22 +74,21 @@ public class RootController{
 		u.setLose(0);
 		u.setEnabled((byte) 0x01);
 		u.setRoles("USER");
+		
 		entityManager.persist(u);
-		
 		entityManager.flush();
-		
 		
 		return "login";
 	}
     
     @RequestMapping(value = "/createCode", method=RequestMethod.POST)
     @Transactional
-    public String handleFileUpload(
+    public String handleCreateCode(
     		HttpServletResponse response,
-    		@RequestParam("code") String code,
-    		@RequestParam("codeFileName") String codeFileName,
-    		HttpSession s,
-    		Model m){
+    		@RequestParam String code,
+    		@RequestParam String codeFileName,
+    		HttpSession s)
+    {
     	response.setHeader("X-XSS-Protection", "0");
     	
 		String error = "";
@@ -106,23 +99,16 @@ public class RootController{
         } else {
         	
 	    		Code codeObject= new Code();
-	    		User u = new User();
-	    		u.setId(Long.parseLong(s.getAttribute("user").toString()));
+	    		User u = (User) s.getAttribute("user");
 	    		codeObject.setCreator(u);
-	    		codeObject.setDescription("");
 	    		codeObject.setName(codeFileName);
 	    		codeObject.setCreationTime(Calendar.getInstance().getTime());
 
 	    		entityManager.persist(codeObject);
-	    		
 	    		entityManager.flush();
 	    		
 	    		File f = localData.getFile("codes", String.valueOf(codeObject.getId()));
-	    		try (BufferedOutputStream stream =
-		                new BufferedOutputStream(
-		                		new FileOutputStream(f)
-		                )
-		        )
+	    		try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f)))
 	    		{
 	    			stream.write(code.getBytes());
 	     
@@ -140,65 +126,55 @@ public class RootController{
     
     @RequestMapping(value="/createMap", method=RequestMethod.POST)
     @Transactional
-    public String handleFileUpload(
+    public String handleCreateMap(
     		HttpServletResponse response,
     		@RequestParam String json,
     		@RequestParam String mapFileName,
-    		HttpSession s){
+    		HttpSession s)
+    {
 
     	String error = "";
         if (json.isEmpty()) {
-        	
         	error = "You failed to upload the map";     
         	log.info(error);
         } else {
         	
 	    		Map map= new Map();
-	    		User u = new User();
-	    		u.setId(Long.parseLong(s.getAttribute("user").toString()));
+	    		User u = (User) s.getAttribute("user");
 	    		map.setCreator(u);
-	    		map.setDescription("");
 	    		map.setName(mapFileName);
-	    	
 	    		map.setCreationTime(Calendar.getInstance().getTime());
 
 	    		entityManager.persist(map);
-	    		
 	    		entityManager.flush();
 	    		
 	    		File f = localData.getFile("maps", String.valueOf(map.getId()));
-	    		try (BufferedOutputStream stream =
-		                new BufferedOutputStream(
-		                		new FileOutputStream(f)
-		                )
-		        )
+	    		try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f)))
 	    		{
 	    			stream.write(json.getBytes());
 	     
 	    		} catch (Exception e) {
 	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
 	    		}
+	    		return "/settings";
         }
-      
-        return "/settings";
+        
+        // exit with error, blame user
+    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return error;
 	}
     
 	@GetMapping({"/", "/index"})
 	public String root(Model model, Principal principal, HttpSession s) {
 		
-			log.info(principal.getName() + " de tipo " + principal.getClass());
-		
-			if (s.getAttribute("user") == null) {
-				s.setAttribute("user", entityManager
-						.createQuery("from User where nickname = :nickname", User.class)
-	                    .setParameter("nickname", principal.getName())
-	                    .getSingleResult());
+		if (s.getAttribute("user") == null) {
+			s.setAttribute("user", entityManager
+				.createQuery("from User where nickname = :nickname", User.class)
+	            .setParameter("nickname", principal.getName())
+	            .getSingleResult());
 				
-			}
-			User u = (User) s.getAttribute("user");
-			log.info(""+u.getId());
-			// org.springframework.security.core.userdetails.User
-
+		}
+			
 		return "home";
 	}
 	
@@ -259,23 +235,6 @@ public class RootController{
 	
 	@GetMapping("/profile")
 	public String profile(HttpSession s) {
-		User u = (User) s.getAttribute("user");
-		s.setAttribute("codes", entityManager
-				.createQuery("from Code where creator = :id", Code.class)
-                .setParameter("id",  u).getResultList());
-		
-		List<Code> listaCodes = (List<Code>) s.getAttribute("codes");
-		int sizeCodes = listaCodes.size();
-		s.setAttribute("codeListSize", sizeCodes);
-		
-		s.setAttribute("maps", entityManager
-				.createQuery("from Map where creator = :id", Map.class)
-                .setParameter("id",  u).getResultList());
-		
-		List<Map> listaMaps = (List<Map>) s.getAttribute("maps");
-		int sizeMaps = listaMaps.size();
-		s.setAttribute("mapListSize", sizeMaps);
-		
 		return "profile";
 	}
 	
@@ -294,13 +253,11 @@ public class RootController{
 	}
 	
 	@GetMapping("/loadMap")
-	public String loadMap(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
-
-	// request is an object of type HttpServletRequest and it's used to obtain information
-	// response is an object of type HttpServletResponse and it's used to generate a response
-	// throws is used to specify the exceptions than a method can throw
-	
-	 {
+	public String loadMap(
+			HttpServletRequest request,
+			HttpServletResponse response)
+	throws ServletException, IOException  
+	{
 		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("maps", "1")));
 		String everything = "";
 		try {
@@ -317,22 +274,19 @@ public class RootController{
 		    br.close();
 		}
 		
-		
 	    response.setContentType("application/json");
 	    PrintWriter info = response.getWriter();
 	    info.println(everything);
 	    info.close();
-	    return "playing";
-	    }
+	    return "map-design";
+	}
 	
 	@GetMapping("/loadCode")
-	public String loadCode(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
-
-	// request is an object of type HttpServletRequest and it's used to obtain information
-	// response is an object of type HttpServletResponse and it's used to generate a response
-	// throws is used to specify the exceptions than a method can throw
-	
-	 {
+	public String loadCode(
+			HttpServletRequest request,
+			HttpServletResponse response) 
+	throws ServletException, IOException  
+	{
 		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("codes", "1")));
 		String everything = "";
 		try {
@@ -349,16 +303,17 @@ public class RootController{
 		    br.close();
 		}
 		
-		
 	    response.setContentType("text/plain");
 	    PrintWriter info = response.getWriter();
 	    info.println(everything);
 	    info.close();
-	    return "playing";
-	    }
+	    return "code-design";
+	}
 	
 	@RequestMapping(value="/saveAvatar", method=RequestMethod.POST)
-	public String handleFileUpload(@RequestParam("photo") MultipartFile photo, HttpSession s, HttpServletResponse response)
+	public String handleFileUpload(
+			@RequestParam MultipartFile photo,
+			HttpSession s)
 	{
 		String error = "";
 		if (photo.isEmpty()) {
@@ -374,16 +329,15 @@ public class RootController{
 				log.error(error);
 			}
 		}
-	
-
-		    return  "redirect:/profile";
+		return  "redirect:/profile";
 	}
 	
 
-	@RequestMapping(value="/avatar/{id}", 		
-			produces = MediaType.IMAGE_JPEG_VALUE)
-	public void userPhoto(@PathVariable("id") String id, 
-			HttpServletResponse response) {
+	@RequestMapping(value="/avatar/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public void userPhoto(
+			@PathVariable String id, 
+			HttpServletResponse response) 
+	{
 	    File f = localData.getFile("users/" + id, "avatar");
 	    try (InputStream in = f.exists() ? 
 		    	new BufferedInputStream(new FileInputStream(f)) :
