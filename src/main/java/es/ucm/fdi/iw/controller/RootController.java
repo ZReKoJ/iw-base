@@ -222,14 +222,19 @@ public class RootController{
 	}
 	
 	@GetMapping("/play")
-	public String play(Model m) {
+	public String play(Model m, HttpSession s) {
 		
-		List<Code> codes = entityManager.createQuery("SELECT e FROM Code e", Code.class).getResultList();
-		m.addAttribute("codes", codes);
-
-		List<Map> maps = entityManager.createQuery("SELECT e FROM Map e", Map.class).getResultList();
+		List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
 		m.addAttribute("maps", maps);
 		
+		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
+		m.addAttribute("codes", codes);
+		
+		User u = (User) s.getAttribute("user");
+		m.addAttribute("ownedCodes", entityManager
+						.createQuery("from Code where creator = :id", Code.class)
+			            .setParameter("id",  u).getResultList());
+			
 		return "play";
 	}
 	

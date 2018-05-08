@@ -15,9 +15,9 @@
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Your Robot</h3>
 			  <c:choose>
-				<c:when test="${user.getOwnedCodes().size() > 0}">
+				<c:when test="${ownedCodes.size() > 0}">
 					<select name="user-code" class="selectpicker show-tick" data-width="100%" data-live-search="true">
-						<c:forEach var="code" items="${user.getOwnedCodes()}">
+						<c:forEach var="code" items="${ownedCodes}">
 							<option value="${code.id}">${code.name}</option>
 						</c:forEach>
 					</select>
