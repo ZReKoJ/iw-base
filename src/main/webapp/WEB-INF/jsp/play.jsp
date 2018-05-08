@@ -10,20 +10,22 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
+<script src="${s}/js/play.js"></script>
+
 <form id="play-form" action="/loadGame" method="post" role="form">
 	<div class = "row bigpaddingtop" >
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Your Robot</h3>
 			  <c:choose>
 				<c:when test="${ownedCodes.size() > 0}">
-					<select name="user-code" class="selectpicker show-tick" data-width="100%" data-live-search="true">
+					<select id="owned-codes" name="user-code" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="1" multiple>
 						<c:forEach var="code" items="${ownedCodes}">
-							<option value="${code.id}">${code.name}</option>
+							<option id="owned-${code.id}" class="owned-codes-op" value="${code.id}">${code.name}</option>
 						</c:forEach>
 					</select>
 				</c:when>
 				<c:otherwise>
-					<select class="selectpicker show-tick" data-width="100%" data-live-search="true" disabled>
+					<select id="owned-codes" class="selectpicker show-tick" data-width="100%" data-live-search="true" disabled>
 						<option> No codes uploaded yet! </option>
 					</select>
 				</c:otherwise>
@@ -36,14 +38,14 @@
 	   		<h3 class="page-subtitle">Select Map</h3>
 				 <c:choose>
 					<c:when test="${maps.size() > 0}">
-						<select name="map" class="selectpicker show-tick" data-width="100%" data-live-search="true">
+						<select id="all-maps" name="map" class="selectpicker show-tick" data-width="100%"  data-live-search="true" data-max-options="1" multiple>
 							<c:forEach var="map" items="${maps}">
 								<option value="${map.id}">${map.name}</option>
 							</c:forEach>
 						</select>
 					</c:when>
 					<c:otherwise>
-						<select class="selectpicker show-tick" data-width="100%" data-live-search="true" disabled>
+						<select id="all-maps" class="selectpicker show-tick" data-width="100%" data-live-search="true" disabled>
 							<option> No maps uploaded yet! </option>
 						</select>
 					</c:otherwise>
@@ -55,14 +57,14 @@
 	   		<h3 class="page-subtitle">Select Enemy Robots</h3>
 			   <c:choose>
 					<c:when test="${codes.size() > 0}">
-	  					<select name="enemy-codes[]" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="5" multiple>	
+	  					<select id="all-codes" name="enemy-codes[]" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="5" multiple>	
 							<c:forEach var="code" items="${codes}">
-								<option value="${code.id}">${code.name}</option>
+								<option id="all-${code.id}" value="${code.id}">${code.name}</option>
 							</c:forEach>
 						</select>
 					</c:when>
 					<c:otherwise>
-	  					<select class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="5" multiple disabled>
+	  					<select id="all-codes" class="selectpicker show-tick" data-width="100%" data-live-search="true" disabled>
 							<option> No codes uploaded yet! </option>
 						</select>
 					</c:otherwise>
