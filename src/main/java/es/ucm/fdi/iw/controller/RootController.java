@@ -246,13 +246,13 @@ public class RootController{
 	}
 	
 	@GetMapping("/play")
-	public String play(HttpSession s) {
+	public String play(Model m) {
 		
 		List<Code> codes = entityManager.createQuery("SELECT e FROM Code e", Code.class).getResultList();
-		s.setAttribute("codes", codes);
+		m.addAttribute("codes", codes);
 
 		List<Map> maps = entityManager.createQuery("SELECT e FROM Map e", Map.class).getResultList();
-		s.setAttribute("maps", maps);
+		m.addAttribute("maps", maps);
 		
 		return "play";
 	}
