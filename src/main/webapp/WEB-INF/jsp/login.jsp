@@ -6,6 +6,30 @@
 
 <link href="${s}/css/login.css" rel="stylesheet">
 
+<script>
+$('#register-form').submit(doubleSubmit);
+
+function doubleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $.post("/createUser", { 
+    		nickname: $('#regname').val(),
+    		password: $('#regpas').val(),
+    		csrf_token: $('#regextra').val()},
+    		function (data) {
+    			sendSecondStage();
+    		});
+}
+
+function sendSecondStage(){
+	$.post("/login", { 
+			username: $('#regname').val(),
+			password: $('#regpas').val(),
+			csrf_token: $('#regextra').val()
+		});
+}
+</script>
+
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-login">

@@ -12,13 +12,19 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,6 +206,14 @@ public class RootController{
 	public String login() {
 		return "login";
 	}
+
+	@GetMapping("/chat")
+	public String chat(Model model, HttpServletRequest request) {
+		model.addAttribute("endpoint", request.getRequestURL().toString()
+				.replaceFirst("[^:]*", "ws")
+				.replace("chat", "chatsocket"));
+		return "chat";
+	}	
 	
 	@GetMapping("/logout")
 	public String logout() {
@@ -233,22 +247,12 @@ public class RootController{
 	
 	@GetMapping("/play")
 	public String play(HttpSession s) {
-		User u = (User) s.getAttribute("user");
-		s.setAttribute("codes", entityManager
-				.createQuery("from Code where creator = :id", Code.class)
-                .setParameter("id",  u).getResultList());
 		
-		List<Code> listaCodes = (List<Code>) s.getAttribute("codes");
-		int sizeCodes = listaCodes.size();
-		s.setAttribute("codeListSize", sizeCodes);
-		
-		s.setAttribute("maps", entityManager
-				.createQuery("from Map where creator = :id", Map.class)
-                .setParameter("id",  u).getResultList());
-		
-		List<Map> listaMaps = (List<Map>) s.getAttribute("maps");
-		int sizeMaps = listaMaps.size();
-		s.setAttribute("mapListSize", sizeMaps);
+		List<Code> codes = entityManager.createQuery("SELECT e FROM Code e", Code.class).getResultList();
+		s.setAttribute("codes", codes);
+
+		List<Map> maps = entityManager.createQuery("SELECT e FROM Map e", Map.class).getResultList();
+		s.setAttribute("maps", maps);
 		
 		return "play";
 	}
@@ -282,9 +286,9 @@ public class RootController{
 	
 	@GetMapping("/ranking")
 	public String ranking(HttpSession s) {
-		s.setAttribute("users", entityManager
-				.createQuery("from User", User.class)
-                .getResultList());
+		List<User> users = entityManager.createQuery("from User", User.class).getResultList();
+		users = users.stream().sorted((user1, user2) -> new Integer(user2.getScore()).compareTo(new Integer(user1.getScore()))).collect(Collectors.toList());
+		s.setAttribute("users", users);
 	
 		return "ranking";
 	}

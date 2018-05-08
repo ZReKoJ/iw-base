@@ -194,7 +194,7 @@ label{
 	height: 100%;
 }
 
-.selected {
+.selection {
     border: 2px solid red;
 }
 
