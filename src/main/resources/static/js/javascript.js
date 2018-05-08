@@ -1035,7 +1035,7 @@ function start(battleGround){
 	function loop(timestamp) {
 		var progress = (timestamp - lastRender)
 		
-		for (let [key, value] of robots) {
+		for (let [key, value] of battleGround.robots) {
 			if (key != "Zihao") value.makeMove(battleGround);
 		}
 		moving();
@@ -1178,26 +1178,42 @@ class Robot {
 		}
 		
 		let position = battleGround.getCellPosition(new Point(this.x, this.y));
-		console.log(position);
 		position = new Point(position.x - 2, position.y - 2);
 		let mapContent = battleGround.mapContent;
 		let mapData = createArray(5, 5);
 		for (let i = 0; i < 5; ++i){
 			for (let j = 0; j < 5; ++j){
-				if (0 < position.y + i && position.y + i < battleGround.rows
-					&& 0 < position.x + j && position.x + j < battleGround.cols){
-					mapData[i][j] = mapContent[position.x + j][position.y + i].index;
+				if (0 <= position.y + i && position.y + i < battleGround.rows
+					&& 0 <= position.x + j && position.x + j < battleGround.cols){
+					mapData[i][j] = mapContent[position.y + i][position.x + j].index;
 				}
-				else mapData[j][i] = battleGround.BLOCKS.NOTHING;
+				else mapData[i][j] = battleGround.BLOCKS.NOTHING;
 			}
 		}
 		position = new Point(position.x + 2, position.y + 2);
+		
+		let dist = undefined;
+		let cells = Math.max(battleGround.rows, battleGround.cols);
+		cells = cells / (battleGround.robots.size - 1);
+		this.closeRobots = [];
+		for (let [key, value] of battleGround.robots) {
+			if (this.name != value.name) {
+				dist = new Point(this.x, this.y).distanceTo(new Point(value.x, value.y));
+				if (dist < (cells * 5 * this.proportionX)){
+					this.closeRobots.push({
+						name : value.name,
+						distance : dist
+					});
+				}
+			}
+		}
+		
 		
 		let data = {
 			atk : this.atk,
 			hp : this.hp,
 			bullets : this.numBullets,
-			position : position,
+			position : new Point(this.x, this.y),
 			robots : this.closeRobots,
 			mapData : mapData
 		}
@@ -1263,23 +1279,12 @@ class Robot {
 			movementsAvailable.topLeft)){
 			move = false;
 		}
-		
-		let dist = undefined;
-		this.closeRobots = [];
-		for (let [key, value] of battleGround.robots) {
-			if (this.name != value.name) {
-				dist = new Point(this.x, this.y).distanceTo(new Point(value.x, value.y));
-				if (dist < (25 * this.proportionX)){
-					this.closeRobots.push({
-						name : value.name,
-						distance : dist
-					});
-				}
-				
-				if (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
+		else {
+			for (let [key, value] of battleGround.robots) {
+				if (this.name != value.name && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner)) {
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
 					move = false;
 				}
 			}
