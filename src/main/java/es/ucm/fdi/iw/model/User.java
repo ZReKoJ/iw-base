@@ -45,11 +45,6 @@ public class User {
 	public long getId() {
 	return id;
 	}
-	
-	@Override
-	public String toString() {
-		return ""+id;
-	}
 
 	public void setId(long id) {
 		this.id = id;

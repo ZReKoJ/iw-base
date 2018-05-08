@@ -37,37 +37,41 @@
                     </button>
                     <a class="navbar-brand brand_title" href="/">ROBOTRON 2000</a>
                 </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="userProfilePic">
-                            <img id="userProfileIcon" class="icon" src="${s}/img/avatar.png">
-                            </span>
-                            <span class="userProfileName">${user.nickname}</span>
-                            <b class="caret"></b>
-                            </a>
-                            <div class="dropdown-menu">
-                            	<div id="profileCard" class="card">
-								    <h5 class="card-header">${user.nickname}</h5>
-								  	<img id="userProfilePicture" class="card-img-top" src="${s}/img/avatar.png" alt="Card image cap">
-								  	<div class="card-body">
-								    	<ul class="list-group list-group-flush">
-	                                        <li class="list-group-item">Platinum</li>
-	                                        <li class="list-group-item">Wins: ${user.win}</li>
-	                                        <li class="list-group-item">Draw: ${user.draw}</li>
-	                                        <li class="list-group-item">Lose: ${user.lose}</li>
-	                                    </ul>
-										<div class="btn-group btn-group-justified">
-	                                        <a class="btn btn-primary" href="profile" role="button">Profile</a>
-	                                        <a class="btn btn-primary" role="button" onclick="logout()">Logout</a>
-	                                    </div>
-								  	</div>
-								</div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <c:if test="${user.id != null}">
+	                <div id="navbar" class="collapse navbar-collapse">
+	                    <ul class="nav navbar-nav navbar-right">
+	                        <li class="dropdown">
+	                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	                            <span class="userProfilePic">
+	                            <img id="userProfileIcon" class="icon rounded" src="avatar/${user.id}">
+	                            </span>
+	                            <span class="userProfileName">${user.nickname}</span>
+	                            <b class="caret"></b>
+	                            </a>
+	                            <div class="dropdown-menu">
+	                            	<div id="profileCard" class="card">
+									    
+									  	<img src="avatar/${user.id}" class="circle-avatar-mini">
+									  	<h1 class="card-header centered">${user.nickname}</h1>
+									  	
+									  	<div class="card-body">
+									    	<ul class="list-group list-group-flush">
+		                                        <li class="list-group-item">Platinum</li>
+		                                        <li class="list-group-item">Wins: ${user.win}</li>
+		                                        <li class="list-group-item">Draw: ${user.draw}</li>
+		                                        <li class="list-group-item">Lose: ${user.lose}</li>
+		                                    </ul>
+											<div class="btn-group btn-group-justified">
+		                                        <a class="btn btn-primary" href="profile" role="button">Profile</a>
+		                                        <a class="btn btn-primary" role="button" onclick="logout()">Logout</a>
+		                                    </div>
+									  	</div>
+									</div>
+	                            </div>
+	                        </li>
+	                    </ul>
+	                </div>
+                </c:if>
                 <!--/.nav-collapse -->
             </div>
         </nav>
