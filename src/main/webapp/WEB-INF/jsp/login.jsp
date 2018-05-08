@@ -6,30 +6,6 @@
 
 <link href="${s}/css/login.css" rel="stylesheet">
 
-<script>
-$('#register-form').submit(doubleSubmit);
-
-function doubleSubmit(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    $.post("/createUser", { 
-    		nickname: $('#regname').val(),
-    		password: $('#regpas').val(),
-    		csrf_token: $('#regextra').val()},
-    		function (data) {
-    			sendSecondStage();
-    		});
-}
-
-function sendSecondStage(){
-	$.post("/login", { 
-			username: $('#regname').val(),
-			password: $('#regpas').val(),
-			csrf_token: $('#regextra').val()
-		});
-}
-</script>
-
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-login">
@@ -47,12 +23,12 @@ function sendSecondStage(){
             <div class="panel-body">
                 <form id="login-form" action="/login" method="post" role="form">
                     <div class="form-group">
-                        <input class="form-control" type="text" name="username" placeholder="Username"/>
+                        <input id="logname" class="form-control" type="text" name="username" placeholder="Username"/>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="password" name="password" placeholder="Password"/>
+                        <input id="logpass" class="form-control" type="password" name="password" placeholder="Password"/>
                     </div>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input id="logextra" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group text-center">
                         <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
                         <label for="remember"> Remember Me</label>
