@@ -9,19 +9,13 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -193,19 +187,17 @@ public class RootController{
 						.createQuery("from User where nickname = :nickname", User.class)
 	                    .setParameter("nickname", principal.getName())
 	                    .getSingleResult());
-				User u = (User) s.getAttribute("user");
-				log.info(System.getProperty("user.dir"));
-				File f = localData.getFile("users/" + s.getAttribute("user").toString(),"avatar.png");
-				s.setAttribute("avatar", "users/1/avatar.png");
 				
 			}
+			User u = (User) s.getAttribute("user");
+			log.info(""+u.getId());
 			// org.springframework.security.core.userdetails.User
 
 		return "home";
 	}
 	
 	@GetMapping("/login")
-	public String login(HttpSession s) {
+	public String login() {
 		return "login";
 	}
 	
@@ -369,8 +361,8 @@ public class RootController{
 			error = "Empty file uploading photo";
 			log.error(error);
 		} else {
-
-			File f = localData.getFile("users/" + s.getAttribute("user").toString(),"avatar.png");
+			String id = "" + ((User)s.getAttribute("user")).getId();
+			File f = localData.getFile("users/" + id,"avatar");
 			try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
 				stream.write(photo.getBytes());
 			} catch (Exception e) {
@@ -384,21 +376,20 @@ public class RootController{
 	}
 	
 
-	@RequestMapping(value="/getAvatar", 
-	method = RequestMethod.GET)
-public void userPhoto(HttpSession s,
-	HttpServletResponse response) {
-File f = localData.getFile("user", s.getAttribute("user").toString());
-try (InputStream in = f.exists() ? 
-    	new BufferedInputStream(new FileInputStream(f)) :
-    	new BufferedInputStream(this.getClass().getClassLoader()
-    			.getResourceAsStream("unknown-user.jpg"))) {
-	FileCopyUtils.copy(in, response.getOutputStream());
-} catch (IOException ioe) {
-	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
-	log.info("Error retrieving file: " + f + " -- " + ioe.getMessage());
-}
-}
-	
+	@RequestMapping(value="/avatar/{id}", 		
+			produces = MediaType.IMAGE_JPEG_VALUE)
+	public void userPhoto(@PathVariable("id") String id, 
+			HttpServletResponse response) {
+	    File f = localData.getFile("users/" + id, "avatar");
+	    try (InputStream in = f.exists() ? 
+		    	new BufferedInputStream(new FileInputStream(f)) :
+		    	new BufferedInputStream(this.getClass().getClassLoader()
+		    			.getResourceAsStream("unknown-user.jpg"))) {
+	    	FileCopyUtils.copy(in, response.getOutputStream());
+	    } catch (IOException ioe) {
+	    	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
+	    	log.info("Error retrieving file: " + f + " -- " + ioe.getMessage());
+	    }
+	}
 	
 }

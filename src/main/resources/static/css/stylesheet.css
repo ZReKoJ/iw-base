@@ -200,7 +200,7 @@ label{
 
 /* playing*/
  #game-zone{
- 	padding-top: 30px;
+ 	margin-top: 70px;
  }
  
  /* pre-play-screen */
@@ -210,3 +210,87 @@ label{
  	text-align: center;
  }
  
+ .stats-cards{
+ 	padding-bottom:30px;
+ }
+ 
+ .stat-card{
+ 	background-color: #458B9C;
+ 	padding:7px;
+ 	border-radius: 5px;
+ 	
+ }
+ 
+ .width-100{
+ 	width:100%;
+ }
+ 
+ .image-card{
+ 	width: 50%;
+ 	margin-right:25%;
+ 	margin-left:25%;
+ }
+ 
+ .title-card{
+ 	text-align:center;
+ 	font-weight: bold;
+ }
+ 
+ .list-card{
+ 	margin-bottom:0px;
+ }
+ 
+ .circle-avatar{
+ 	width: 100%;
+	height: auto;
+	border-radius: 50%;
+	object-fit:cover;
+	margin-top:6%;
+ }
+ 
+ .circle-avatar-mini{
+ 	width: 50%;
+ 	margin-left:25%;
+ 	margin-right:25%;
+	height: auto;
+	border-radius: 50%;
+	object-fit:cover;
+ }
+ 
+ .rounded{
+ border-radius: 50%;
+	object-fit:cover;
+ }
+ 
+ .inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    width:70%;
+    margin-right:15%;
+    margin-left:15%;
+    line-height:160%;
+    padding:2%;
+    border: solid 1px black;
+    border-radius:5px;
+    background-color: #2B7093;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: #3F8CB3;
+}
+
+.centered{
+	text-align:center;
+}
