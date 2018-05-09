@@ -31,6 +31,13 @@ function codeDesign() {
     };
     xhr.open('GET', "/static/js/example.js");
     xhr.send();
+
+	document.getElementById("upload").addEventListener("click", function(e){
+		if (document.getElementById("codeFileName").value == ""){
+			e.preventDefault();
+			alert("Error: No file name");
+		}
+	});
 	
 	$("#fileButton").change(function() {
 	    let fileInput = document.getElementById('fileSent');
@@ -747,11 +754,16 @@ function mapDesign() {
 	});
 	
 	document.getElementById("upload").addEventListener("click", function(){
-		console.log(battleGround.json());
-		$.post("/createMap", {
-			"_csrf" : csrf_data.token, 
-			"json" : battleGround.json(),
-			"mapFileName": document.getElementById("mapFileName").value});
+		if (document.getElementById("mapFileName").value != ""){
+			console.log(battleGround.json());
+			$.post("/createMap", {
+				"_csrf" : csrf_data.token, 
+				"json" : battleGround.json(),
+				"mapFileName": document.getElementById("mapFileName").value});
+		}
+		else {
+			alert("Error: No file name");
+		}
 	});
 	
     battleGround.drawCellMap().writeInfo();
@@ -947,8 +959,8 @@ class ImageLoader{
 		this.imagesLoaded = 0;
 		this.loaded = true;
 
-		let bulletPath = "/static/img/map2/component (12).png";
-		let explosionPath = "/static/img/map2/component (2).png";
+		let bulletPath = "/static/img/bullet/bullet (1).png";
+		let explosionPath = "/static/img/animation/explosion/explosion (1).png";
 		this.loadImage("bullet", bulletPath);
 		this.loadImage("explosion", explosionPath);
 	}
@@ -992,12 +1004,12 @@ function start(battleGround){
 	}
 	
 	let robots = new Map();
-	let robot = new Robot("Zihao", "/static/img/map2/component (132).png", code, battleGround).setFollow(true);
+	let robot = new Robot("Zihao", "/static/img/robot/robot (10).png", code, battleGround).setFollow(true);
 	robot.numBullets = 1000000;
 	robot.hp = 1000000;
 	robots.set("Zihao", robot);
-	robots.set("Cesar", new Robot("Cesar", "/static/img/map2/component (58).png", code, battleGround));
-	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/map2/component (102).png", code, battleGround));
+	robots.set("Cesar", new Robot("Cesar", "/static/img/robot/robot (3).png", code, battleGround));
+	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/robot/robot (7).png", code, battleGround));
 	//for (let i = 25; i < 159; i++)
 	//	robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", code, battleGround));
 	
@@ -1005,7 +1017,7 @@ function start(battleGround){
 		battleGround.addRobot(v);
 	}
 	
-	let left = false, right = false, up = false, down = false, space = false;
+	let left = false, right = false, up = false, down = false, space = false, makeMove = false;
 	
 	window.onkeydown = function(e) {
 		let key = e.keyCode ? e.keyCode : e.which;
@@ -1031,7 +1043,11 @@ function start(battleGround){
 		case 38: up = false; break;
 		case 39: right = false; break;
 		case 40: down = false; break;
-		default: event.returnValue = true; break;
+		case 77: robots.get("Zihao").makeMove(battleGround); break;
+		default: 
+			console.log(key);
+			event.returnValue = true; 
+			break;
 		}
 		
 		moving();
@@ -1226,6 +1242,7 @@ class Robot {
 		
 		
 		let data = {
+			name : this.name,
 			atk : this.atk,
 			hp : this.hp,
 			bullets : this.numBullets,
