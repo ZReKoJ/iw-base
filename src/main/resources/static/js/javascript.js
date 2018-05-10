@@ -1,15 +1,3 @@
-function createArray(length) {
-    let arr = new Array(length || 0),
-        i = length;
-
-    if (arguments.length > 1) {
-        let args = Array.prototype.slice.call(arguments, 1);
-        while(i--) arr[length-1 - i] = createArray.apply(this, args);
-    }
-
-    return arr;
-}
-
 function codeDesign() {
 	
 	let codeMirror = document.getElementById("codeText");
@@ -156,100 +144,6 @@ function home(){
 function setCanvasSize(canvas, width, height){
 	canvas.width = width;
 	canvas.height = height;
-}
-
-class Point {
-	constructor(x, y){
-		this.x = x;
-		this.y = y;
-	}
-	
-	relativeLocation(oldRectangle, newRectangle){
-		this.x = Math.floor(newRectangle.width * this.x / oldRectangle.width),
-		this.y = Math.floor(newRectangle.height * this.y / oldRectangle.height)
-	}
-	
-	distanceTo(point){
-		let x = this.x - point.x;
-		let y = this.y - point.y;
-		return Math.sqrt(x * x + y * y);
-	}
-}
-
-class Rectangle {
-	constructor(width, height) {
-		this.width = width;
-		this.height = height;
-	}
-	
-	get center() {
-		return this.calculateCenter();
-	}
-	
-	get area() {
-		return this.calculateArea();
-	}
-	
-	get diagonal() {
-		return this.calculateDiagonal();
-	}
-	
-	calculateCenter(){
-		return new Point(Math.floor(this.width / 2), Math.floor(this.height / 2));
-	}
-	
-	calculateArea(){
-		return this.width * this.height;
-	}
-	
-	calculateDiagonal(){
-		return Math.sqrt(this.width * this.width + this.height * this.height);
-	}
-	
-	distancesTo(point){
-		return {
-			left: point.x,
-			right: this.width - point.x,
-			top: point.y,
-			down: this.height - point.y
-		};
-	}
-	
-	isMoreThan(rectangle){
-		return this.width > rectangle.width && this.height > rectangle.height;
-	}
-	
-	isLessThan(rectangle){
-		return this.width < rectangle.width && this.height < rectangle.height;
-	}
-	
-	isMoreEqual(rectangle){
-		return this.width >= rectangle.width && this.height >= rectangle.height;
-	}
-	
-	isLessEqual(rectangle){
-		return this.width <= rectangle.width && this.height <= rectangle.height;
-	}
-	
-}
-
-class Square extends Rectangle {
-	constructor(width, height){
-		super(width, height);
-		let min = Math.min(width, height);
-		this.width = min;
-		this.height = min;
-	}
-	
-	zoomIn(value){
-		this.width += value;
-		this.height += value;
-	}
-	
-	zoomOut(value){
-		this.width -= value;
-		this.height -= value;
-	}
 }
 
 class BattleGround {
@@ -610,35 +504,43 @@ function mapDesign() {
 	grid.style.height = canvas.height + "px";
 	
 	$('.btn-number').click(function(e){
-	    e.preventDefault();
+	    let fieldName = $(this).attr('data-field');
+	    let type      = $(this).attr('data-type');
+	    let input = $("input[name='" + fieldName + "']");
+	    let currentVal = parseInt(input.val());
 	    
-	    fieldName = $(this).attr('data-field');
-	    type      = $(this).attr('data-type');
-	    var input = $("input[name='" + fieldName + "']");
-	    var currentVal = parseInt(input.val());
 	    if (!isNaN(currentVal)) {
-	        if(type == 'minus') {
-	            
-	            if(currentVal > input.attr('min')) {
+	    	switch (type) {
+	    	case 'minus': 
+	    		
+	    		if(currentVal > input.attr('min')) {
 	                input.val(currentVal - 1).change();
 	            } 
+	            
 	            if(parseInt(input.val()) == input.attr('min')) {
 	                $(this).attr('disabled', true);
 	            }
-
-	        } else if(type == 'plus') {
-
-	            if(currentVal < input.attr('max')) {
+	            
+    		break;
+	    	case 'plus': 
+	    	
+	    		if(currentVal < input.attr('max')) {
 	                input.val(currentVal + 1).change();
 	            }
+	            
 	            if(parseInt(input.val()) == input.attr('max')) {
 	                $(this).attr('disabled', true);
 	            }
-
-	        }
-	    } else {
+    		
+            break;
+	    	default: break;
+	    	}
+	    } 
+	    else {
 	        input.val(0);
 	    }
+	    
+	    e.preventDefault();
 	});
 	$('.input-number').focusin(function(){
 	   $(this).data('oldValue', $(this).val());
