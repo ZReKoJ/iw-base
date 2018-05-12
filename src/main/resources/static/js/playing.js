@@ -166,7 +166,9 @@ function playing() {
     
     };
 
-	document.getElementById("fullscreen").addEventListener("click", fullscreen);
+	document.getElementById("fullscreen").addEventListener("click", function(){
+		fullscreen(canvas);
+	});
 
 }
 
@@ -265,36 +267,4 @@ function start(battleGround){
 	var lastRender = 0;
 	window.requestAnimationFrame(loop);
 	
-}
-
-class RobotAbstraction {
-	constructor(code) {
-		this.code = code;
-		this.command = "";
-	}
-	
-	fire(){
-		this.command = "fireBullet";
-	}
-	
-	left(){
-		this.command = "moveToDown"
-	}
-	
-	up(){
-		this.command = "moveToUp";
-	}
-	
-	right(){
-		this.command = "moveToRight";
-	}
-	
-	down(){
-		this.command = "moveToDown";
-	}
-	
-	makeMove(data){
-		eval(this.code);
-		return this.command;
-	}
 }

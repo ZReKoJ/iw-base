@@ -5,10 +5,10 @@ function isFullScreen(){
     else return false;
 }
 
-function fullscreen(){
-	if(canvas.webkitRequestFullScreen) 
-		canvas.webkitRequestFullScreen();
-	else canvas.mozRequestFullScreen();
+function fullscreen(content){
+	if(content.webkitRequestFullScreen) 
+		content.webkitRequestFullScreen();
+	else content.mozRequestFullScreen();
 }
 
 class ImageLoader{

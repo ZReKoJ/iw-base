@@ -1,5 +1,3 @@
-
-
 class Robot {
 	constructor(name, path, code, battleGround){
 		this.name = name;
@@ -26,8 +24,9 @@ class Robot {
 		this.bullets = [];
 		
 		this.moveCounter = 0;
+		this.atk = 10;
 		this.hp = 100;
-		this.atk = 100;
+		this.def = 1;
 		this.numBullets = 5;
 		this.closeRobots = [];
 		
@@ -53,7 +52,7 @@ class Robot {
 	gotHit(bullet, a, b){
 		let hit = bullet.owner != this.name && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
 		if (hit) {
-			this.hp -= bullet.atk;
+			this.hp -= (bullet.atk - this.def);
 			console.log(this.name + ": " + this.hp + " hp");
 		}
 		return hit;
@@ -101,6 +100,7 @@ class Robot {
 			name : this.name,
 			atk : this.atk,
 			hp : this.hp,
+			def : this.def,
 			bullets : this.numBullets,
 			position : new Point(this.x, this.y),
 			robots : this.closeRobots,
@@ -279,5 +279,38 @@ class Bullet {
 			break;
 		default: break;
 		}
+	}
+}
+
+class RobotAbstraction {
+	constructor(code) {
+		this.code = code;
+		this.command = "";
+		this.dataMap = new Map();
+	}
+	
+	fire(){
+		this.command = "fireBullet";
+	}
+	
+	left(){
+		this.command = "moveToDown"
+	}
+	
+	up(){
+		this.command = "moveToUp";
+	}
+	
+	right(){
+		this.command = "moveToRight";
+	}
+	
+	down(){
+		this.command = "moveToDown";
+	}
+	
+	makeMove(data){
+		eval(this.code);
+		return this.command;
 	}
 }
