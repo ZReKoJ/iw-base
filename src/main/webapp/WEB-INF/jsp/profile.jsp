@@ -141,4 +141,5 @@
 	});
 	</script>
 	
+<script src="${s}/js/profile.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

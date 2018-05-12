@@ -25,4 +25,5 @@
     });
 </script>
 
+<script src="${s}/js/home.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

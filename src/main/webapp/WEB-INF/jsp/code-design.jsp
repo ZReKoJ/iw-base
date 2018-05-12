@@ -45,4 +45,5 @@ $( document ).ready(function() {
 
 <script src="${s}/js/codemirror.js"></script>
 <script src="${s}/js/javascriptMode.js"></script>
+<script src="${s}/js/code-design.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

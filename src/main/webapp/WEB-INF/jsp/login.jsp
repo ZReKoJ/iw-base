@@ -74,4 +74,5 @@ $( document ).ready(function() {
 });
 </script>
 
+<script src="${s}/js/login.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

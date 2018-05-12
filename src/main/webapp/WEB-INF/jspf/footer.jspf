@@ -1,11 +1,5 @@
 		<%@ page pageEncoding="UTF-8"%>
 		</div><!-- /.container -->
-		<script>
-			var csrf_data = {
-					field : "${_csrf.parameterName}",
-					token : "${_csrf.token}"};
-		</script>
-		<script src="${s}/js/javascript.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="${s}/js/bootstrap.min.js"></script>
 
