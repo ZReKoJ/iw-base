@@ -6,16 +6,8 @@ class BattleGround {
 		// numCells
 		this.rows = numRows;
 		this.cols = numCols;
-		// Blocks
-		this.BLOCKS = Object.freeze({
-			"NOTHING": 0,
-			"PLATFORM": 1,
-			"GROUND": 2,
-			"GRASS": 3,
-			"WATER": 4,
-			"BRIDGE" : 5,
-			"BARRIER": 26
-			});
+		// BLOCKS
+		this.BLOCKS = Object.freeze(mapProperties);
 		// status 
 		this.frame = new Rectangle(canvas.width, canvas.height);
 		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
@@ -172,11 +164,13 @@ class BattleGround {
 		let moveOn = [
 			this.BLOCKS.PLATFORM,
 			this.BLOCKS.GRASS,
-			this.BLOCKS.GROUND
+			this.BLOCKS.GROUND,
+			this.BLOCKS.BRIDGE,
+			this.BLOCKS.BUSH
 		];
 		let yes = false;
 		for (let i in moveOn) {
-			yes = yes || (cell == moveOn[i]);
+			yes = yes || (cell == moveOn[i].id);
 		}
 		return yes;
 	}
@@ -184,11 +178,13 @@ class BattleGround {
 	canIShotBulletOn(cell) {
 		let shotBulletOn = [
 			this.BLOCKS.NOTHING,
-			this.BLOCKS.BARRIER
+			this.BLOCKS.MUD_BARRIER,
+			this.BLOCKS.CEMENT_BARRIER,
+			this.BLOCKS.METAL_BARRIER
 		];
 		let yes = false;
 		for (let i in shotBulletOn) {
-			yes = yes || (cell == shotBulletOn[i]);
+			yes = yes || (cell == shotBulletOn[i].id);
 		}
 		return yes;
 	}

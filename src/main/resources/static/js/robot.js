@@ -29,6 +29,7 @@ class Robot {
 		this.def = 1;
 		this.numBullets = 5;
 		this.closeRobots = [];
+		this.block = battleGround.BLOCKS.NOTHING;
 		
 		this.abstraction = new RobotAbstraction(code);
 	}
@@ -52,7 +53,7 @@ class Robot {
 	gotHit(bullet, a, b){
 		let hit = bullet.owner != this.name && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
 		if (hit) {
-			this.hp -= (bullet.atk - this.def);
+			this.hp -= (bullet.atk - (this.def * this.block.def));
 		}
 		return hit;
 	}
@@ -117,6 +118,12 @@ class Robot {
 		if (command != "") {
 			command = "this." + command + "(battleGround);";
 			eval(command);
+		}
+		
+		for (let block in battleGround.BLOCKS){
+			if (battleGround.BLOCKS[block].id == battleGround.checkPosition(new Point(this.x, this.y))){
+				this.block = battleGround.BLOCKS[block];
+			}
 		}
 	}
 	
@@ -207,8 +214,8 @@ class Robot {
 	
 	moveToUp(battleGround){
 		this.moveTo(
-			this.proportionX * Math.sin(toRadians(this.rotation)),
-			-this.proportionY * Math.cos(toRadians(this.rotation)),
+			this.proportionX * Math.sin(toRadians(this.rotation)) * this.block.speed,
+			-this.proportionY * Math.cos(toRadians(this.rotation)) * this.block.speed,
 			battleGround);
 	}
 	
@@ -218,8 +225,8 @@ class Robot {
 	
 	moveToDown(battleGround){
 		this.moveTo(
-			-this.proportionX * Math.sin(toRadians(this.rotation)),
-			this.proportionY * Math.cos(toRadians(this.rotation)),
+			-this.proportionX * Math.sin(toRadians(this.rotation)) * this.block.speed,
+			this.proportionY * Math.cos(toRadians(this.rotation)) * this.block.speed,
 			battleGround);
 	}
 }
@@ -241,7 +248,7 @@ class Bullet {
 			});
 		this.state = this.STATES.MOVING;
 		
-		this.atk = robot.atk;
+		this.atk = robot.atk * robot.block.atk;
 	}
 	
 	get image(){

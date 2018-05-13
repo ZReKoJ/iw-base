@@ -95,6 +95,7 @@ $( document ).ready(function() {
 });
 </script>
 
+<script src="${s}/js/map-properties.js"></script>
 <script src="${s}/js/battle-ground.js"></script>
 <script src="${s}/js/robot.js"></script>
 <script src="${s}/js/playing.js"></script>
