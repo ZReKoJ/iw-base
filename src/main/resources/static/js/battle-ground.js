@@ -148,6 +148,10 @@ class BattleGround {
 		return null;
 	}
 	
+	toRealPosition(point){
+		return new Point(Math.floor(this.table.width * point.x), Math.floor(this.table.height * point.y));
+	}
+	
 	getCellPosition(point){
 		let mouseAt = this.defineMouseAt(
 			this.margin.left + this.table.width * point.x,

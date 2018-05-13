@@ -67,14 +67,19 @@ class Robot {
 		let position = battleGround.getCellPosition(new Point(this.x, this.y));
 		position = new Point(position.x - 2, position.y - 2);
 		let mapContent = battleGround.mapContent;
-		let mapData = createArray(5, 5);
+		let mapData = {
+			dimension : new Point(battleGround.cols, battleGround.rows),
+			cellDimension : battleGround.cell,
+			mapDimension : battleGround.table,
+			area : createArray(5, 5)
+		}
 		for (let i = 0; i < 5; ++i){
 			for (let j = 0; j < 5; ++j){
 				if (0 <= position.y + i && position.y + i < battleGround.rows
 					&& 0 <= position.x + j && position.x + j < battleGround.cols){
-					mapData[i][j] = mapContent[position.y + i][position.x + j].index;
+					mapData.area[i][j] = mapContent[position.y + i][position.x + j].index;
 				}
-				else mapData[i][j] = battleGround.BLOCKS.NOTHING;
+				else mapData.area[i][j] = battleGround.BLOCKS.NOTHING;
 			}
 		}
 		position = new Point(position.x + 2, position.y + 2);
@@ -85,17 +90,17 @@ class Robot {
 		this.closeRobots = [];
 		for (let [key, value] of battleGround.robots) {
 			if (this.name != value.name) {
-				dist = new Point(this.x, this.y).distanceTo(new Point(value.x, value.y));
-				if (dist < (cells * 5 * this.proportionX)){
+				dist = battleGround.toRealPosition(new Point(this.x, this.y)).distanceTo(battleGround.toRealPosition(new Point(value.x, value.y)));
+				if (dist < (cells * 5 * battleGround.cell.width	)){
 					this.closeRobots.push({
 						name : value.name,
-						position : new Point(value.x, value.y),
+						position : battleGround.toRealPosition(new Point(value.x, value.y)),
 						distance : dist
 					});
 				}
 			}
 		}
-		
+		this.closeRobots.sort(function(a, b) { return (a.distance > b.distance); });
 		
 		let data = {
 			name : this.name,
@@ -103,7 +108,7 @@ class Robot {
 			hp : this.hp,
 			def : this.def,
 			bullets : this.numBullets,
-			position : new Point(this.x, this.y),
+			position : battleGround.toRealPosition(new Point(this.x, this.y)),
 			rotation : (90 - this.rotation + 360) % 360,
 			robots : this.closeRobots,
 			mapData : mapData

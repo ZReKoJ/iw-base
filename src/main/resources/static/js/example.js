@@ -1,4 +1,3 @@
-
 class Robot {
 	constructor(code){
 		// Enables the posibility of writing a new code for the robot while execution
@@ -32,11 +31,17 @@ class Robot {
 		position : Current position the robot is at.
 		rotation : Rotation of the robot.
 		robots : List of enemies in a distance range.
-		mapData : Matrix (5x5) which contains the map data around the robot.
+		mapData : {
+			dimension : Rows and columns for the map.
+			cellDimension : The dimension for one single cell.
+			mapDimension : The dimension for the whole map.
+			area : Matrix (5x5) which contains the map data around the robot.
+		}
 	*/
 	makeMove(data){
 		eval(this.code);
 	}
+	// For further information about data write in console "console.log(data)" and see its properties.
 	
 }
 
@@ -51,12 +56,30 @@ if (data.robots.length > 0){
 	let radian = Math.acos(width / robot.distance);
 	let degree = Math.trunc(toDegrees(radian));
 	if (height < 0) {
-		degree = 180 + 180 - degree;
+		degree = 360 - degree;
 	}
-	if (degree != data.rotation) {
-		this.left();
+	if (data.rotation != degree){
+		let left = degree - data.rotation;
+		let right = data.rotation - degree;
+		(data.rotation < degree) ? right += 360 : left += 360;
+		if (left < right) this.left();
+		else this.right();
 	}
 	else {
-		this.fire();
+		if (robot.distance < 2.5 * data.mapData.cellDimension.width){
+			this.fire();
+		}
+		else {
+			this.up();
+		}
 	}
+}
+else {
+	let rand = Math.random();
+	if (0 <= rand && rand < 0.6) this.up();
+	else if (0.6 <= rand && rand < 0.75) this.left();
+	else if (0.75 <= rand && rand < 0.9) this.right();
+	else if (0.9 <= rand && rand < 0.95) this.down();
+	else if (0.95 <= rand && rand < 1) this.fire();
+	else alert('error');
 }
