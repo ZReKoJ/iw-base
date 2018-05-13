@@ -79,7 +79,7 @@ function mapDesign() {
 	document.getElementById("resize").addEventListener("click", function(){
 		battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
 		battleGround.reset(canvas);
-	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+	    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
 	});
 	
 	let index;
@@ -93,7 +93,7 @@ function mapDesign() {
 
 		if (drag) battleGround.setImageOnCell(battleGround.mouseAt.cellPosition.y, battleGround.mouseAt.cellPosition.x, $('.selection')[0], index);
 		
-	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+	    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
@@ -126,7 +126,7 @@ function mapDesign() {
         battleGround.table = new Rectangle(battleGround.cols * battleGround.cell.width, battleGround.rows * battleGround.cell.height);
         battleGround.mapCenter.relativeLocation(oldTable, battleGround.table);
         battleGround.defineMapFeature();
-        battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+        battleGround.clear().drawMapContent().drawCellMap().writeInfo();
 	    battleGround.drawCell(battleGround.mouseAt.cellPosition.x, battleGround.mouseAt.cellPosition.y);
 	    
 	    event.returnValue = false;
@@ -138,7 +138,7 @@ function mapDesign() {
 		canvas.height = parent.width();
 		grid.style.height = canvas.height + "px";
 		battleGround.reset(canvas);
-	    battleGround.clear().drawCellMap().drawMapContent().writeInfo();
+	    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
     
     };
 

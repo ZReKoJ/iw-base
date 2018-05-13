@@ -53,7 +53,6 @@ class Robot {
 		let hit = bullet.owner != this.name && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
 		if (hit) {
 			this.hp -= (bullet.atk - this.def);
-			console.log(this.name + ": " + this.hp + " hp");
 		}
 		return hit;
 	}

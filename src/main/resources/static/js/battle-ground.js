@@ -246,6 +246,8 @@ class BattleGround {
 	    	}
 	    	else {
 	    		this.robots.delete(key);
+	    		console.log(value.name + " was eliminated");
+	    		console.log("Robots left: " + this.robots.size);
 	    		if (this.robots.size == 1) {
 	    			window.location.replace("http://localhost:8080/results");
 	    		}
