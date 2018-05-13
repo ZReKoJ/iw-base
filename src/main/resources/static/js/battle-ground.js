@@ -9,11 +9,12 @@ class BattleGround {
 		// Blocks
 		this.BLOCKS = Object.freeze({
 			"NOTHING": 0,
-			"PLATFORM": 205,
-			"GROUND": 206,
-			"GRASS": 207,
-			"WATER": 208,
-			"BARRIER": 195
+			"PLATFORM": 1,
+			"GROUND": 2,
+			"GRASS": 3,
+			"WATER": 4,
+			"BRIDGE" : 5,
+			"BARRIER": 26
 			});
 		// status 
 		this.frame = new Rectangle(canvas.width, canvas.height);
@@ -115,7 +116,7 @@ class BattleGround {
 	    		set.add(data.data[i][j]);
 		
 		for (let item of set){
-			imageLoader.loadImage("map_" + item, "/static/img/map2/component (" + item + ").png");
+			imageLoader.loadImage("map_" + item, "/static/img/map/component (" + item + ").png");
 		}
 		
 		for (let i = 0; i < this.rows; i++){

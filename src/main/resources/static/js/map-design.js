@@ -143,8 +143,8 @@ function mapDesign() {
     };
 
 	let path;
-	for (let x = 0; x < 325; x++){
-		path = "<img class='icon' src='/static/img/map2/component (" + x + ").png'>";
+	for (let x = 0; x < 137; x++){
+		path = "<img class='icon' src='/static/img/map/component (" + x + ").png'>";
 		$('#grid-element').append(path)
 	}
     

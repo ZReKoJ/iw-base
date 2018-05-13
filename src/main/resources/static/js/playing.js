@@ -197,8 +197,8 @@ function start(battleGround){
 	robots.set("Zihao", robot);
 	robots.set("Cesar", new Robot("Cesar", "/static/img/robot/robot (3).png", code, battleGround));
 	robots.set("Lorenzo", new Robot("Lorenzo", "/static/img/robot/robot (7).png", code, battleGround));
-	for (let i = 25; i < 35; i++)
-		robots.set(i.toString(), new Robot(i, "/static/img/map2/component (" + i + ").png", code, battleGround));
+	//for (let i = 25; i < 35; i++)
+	//	robots.set(i.toString(), new Robot(i, "/static/img/map/component (" + i + ").png", code, battleGround));
 	
 	for (let [k, v] of robots) {
 		battleGround.addRobot(v);
