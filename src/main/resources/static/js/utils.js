@@ -181,9 +181,4 @@ class Square extends Rectangle {
 	}
 }
 
-var csrf_data = {
-	field : "${_csrf.parameterName}",
-	token : "${_csrf.token}"
-};
-
 var imageLoader = new ImageLoader();
