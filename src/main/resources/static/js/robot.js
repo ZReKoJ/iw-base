@@ -7,7 +7,7 @@ class Robot {
 		this.height = 0.5;
 		this.proportionX = battleGround.cell.width / battleGround.table.width / 5;
 		this.proportionY = battleGround.cell.height / battleGround.table.height / 5;
-		this.rotationScale = 3;
+		this.rotationScale = 1;
 		this.rotation = 0;
 		
 		let newPosition = battleGround.findEmptyCell();
@@ -89,6 +89,7 @@ class Robot {
 				if (dist < (cells * 5 * this.proportionX)){
 					this.closeRobots.push({
 						name : value.name,
+						position : new Point(value.x, value.y),
 						distance : dist
 					});
 				}
@@ -103,6 +104,7 @@ class Robot {
 			def : this.def,
 			bullets : this.numBullets,
 			position : new Point(this.x, this.y),
+			rotation : (90 - this.rotation + 360) % 360,
 			robots : this.closeRobots,
 			mapData : mapData
 		}
@@ -137,6 +139,10 @@ class Robot {
 	
 	changeRotation(degrees, battleGround){
 		this.rotation += degrees;
+		this.rotation %= 360;
+		if (this.rotation < 0){
+			this.rotation = 359;
+		}
 		this.calculateCorners(battleGround);
 	}
 	
@@ -294,7 +300,7 @@ class RobotAbstraction {
 	}
 	
 	left(){
-		this.command = "moveToDown"
+		this.command = "moveToLeft"
 	}
 	
 	up(){
@@ -310,6 +316,7 @@ class RobotAbstraction {
 	}
 	
 	makeMove(data){
+		this.command = "";
 		eval(this.code);
 		return this.command;
 	}
