@@ -45,6 +45,8 @@ class Robot {
 	
 }
 
+
+// The code below can only aim the direction for bullet but cannot move through labyrinths.
 function toDegrees(radians){
 	return radians * (180 / Math.PI);
 }
