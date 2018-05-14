@@ -1,4 +1,4 @@
-function codeDesign() {
+function codeDesign(codeId) {
 	
 	let codeMirror = document.getElementById("codeText");
 	
@@ -13,11 +13,16 @@ function codeDesign() {
 		extraKeys: {"Ctrl-Space": "autocomplete"}
 	});
 	
+	let path = "/static/js/example.js"
+	if (codeId != null && codeId != undefined && codeId != ""){
+		path = '/loadCode/' + codeId;
+	}
+	
     let xhr = new XMLHttpRequest();
     xhr.onload = function () {
     	codeMirrorEditor.setValue(this.responseText);
     };
-    xhr.open('GET', "/static/js/example.js");
+    xhr.open('GET', path);
     xhr.send();
 
 	document.getElementById("upload").addEventListener("click", function(e){

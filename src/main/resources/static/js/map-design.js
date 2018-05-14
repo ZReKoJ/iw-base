@@ -1,4 +1,4 @@
-function mapDesign() {
+function mapDesign(mapId) {
 	
 	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
@@ -75,6 +75,21 @@ function mapDesign() {
 	});
 	
 	let battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
+	if (mapId != null && mapId != undefined && mapId != ""){
+		let data = null;
+		let xhr = new XMLHttpRequest();
+		xhr.onload = function () {
+			data = xhr.responseText;
+			data = JSON.parse(data);
+			console.log(data);
+			battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
+			battleGround.fillContent(data);
+		    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
+	    };
+		xhr.open('GET', '/loadMap/' + mapId); 
+		xhr.send();
+	}
+	
 	
 	document.getElementById("resize").addEventListener("click", function(){
 		battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));

@@ -51,7 +51,7 @@
 </div>
 <script>
     $( document ).ready(function() {
-    	mapDesign();
+    	mapDesign('${mapId}');
     });
 </script>
 

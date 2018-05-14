@@ -102,7 +102,7 @@
 					<c:when test="${myCodesSize > 0}">
 					<ul class="list-group">
 						<c:forEach var="code" items="${myCodes}">
-							<li class="list-group-item" onClick="goCodeEdit(this.value);">${code.name}</li>
+							<a href="code-design?id=${code.id}"><li class="list-group-item">${code.name}</li></a>
 						</c:forEach>
 					</ul>
 					</c:when>
@@ -117,7 +117,7 @@
 					<c:when test="${myMapsSize > 0}">
 					<ul class="list-group">
 						<c:forEach var="map" items="${myMaps}">
-							<li class="list-group-item" value="${map.id}" onClick="goMapEdit(this.value);">${map.name}</li>
+							<a href="map-design?id=${map.id}"><li class="list-group-item">${map.name}</li></a>
 						</c:forEach>
 					</ul>
 					</c:when>
