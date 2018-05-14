@@ -216,6 +216,20 @@ public class RootController{
 		return "playing";
 	}
 	
+	@GetMapping("/loadPlaying")
+	public String loadPlay(
+			@RequestParam String usercode,
+			@RequestParam String map,
+			@RequestParam String enemycodes[],
+			Model m) {
+		
+		m.addAttribute("usercode", usercode);
+		m.addAttribute("map", map);
+		m.addAttribute("enemycodes", enemycodes);
+		
+		return "playing";
+	}
+	
 	@GetMapping("/map-design")
 	public String map_design(@RequestParam(required=false) String id,
 			Model m) {

@@ -12,13 +12,13 @@
 
 <script src="${s}/js/play.js"></script>
 
-<form id="play-form" action="/loadGame" method="post" role="form">
+<form id="play-form" action="/loadPlaying" method="post" role="form">
 	<div class = "row bigpaddingtop" >
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Your Robot</h3>
 			  <c:choose>
 				<c:when test="${ownedCodes.size() > 0}">
-					<select id="owned-codes" name="user-code" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="1" multiple>
+					<select id="owned-codes" name="usercode" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="1" multiple>
 						<c:forEach var="code" items="${ownedCodes}">
 							<option id="owned-${code.id}" class="owned-codes-op" value="${code.id}">${code.name}</option>
 						</c:forEach>
@@ -57,7 +57,7 @@
 	   		<h3 class="page-subtitle">Select Enemy Robots</h3>
 			   <c:choose>
 					<c:when test="${codes.size() > 0}">
-	  					<select id="all-codes" name="enemy-codes[]" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="5" multiple>	
+	  					<select id="all-codes" name="enemycodes[]" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="5" multiple>	
 							<c:forEach var="code" items="${codes}">
 								<option id="all-${code.id}" value="${code.id}">${code.name}</option>
 							</c:forEach>
