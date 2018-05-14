@@ -9,7 +9,7 @@ function playing() {
 	
 	let data = null;
 	let req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/loadMap', false); 
+	req.open('GET', 'http://localhost:8080/loadMap/1', false); 
 	req.send(null);
 	if (req.status == 200){
 		data = req.responseText;

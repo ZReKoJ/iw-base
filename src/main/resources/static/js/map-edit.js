@@ -1,5 +1,5 @@
 function mapEdit(map) {
-	window.location.replace("http://localhost:8080/map-design");
+
 	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();

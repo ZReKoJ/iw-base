@@ -224,8 +224,9 @@ function mapEdit(map) {
 function goMapEdit(mapId){
 
 	console.log(mapId);
-	$.post("/postMap/" + mapId,{
-		"mapId": mapId,
-		"_csrf" : csrf_data.token
+	$.post("/postMap",{
+		"_csrf" : csrf_data.token,
+		"mapId" : mapId 
 	});
+	window.location.replace("http://localhost:8080/map-edit");
 }
