@@ -1,5 +1,5 @@
-function mapDesign() {
-	
+function mapEdit(map) {
+	window.location.replace("http://localhost:8080/map-design");
 	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
@@ -74,7 +74,17 @@ function mapDesign() {
 	    
 	});
 	
-	let battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
+	let data = null;
+	let req = new XMLHttpRequest();
+	req.open('GET', 'http://localhost:8080/loadMap/' + canvas.value, false);
+	req.send(null);
+	if (req.status == 200){
+		data = req.responseText;
+	}
+	data = JSON.parse(data);
+	
+	let battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
+	battleGround.fillContent(data);
 	
 	document.getElementById("resize").addEventListener("click", function(){
 		battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));

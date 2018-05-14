@@ -225,11 +225,26 @@ public class RootController{
 	public String map_design() {
 		return "map-design";
 	}
+	
+	@RequestMapping(value="/postMap/{id}", method=RequestMethod.POST)
+	public String map_editHandler(@PathVariable String mapId, Model m) {
+		log.info(mapId);
+		m.addAttribute("mapId", mapId);
+		log.info(mapId);
+		return  "/map-edit";
+	}
+	
+	@GetMapping("/map-edit")
+	public String map_edit() {
+		return  "map-edit";
+	}
 
 	@GetMapping("/code-design")
 	public String code_design() {
 		return "code-design";
 	}
+	
+	
 	
 	@GetMapping("/play")
 	public String play(Model m, HttpSession s) {
@@ -249,7 +264,7 @@ public class RootController{
 	}
 	
 	@GetMapping("/profile")
-<<<<<<< HEAD
+
 	public String profile(HttpSession s, Model m) {
 		
 		User u = (User) s.getAttribute("user");
@@ -266,23 +281,9 @@ public class RootController{
 		m.addAttribute("myMaps", myMaps);
 		m.addAttribute("myCodesSize", myCodes.size());
 		m.addAttribute("myMapsSize", myMaps.size());
-=======
-	public String profile(Model m, HttpSession s) {
-		
-		User u = (User) s.getAttribute("user");
-
-		m.addAttribute("ownedCodes", entityManager
-						.createQuery("from Code where creator = :id", Code.class)
-			            .setParameter("id",  u).getResultList());
-		
-		m.addAttribute("ownedMaps", entityManager
-				.createQuery("from Map where creator = :id", Map.class)
-	            .setParameter("id",  u).getResultList());
->>>>>>> branch 'master' of https://github.com/ZReKoJ/iw-base
 		
 		return "profile";
 	}
-	
 	
 	@GetMapping("/settings")
 	public String settings() {
@@ -299,14 +300,14 @@ public class RootController{
 		return "ranking";
 	}
 	
-	@GetMapping("/loadMap")
-	public String loadMap(
+	@GetMapping("/loadMap/{id}")
+	public String loadMap(@PathVariable("id") String id, 
 			HttpServletRequest request, 
 			HttpServletResponse response) 
 	throws ServletException, IOException
 	{
 		
-		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("maps", "1")));
+		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("maps", id)));
 		String everything = "";
 		try {
 		    StringBuilder sb = new StringBuilder();

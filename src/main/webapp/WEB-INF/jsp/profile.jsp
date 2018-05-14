@@ -97,51 +97,34 @@
                 </ul>
             </div>
             <div class="user-menu-content">
-                <h3>
-                    Codes
-                </h3>
-                <ul>
-                	<c:choose>
-						<c:when test="${myCodesSize > 0}">
-							<c:forEach var="code" items="${myCodes}">
-								<li class="btn neutralColourLightBg">${code.name}</li>
-							</c:forEach>
-						</c:when>
-						<c:when test="${ownedCodes.size() > 0}">
-							<c:forEach var="code" items="${ownedCodes}">
-								<li>${code.name}</li>
-								</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<p> No codes uploaded yet!
-						</c:otherwise>
-					</c:choose>
-	                
-				</ul>
-	            
-            </div>
-            <div class="user-menu-content">
-                <h3>
-                   Maps
-                </h3>
-                <ul>
+                <h3 class="centered">Your codes</h3>
                 <c:choose>
-						<c:when test="${myMapsSize > 0}">
-							<c:forEach var="map" items="${myMaps}">
-								<li class="btn neutralColourLightBg">${map.name}</li>
-							</c:forEach>
-						</c:when>
-						<c:when test="${ownedMaps.size() > 0}">
-							<c:forEach var="map" items="${ownedMaps}">
-								<li>${map.name}</li>
-
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<p> No maps uploaded yet!
-						</c:otherwise>
-					</c:choose>
-                </ul>
+					<c:when test="${myCodesSize > 0}">
+					<ul class="list-group">
+						<c:forEach var="code" items="${myCodes}">
+							<li class="list-group-item">${code.name}</li>
+						</c:forEach>
+					</ul>
+					</c:when>
+					<c:otherwise>
+						<p class="centered"> No codes uploaded yet!
+					</c:otherwise>
+				</c:choose>
+	        </div>
+            <div class="user-menu-content">
+                <h3 class="centered">Your maps</h3>
+                <c:choose>
+					<c:when test="${myMapsSize > 0}">
+					<ul class="list-group">
+						<c:forEach var="map" items="${myMaps}">
+							<li class="list-group-item" value="${map.id}" onClick="goMapEdit(this.value);">${map.name}</li>
+						</c:forEach>
+					</ul>
+					</c:when>
+					<c:otherwise>
+						<p class="centered"> No maps uploaded yet!
+					</c:otherwise>
+				</c:choose>
             </div>
         </div>
     </div>
@@ -151,6 +134,6 @@
 		profile();
 	});
 	</script>
-	
+
 <script src="${s}/js/profile.js"></script>
 <%@ include file="../jspf/footer.jspf"%>
