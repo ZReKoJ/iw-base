@@ -253,7 +253,18 @@ public class RootController{
 	}
 	
 	@GetMapping("/profile")
-	public String profile(HttpSession s) {
+	public String profile(Model m, HttpSession s) {
+		
+		User u = (User) s.getAttribute("user");
+
+		m.addAttribute("ownedCodes", entityManager
+						.createQuery("from Code where creator = :id", Code.class)
+			            .setParameter("id",  u).getResultList());
+		
+		m.addAttribute("ownedMaps", entityManager
+				.createQuery("from Map where creator = :id", Map.class)
+	            .setParameter("id",  u).getResultList());
+		
 		return "profile";
 	}
 	

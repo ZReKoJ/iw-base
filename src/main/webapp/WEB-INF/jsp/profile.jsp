@@ -102,9 +102,9 @@
                 </h3>
                 <ul>
                 	<c:choose>
-						<c:when test="${codeListSize > 0}">
-							<c:forEach var="code" items="${codes}">
-								<li class="btn neutralColourLightBg">${code.name}</li>
+						<c:when test="${ownedCodes.size() > 0}">
+							<c:forEach var="code" items="${ownedCodes}">
+								<li>${code.name}</li>
 							</c:forEach>
 						</c:when>
 						<c:otherwise>
@@ -116,14 +116,14 @@
 	            
             </div>
             <div class="user-menu-content">
-                <h3 class="text-center">
+                <h3>
                    Maps
                 </h3>
                 <ul>
                 <c:choose>
-						<c:when test="${mapListSize > 0}">
-							<c:forEach var="map" items="${maps}">
-								<li class="btn neutralColourLightBg">${map.name}</li>
+						<c:when test="${ownedMaps.size() > 0}">
+							<c:forEach var="map" items="${ownedMaps}">
+								<li>${map.name}</li>
 							</c:forEach>
 						</c:when>
 						<c:otherwise>
