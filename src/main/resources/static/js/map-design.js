@@ -77,16 +77,17 @@ function mapDesign(mapId) {
 	let battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
 	if (mapId != null && mapId != undefined && mapId != ""){
 		let data = null;
-		let req = new XMLHttpRequest();
-		req.open('GET', 'http://localhost:8080/loadMap/' + mapId, false); 
-		req.send(null);
-		if (req.status == 200){
-			data = req.responseText;
+		let xhr = new XMLHttpRequest();
+		xhr.onload = function () {
+			data = xhr.responseText;
 			data = JSON.parse(data);
 			console.log(data);
 			battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 			battleGround.fillContent(data);
-		}
+		    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
+	    };
+		xhr.open('GET', '/loadMap/' + mapId); 
+		xhr.send();
 	}
 	
 	
@@ -188,5 +189,5 @@ function mapDesign(mapId) {
 		}
 	});
 	
-    battleGround.drawMapContent().drawCellMap().writeInfo();
+    battleGround.drawCellMap().writeInfo();
 }

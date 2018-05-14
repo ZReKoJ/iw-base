@@ -229,21 +229,12 @@ public class RootController{
 		return "map-design";
 	}
 	
-	@RequestMapping(value="/postMap", method=RequestMethod.POST)
-	public String map_editHandler(@RequestParam int mapId, Model m) {
-		m.addAttribute("mapId", mapId);
-		return  "/map-design";
-	}
-	
 	@GetMapping("/code-design")
-	public String code_design() {
+	public String code_design(@RequestParam(required=false) String id,
+			Model m) {
+		if (id != null && !id.isEmpty())
+			m.addAttribute("codeId", id);
 		return "code-design";
-	}
-	
-	@RequestMapping(value="/postCode", method=RequestMethod.POST)
-	public String code_editHandler(@RequestParam int codeId, Model m) {
-		m.addAttribute("codeId", codeId);
-		return  "/code-design";
 	}
 	
 	@GetMapping("/play")
@@ -331,15 +322,16 @@ public class RootController{
 	    return "playing";
 	}
 	
-	@GetMapping("/loadCode")
-	public String loadCode(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
+	@GetMapping("/loadCode/{id}")
+	public String loadCode(@PathVariable("id") String id, 
+			HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
 
 	// request is an object of type HttpServletRequest and it's used to obtain information
 	// response is an object of type HttpServletResponse and it's used to generate a response
 	// throws is used to specify the exceptions than a method can throw
 	
 	 {
-		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("codes", "1")));
+		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("codes", id)));
 		String everything = "";
 		try {
 		    StringBuilder sb = new StringBuilder();

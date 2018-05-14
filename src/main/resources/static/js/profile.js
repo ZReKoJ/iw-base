@@ -220,12 +220,3 @@ function mapEdit(map) {
 	
     battleGround.drawCellMap().writeInfo();
 }
-
-function goMapEdit(mapId){
-	window.location.replace("/postMap?id=" + mapId);
-}
-
-function goCodeEdit(codeId){
-	window.location.replace("/postCode?id=" + codeId);
-
-}

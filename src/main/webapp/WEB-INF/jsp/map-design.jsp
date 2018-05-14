@@ -51,9 +51,7 @@
 </div>
 <script>
     $( document ).ready(function() {
-    	var mapId = '${mapId}';
-    	console.log(mapId);
-    	mapDesign(mapId);
+    	mapDesign('${mapId}');
     });
 </script>
 

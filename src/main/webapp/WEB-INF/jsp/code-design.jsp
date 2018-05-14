@@ -39,7 +39,7 @@
 
 <script>
 $( document ).ready(function() {
-	codeDesign();
+	codeDesign('${codeId}');
 });
 </script>
 
