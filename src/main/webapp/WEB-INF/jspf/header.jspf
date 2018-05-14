@@ -16,6 +16,7 @@
         <link href="${s}/css/stylesheet.css" rel="stylesheet">
         <!-- JQuery -->
         <script src="${s}/js/jquery.min.js"></script>
+        <script src="${s}/js/utils.js"></script>
         <script>
        		function logout() {
         		$( "#logoutform" ).submit();

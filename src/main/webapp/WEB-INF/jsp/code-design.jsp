@@ -30,7 +30,7 @@
 	        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
 	    </div>
 	    <div class="btn-toolbar pull-right">
-	    	<button class="btn btn-primary" role="button" type="submit">Upload</button>
+	    	<button id="upload" class="btn btn-primary" role="button" type="submit">Upload</button>
 	        <a class="btn btn-primary" href="/" role="button">Cancel</a>
 	    </div>
 	    <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
@@ -45,4 +45,5 @@ $( document ).ready(function() {
 
 <script src="${s}/js/codemirror.js"></script>
 <script src="${s}/js/javascriptMode.js"></script>
+<script src="${s}/js/code-design.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

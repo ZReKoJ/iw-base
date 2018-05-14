@@ -54,4 +54,8 @@
     	mapDesign();
     });
 </script>
+
+<script src="${s}/js/map-properties.js"></script>
+<script src="${s}/js/battle-ground.js"></script>
+<script src="${s}/js/map-design.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

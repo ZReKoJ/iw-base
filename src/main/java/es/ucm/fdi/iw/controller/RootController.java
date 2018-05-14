@@ -232,18 +232,24 @@ public class RootController{
 	}
 	
 	@GetMapping("/play")
-	public String play(HttpSession s) {
+	public String play(Model m, HttpSession s) {
 		
-		List<Code> codes = entityManager.createQuery("SELECT e FROM Code e", Code.class).getResultList();
-		s.setAttribute("codes", codes);
-
-		List<Map> maps = entityManager.createQuery("SELECT e FROM Map e", Map.class).getResultList();
-		s.setAttribute("maps", maps);
+		List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
+		m.addAttribute("maps", maps);
 		
+		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
+		m.addAttribute("codes", codes);
+		
+		User u = (User) s.getAttribute("user");
+		m.addAttribute("ownedCodes", entityManager
+						.createQuery("from Code where creator = :id", Code.class)
+			            .setParameter("id",  u).getResultList());
+			
 		return "play";
 	}
 	
 	@GetMapping("/profile")
+<<<<<<< HEAD
 	public String profile(HttpSession s, Model m) {
 		
 		User u = (User) s.getAttribute("user");
@@ -260,6 +266,19 @@ public class RootController{
 		m.addAttribute("myMaps", myMaps);
 		m.addAttribute("myCodesSize", myCodes.size());
 		m.addAttribute("myMapsSize", myMaps.size());
+=======
+	public String profile(Model m, HttpSession s) {
+		
+		User u = (User) s.getAttribute("user");
+
+		m.addAttribute("ownedCodes", entityManager
+						.createQuery("from Code where creator = :id", Code.class)
+			            .setParameter("id",  u).getResultList());
+		
+		m.addAttribute("ownedMaps", entityManager
+				.createQuery("from Map where creator = :id", Map.class)
+	            .setParameter("id",  u).getResultList());
+>>>>>>> branch 'master' of https://github.com/ZReKoJ/iw-base
 		
 		return "profile";
 	}
