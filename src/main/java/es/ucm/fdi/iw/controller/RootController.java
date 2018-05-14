@@ -229,20 +229,19 @@ public class RootController{
 	@RequestMapping(value="/postMap", method=RequestMethod.POST)
 	public String map_editHandler(@RequestParam int mapId, Model m) {
 		m.addAttribute("mapId", mapId);
-		return  "/map-edit";
+		return  "/map-design";
 	}
 	
-	@GetMapping("/map-edit")
-	public String map_edit() {
-		return  "map-edit";
-	}
-
 	@GetMapping("/code-design")
 	public String code_design() {
 		return "code-design";
 	}
 	
-	
+	@RequestMapping(value="/postCode", method=RequestMethod.POST)
+	public String code_editHandler(@RequestParam int codeId, Model m) {
+		m.addAttribute("codeId", codeId);
+		return  "/code-design";
+	}
 	
 	@GetMapping("/play")
 	public String play(Model m, HttpSession s) {

@@ -102,7 +102,7 @@
 					<c:when test="${myCodesSize > 0}">
 					<ul class="list-group">
 						<c:forEach var="code" items="${myCodes}">
-							<li class="list-group-item">${code.name}</li>
+							<li class="list-group-item" onClick="goCodeEdit(this.value);">${code.name}</li>
 						</c:forEach>
 					</ul>
 					</c:when>

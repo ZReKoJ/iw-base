@@ -227,5 +227,14 @@ function goMapEdit(mapId){
 		"_csrf" : csrf_data.token,
 		"mapId" : mapId 
 	});
-	window.location.replace("http://localhost:8080/map-edit");
+	window.location.replace("http://localhost:8080/map-design");
+}
+
+function goCodeEdit(codeId){
+
+	$.post("/postCode",{
+		"_csrf" : csrf_data.token,
+		"codeId" : codeId 
+	});
+	window.location.replace("http://localhost:8080/code-design");
 }
