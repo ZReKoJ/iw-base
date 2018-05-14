@@ -9,7 +9,7 @@
 <div class="row user-menu-container square whiteBg">
         <div class="col-md-7 user-details">
             <div class="row neutralColourDarkBg white">
-            	<div class="col-md-3">
+            	<div class="col-md-3 class="circle-avatar"">
             		<img src="avatar/${user.id}" class="circle-avatar">
             	</div>
             	<div class="col-md-9 no-pad">
@@ -23,7 +23,7 @@
             
             	<div class="col-sm-3">
             	<form action="/saveAvatar" enctype="multipart/form-data" method="post">
-					<input type="file" name="photo" id="file" class="inputfile"/>
+					<input type="file" name="photo" id="file" class="inputfile" onchange="form.submit()" />
 					<label for="file">Change avatar</label>
 					<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 				</form>
@@ -102,8 +102,8 @@
                 </h3>
                 <ul>
                 	<c:choose>
-						<c:when test="${codeListSize > 0}">
-							<c:forEach var="code" items="${codes}">
+						<c:when test="${myCodesSize > 0}">
+							<c:forEach var="code" items="${myCodes}">
 								<li class="btn neutralColourLightBg">${code.name}</li>
 							</c:forEach>
 						</c:when>
@@ -121,8 +121,8 @@
                 </h3>
                 <ul>
                 <c:choose>
-						<c:when test="${mapListSize > 0}">
-							<c:forEach var="map" items="${maps}">
+						<c:when test="${myMapsSize > 0}">
+							<c:forEach var="map" items="${myMaps}">
 								<li class="btn neutralColourLightBg">${map.name}</li>
 							</c:forEach>
 						</c:when>

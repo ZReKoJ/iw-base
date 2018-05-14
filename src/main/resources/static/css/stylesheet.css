@@ -242,19 +242,27 @@ label{
  
  .circle-avatar{
  	width: 100%;
-	height: auto;
-	border-radius: 50%;
-	object-fit:cover;
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
 	margin-top:6%;
+	margin-bottom:6%;
  }
  
+ .circle-avatar img{
+ 	display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+ }
  .circle-avatar-mini{
  	width: 50%;
  	margin-left:25%;
  	margin-right:25%;
-	height: auto;
+	 height: 120px;
 	border-radius: 50%;
-	object-fit:cover;
+	
  }
  
  .rounded{
@@ -293,4 +301,9 @@ label{
 
 .centered{
 	text-align:center;
+}
+
+.light-title-margin{
+	margin-top: 5px;
+	margin-bottom:5px;
 }

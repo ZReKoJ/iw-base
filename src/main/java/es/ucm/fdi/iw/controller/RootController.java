@@ -94,8 +94,7 @@ public class RootController{
     		HttpServletResponse response,
     		@RequestParam String code,
     		@RequestParam String codeFileName,
-    		HttpSession s,
-    		Model m)
+    		HttpSession s)
     {
     	response.setHeader("X-XSS-Protection", "0");
     	
@@ -188,9 +187,6 @@ public class RootController{
 		return "home";
 	}
 	
-	private void checkUser() {
-		
-	}
 	
 	@GetMapping("/login")
 	public String login() {
@@ -248,9 +244,26 @@ public class RootController{
 	}
 	
 	@GetMapping("/profile")
-	public String profile(HttpSession s) {
+	public String profile(HttpSession s, Model m) {
+		
+		User u = (User) s.getAttribute("user");
+		List<Code> myCodes = entityManager
+				.createQuery("from Code where creator = :nickname", Code.class)
+				.setParameter("nickname", u)
+                .getResultList();
+		List<Map> myMaps = entityManager
+				.createQuery("from Map where creator = :nickname", Map.class)
+				.setParameter("nickname", u)
+                .getResultList();
+		
+		m.addAttribute("myCodes", myCodes);
+		m.addAttribute("myMaps", myMaps);
+		m.addAttribute("myCodesSize", myCodes.size());
+		m.addAttribute("myMapsSize", myMaps.size());
+		
 		return "profile";
 	}
+	
 	
 	@GetMapping("/settings")
 	public String settings() {

@@ -52,7 +52,7 @@
 	                            	<div id="profileCard" class="card">
 									    
 									  	<img src="avatar/${user.id}" class="circle-avatar-mini">
-									  	<h1 class="card-header centered">${user.nickname}</h1>
+									  	<h2 class="card-header centered light-title-margin">${user.nickname}</h2>
 									  	
 									  	<div class="card-body">
 									    	<ul class="list-group list-group-flush">
