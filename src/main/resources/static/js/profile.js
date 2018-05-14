@@ -223,7 +223,6 @@ function mapEdit(map) {
 
 function goMapEdit(mapId){
 
-	console.log(mapId);
 	$.post("/postMap",{
 		"_csrf" : csrf_data.token,
 		"mapId" : mapId 

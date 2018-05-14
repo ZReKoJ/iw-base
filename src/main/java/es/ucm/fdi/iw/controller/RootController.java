@@ -228,9 +228,7 @@ public class RootController{
 	
 	@RequestMapping(value="/postMap", method=RequestMethod.POST)
 	public String map_editHandler(@RequestParam int mapId, Model m) {
-		log.info(mapId);
 		m.addAttribute("mapId", mapId);
-		log.info(mapId);
 		return  "/map-edit";
 	}
 	
