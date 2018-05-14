@@ -101,14 +101,14 @@ class BattleGround {
 		this.robots.set(robot.name, robot);
 	}
 	
-	fillContent(data){
+	fillContent(data, callback){
 		let set = new Set();
 		for (let i = 0; i < data.cellDim.rows; i++)
 	    	for (let j = 0; j < data.cellDim.cols; j++)
 	    		set.add(data.data[i][j]);
 		
 		for (let item of set){
-			imageLoader.loadImage("map_" + item, "/static/img/map/component (" + item + ").png");
+			imageLoader.loadImage("map_" + item, "/static/img/map/component (" + item + ").png", callback);
 		}
 		
 		for (let i = 0; i < this.rows; i++){
@@ -193,7 +193,7 @@ class BattleGround {
 		if (0 <= x && x < this.rows && 0 <= y && y < this.cols){
 			this.mapContent[x][y] = {
 	    			image: image,
-	    			index: index
+	    			index: (image == null) ? 0 : index
 	    	}
 		}
 	}

@@ -81,15 +81,14 @@ function mapDesign(mapId) {
 		xhr.onload = function () {
 			data = xhr.responseText;
 			data = JSON.parse(data);
-			console.log(data);
 			battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
-			battleGround.fillContent(data);
-		    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
+			battleGround.fillContent(data, function(){
+			    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
+			});
 	    };
 		xhr.open('GET', '/loadMap/' + mapId); 
 		xhr.send();
 	}
-	
 	
 	document.getElementById("resize").addEventListener("click", function(){
 		battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));

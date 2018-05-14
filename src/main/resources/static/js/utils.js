@@ -23,17 +23,20 @@ class ImageLoader{
 		this.loadImage("explosion", explosionPath);
 	}
 	
-	loadImage(name, path){
-		let self = this;
-		let img = document.createElement("img");
-		img.onload = function(){
-			self.imagesLoaded++;
-			if (self.imagesLoaded == self.images.size){
-				self.loaded = true;
+	loadImage(name, path, callback){
+		if (!this.images.has(name)){
+			let self = this;
+			let img = document.createElement("img");
+			img.onload = function(){
+				self.imagesLoaded++;
+				if (self.imagesLoaded == self.images.size){
+					self.loaded = true;
+					if (typeof callback === "function") { callback(); }
+				}
 			}
+			img.src = path;
+			this.images.set(name, img);
 		}
-		img.src = path;
-		this.images.set(name, img);
 	}
 	
 	image(name){

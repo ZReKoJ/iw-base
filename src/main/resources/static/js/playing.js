@@ -17,8 +17,9 @@ function playing() {
 	data = JSON.parse(data);
 	
 	let battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
-	battleGround.fillContent(data);
-	start(battleGround);
+	battleGround.fillContent(data, function(){
+		start(battleGround);
+	});
 
 	canvas.addEventListener('mousemove', function(event) {
 		let rect = canvas.getBoundingClientRect();
@@ -73,7 +74,7 @@ function playing() {
 function start(battleGround){
 	let code = null;
 	let req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/loadCode', false); 
+	req.open('GET', '/loadCode/1', false); 
 	req.send(null);
 	if (req.status == 200){
 		code = req.responseText;
