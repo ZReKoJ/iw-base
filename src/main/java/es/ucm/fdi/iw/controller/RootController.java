@@ -222,7 +222,10 @@ public class RootController{
 	}
 	
 	@GetMapping("/map-design")
-	public String map_design() {
+	public String map_design(@RequestParam(required=false) String id,
+			Model m) {
+		if (id != null && !id.isEmpty())
+			m.addAttribute("mapId", id);
 		return "map-design";
 	}
 	

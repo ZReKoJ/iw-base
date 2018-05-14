@@ -222,19 +222,10 @@ function mapEdit(map) {
 }
 
 function goMapEdit(mapId){
-
-	$.post("/postMap",{
-		"_csrf" : csrf_data.token,
-		"mapId" : mapId 
-	});
-	window.location.replace("http://localhost:8080/map-design");
+	window.location.replace("/postMap?id=" + mapId);
 }
 
 function goCodeEdit(codeId){
+	window.location.replace("/postCode?id=" + codeId);
 
-	$.post("/postCode",{
-		"_csrf" : csrf_data.token,
-		"codeId" : codeId 
-	});
-	window.location.replace("http://localhost:8080/code-design");
 }

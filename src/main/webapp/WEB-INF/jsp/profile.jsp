@@ -117,7 +117,7 @@
 					<c:when test="${myMapsSize > 0}">
 					<ul class="list-group">
 						<c:forEach var="map" items="${myMaps}">
-							<li class="list-group-item" value="${map.id}" onClick="goMapEdit(this.value);">${map.name}</li>
+							<li class="list-group-item"><a href="map-design?id=${map.id}">${map.name}</a></li>
 						</c:forEach>
 					</ul>
 					</c:when>
