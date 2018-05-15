@@ -18,13 +18,18 @@ function login(){
 	
 	$("#register-form").submit(function (e) {
 	    e.preventDefault();
-	    $.post("/createUser", { 
-	    		nickname: $("#regname").val(),
-	    		password: $("#regpass").val(),
-	    		_csrf: $("#regextra").val()},
-	    		function (data) {
-	    			submitLogin();
-	    		});
+	    if ($("#regpass").val() == $("#confirm-password").val()) {
+		    $.post("/createUser", { 
+		    		nickname: $("#regname").val(),
+		    		password: $("#regpass").val(),
+		    		_csrf: $("#regextra").val()},
+		    		function (data) {
+		    			submitLogin();
+		    		});
+	    }
+	    else {
+	    	alert("Error");
+	    }
 	});
 	
 	function submitLogin(){

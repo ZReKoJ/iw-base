@@ -30,18 +30,11 @@
                     </div>
                     <input id="logextra" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group text-center">
-                        <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                        <label for="remember"> Remember Me</label>
-                    </div>
-                    <div class="form-group text-center">
                         <div class="row">
                             <div class="col-sm-6 col-sm-offset-3">
                                 <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group text-center">
-                        <a href="#" tabindex="5" class="forgot-password">Forgot Password?</a>
                     </div>
                 </form>
                 <form id="register-form" action="/createUser" method="post" role="form" style="display: none;">

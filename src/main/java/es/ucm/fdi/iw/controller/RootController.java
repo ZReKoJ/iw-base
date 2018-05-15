@@ -188,14 +188,6 @@ public class RootController{
 	public String login() {
 		return "login";
 	}
-
-	@GetMapping("/chat")
-	public String chat(Model model, HttpServletRequest request) {
-		model.addAttribute("endpoint", request.getRequestURL().toString()
-				.replaceFirst("[^:]*", "ws")
-				.replace("chat", "chatsocket"));
-		return "chat";
-	}	
 	
 	@GetMapping("/logout")
 	public String logout() {
@@ -265,8 +257,7 @@ public class RootController{
 	}
 	
 	@GetMapping("/profile")
-
-	public String profile(HttpSession s, Model m) {
+	public String profile(HttpServletRequest request, HttpSession s, Model m) {
 		
 		User u = (User) s.getAttribute("user");
 		List<Code> myCodes = entityManager
@@ -282,6 +273,10 @@ public class RootController{
 		m.addAttribute("myMaps", myMaps);
 		m.addAttribute("myCodesSize", myCodes.size());
 		m.addAttribute("myMapsSize", myMaps.size());
+
+		m.addAttribute("endpoint", request.getRequestURL().toString()
+				.replaceFirst("[^:]*", "ws")
+				.replace("profile", "chatsocket"));
 		
 		return "profile";
 	}
