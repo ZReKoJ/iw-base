@@ -209,7 +209,7 @@ public class RootController{
 		return "playing";
 	}
 	
-    @RequestMapping(value = "/loadPlaying", method = RequestMethod.POST)
+    @RequestMapping(value = "/playing", method = RequestMethod.POST)
 	public String loadPlay(
 			@RequestParam String usercode,
 			@RequestParam String map,

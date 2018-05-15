@@ -7,7 +7,7 @@
 <link href="${s}/css/bootstrap-select.css" rel="stylesheet">
 <script src="${s}/js/bootstrap-select.js"></script>
 
-<form id="play-form" action="/loadPlaying" method="post" role="form">
+<form id="play-form" action="/playing" method="post" role="form">
 	<div class = "row bigpaddingtop" >
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Your Robot</h3>
