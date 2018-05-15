@@ -10,8 +10,6 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
-<script src="${s}/js/play.js"></script>
-
 <form id="play-form" action="/loadPlaying" method="post" role="form">
 	<div class = "row bigpaddingtop" >
 		<div class="col-sm-4 no_margin">
@@ -57,7 +55,7 @@
 	   		<h3 class="page-subtitle">Select Enemy Robots</h3>
 			   <c:choose>
 					<c:when test="${codes.size() > 0}">
-	  					<select id="all-codes" name="enemycodes[]" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="5" multiple>	
+	  					<select id="all-codes" name="enemycodes" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="5" multiple>	
 							<c:forEach var="code" items="${codes}">
 								<option id="all-${code.id}" value="${code.id}">${code.name}</option>
 							</c:forEach>
@@ -72,6 +70,8 @@
 		</div>
 		
 	</div>
+	
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 	<div class="row">
 		<div class="col-sm-5"></div>
@@ -80,6 +80,9 @@
 		</div>
 		<div class="col-sm-5"></div>
 	</div>
+
 </form>
+
+<script src="${s}/js/play.js"></script>
 
 <%@ include file="../jspf/footer.jspf"%>
