@@ -4,11 +4,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<link href="${s}/css/bootstrap-select.css" rel="stylesheet">
+<script src="${s}/js/bootstrap-select.js"></script>
 
 <form id="play-form" action="/loadPlaying" method="post" role="form">
 	<div class = "row bigpaddingtop" >
@@ -31,7 +28,6 @@
 			
 		</div>
 		
-		
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Map</h3>
 				 <c:choose>
@@ -49,7 +45,6 @@
 					</c:otherwise>
 				</c:choose>
 		</div>
-		
 		
 		<div class="col-sm-4 no_margin">
 	   		<h3 class="page-subtitle">Select Enemy Robots</h3>
