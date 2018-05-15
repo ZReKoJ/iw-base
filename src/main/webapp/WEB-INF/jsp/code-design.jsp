@@ -5,7 +5,7 @@
 <%@ include file="../jspf/header.jspf"%>
 
 <!-- Tema del editor de codemirror -->
-<link href="${s}/css/theme.css" rel="stylesheet">
+<link href="${s}/css/code-design-theme.css" rel="stylesheet">
 <!-- Codemirror editor -->
 <link href="${s}/css/codemirror.css" rel="stylesheet">
 

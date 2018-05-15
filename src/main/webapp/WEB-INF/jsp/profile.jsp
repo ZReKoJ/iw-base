@@ -47,8 +47,7 @@
         </div>
         <div class="col-md-2 user-menu-btns">
             <div class="btn-group-vertical square" id="responsive">
-    			<a class="btn neutralColourLightBg active" href="#" role="button">History</a>
-    			<a class="btn neutralColourLightBg" href="#" role="button">Account</a>
+    			<a class="btn neutralColourLightBg active" href="#" role="button">Chat</a>
     			<a class="btn neutralColourLightBg" href="#" role="button">Codes</a>
     			<a class="btn neutralColourLightBg" href="#" role="button">Maps</a>
     			<a class="btn neutralColourLightBg" onclick="logout()" role="button">Logout</a>
@@ -57,44 +56,18 @@
         </div>
         <div class="col-md-3 user-menu user-pad">
             <div class="user-menu-content active">
-                <h3>
-                    Recent Interactions
-                </h3>
-                <ul class="user-menu-list">
-                    <li>
-                        <h4><i class="fa fa-user coral"></i> Roselynn Smith followed you.</h4>
-                    </li>
-                    <li>
-                        <h4><i class="fa fa-heart-o coral"></i> Jonathan Hawkins followed you.</h4>
-                    </li>
-                    <li>
-                        <h4><i class="fa fa-paper-plane-o coral"></i> Gracie Jenkins followed you.</h4>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-labeled btn-success" href="#">
-                            <span class="btn-label"><i class="fa fa-bell-o"></i></span>View all activity</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="user-menu-content">
-                <h3>
-                    Your Inbox
-                </h3>
-                <ul class="user-menu-list">
-                    <li>
-                        <h4>From Roselyn Smith <small class="coral"><strong>NEW</strong> <i class="fa fa-clock-o"></i> 7:42 A.M.</small></h4>
-                    </li>
-                    <li>
-                        <h4>From Jonathan Hawkins <small class="coral"><i class="fa fa-clock-o"></i> 10:42 A.M.</small></h4>
-                    </li>
-                    <li>
-                        <h4>From Georgia Jennings <small class="coral"><i class="fa fa-clock-o"></i> 10:42 A.M.</small></h4>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-labeled btn-danger" href="#">
-                            <span class="btn-label"><i class="fa fa-envelope-o"></i></span>View All Messages</button>
-                    </li>
-                </ul>
+                <textarea id="chat" readonly></textarea>
+				<form id="escrito">
+					<div class="input-group">
+						<input id="send" type="text" class="form-control" placeholder="Mensaje">
+						<span id="sendButton" class="input-group-btn">
+							<div class="btn btn-default">
+								<span class="glyphicon glyphicon-send"></span>
+								<span>Send</span>
+							</div>
+						</span>
+	        		</div>
+				</form>
             </div>
             <div class="user-menu-content">
                 <h3 class="centered">Your codes</h3>
@@ -131,7 +104,7 @@
     
     <script>
 	$( document ).ready(function() {
-		profile();
+		profile(new WebSocket("${endpoint}"));
 	});
 	</script>
 
