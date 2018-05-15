@@ -396,7 +396,7 @@ public class RootController{
 	    try (InputStream in = f.exists() ? 
 		    	new BufferedInputStream(new FileInputStream(f)) :
 		    	new BufferedInputStream(this.getClass().getClassLoader()
-		    			.getResourceAsStream("unknown-user.jpg"))) {
+		    			.getResourceAsStream("static/img/avatar.png"))) {
 	    	FileCopyUtils.copy(in, response.getOutputStream());
 	    } catch (IOException ioe) {
 	    	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
