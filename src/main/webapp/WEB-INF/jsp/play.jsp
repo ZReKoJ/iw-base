@@ -71,7 +71,7 @@
 	<div class="row">
 		<div class="col-sm-5"></div>
 		<div class="col-sm-2">
-			<input type="submit" id="play-submit" name="play-submit" value="Play" class="btn btn-primary max_width">
+			<input type="submit" id="play-submit" name="play-submit" value="Play" class="btn btn-primary max_width" disabled>
 		</div>
 		<div class="col-sm-5"></div>
 	</div>
