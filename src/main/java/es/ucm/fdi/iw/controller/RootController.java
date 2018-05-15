@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -204,16 +205,11 @@ public class RootController{
 		return "results";
 	}
 	
-	@GetMapping("/playing")
-	public String playing() {
-		return "playing";
-	}
-	
     @RequestMapping(value = "/playing", method = RequestMethod.POST)
 	public String loadPlay(
 			@RequestParam String usercode,
 			@RequestParam String map,
-			@RequestParam String enemycodes[],
+			@RequestParam ArrayList<String> enemycodes,
 			Model m) {
    	    	
 		m.addAttribute("codeId", usercode);

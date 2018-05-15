@@ -18,12 +18,9 @@ function codeDesign(codeId) {
 		path = '/loadCode/' + codeId;
 	}
 	
-    let xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-    	codeMirrorEditor.setValue(this.responseText);
-    };
-    xhr.open('GET', path);
-    xhr.send();
+	loadData(path, function(data){
+    	codeMirrorEditor.setValue(data);
+	});
 
 	document.getElementById("upload").addEventListener("click", function(e){
 		if (document.getElementById("codeFileName").value == ""){

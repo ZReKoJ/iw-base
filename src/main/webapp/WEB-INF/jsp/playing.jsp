@@ -91,7 +91,7 @@
 
 <script>
 $( document ).ready(function() {
-	playing();
+	playing('${mapId}', '${codeId}', JSON.parse('${enemyIds}'));
 });
 </script>
 

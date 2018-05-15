@@ -11,6 +11,15 @@ function fullscreen(content){
 	else content.mozRequestFullScreen();
 }
 
+function loadData(path, callback){
+	let req = new XMLHttpRequest();
+	req.onload = function () {
+		callback(req.responseText);
+	}
+	req.open('GET', path, false); 
+	req.send(null);
+}
+
 class ImageLoader{
 	constructor(){
 		this.images = new Map();

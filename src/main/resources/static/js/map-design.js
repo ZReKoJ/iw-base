@@ -76,18 +76,14 @@ function mapDesign(mapId) {
 	
 	let battleGround = new BattleGround(canvas, parseInt($("input[name='rows']").val()), parseInt($("input[name='cols']").val()));
 	if (mapId != null && mapId != undefined && mapId != ""){
-		let data = null;
-		let xhr = new XMLHttpRequest();
-		xhr.onload = function () {
-			data = xhr.responseText;
+		let data = undefined;
+		loadData('/loadMap/' + mapId, function(data){
 			data = JSON.parse(data);
 			battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 			battleGround.fillContent(data, function(){
 			    battleGround.clear().drawMapContent().drawCellMap().writeInfo();
 			});
-	    };
-		xhr.open('GET', '/loadMap/' + mapId); 
-		xhr.send();
+		});
 	}
 	
 	document.getElementById("resize").addEventListener("click", function(){
