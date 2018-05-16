@@ -125,6 +125,12 @@ class Robot {
 				this.block = battleGround.BLOCKS[block];
 			}
 		}
+		
+		if (this.follow){
+			battleGround.mapCenter.x = Math.floor(battleGround.table.width * this.x);
+			battleGround.mapCenter.y = Math.floor(battleGround.table.height * this.y);
+			battleGround.defineMapFeature();
+		}
 	}
 	
 	calculateCorners(battleGround){
@@ -199,12 +205,6 @@ class Robot {
 		if (!move){
 			this.x -= x;
 			this.y -= y;
-		}
-		
-		if (this.follow){
-			battleGround.mapCenter.x = Math.floor(battleGround.table.width * this.x);
-			battleGround.mapCenter.y = Math.floor(battleGround.table.height * this.y);
-			battleGround.defineMapFeature();
 		}
 	}
 	
