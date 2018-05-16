@@ -157,7 +157,7 @@ class BattleGround {
 		if (0 <= point.x && point.x < this.cols && 0 <= point.y && point.y < this.rows) {
 			return this.mapContent[point.y][point.x].index;
 		}
-		else return this.BLOCKS.NOTHING;
+		else return this.BLOCKS.NOTHING.id;
 	}
 	
 	canIMoveOn(cell) {
