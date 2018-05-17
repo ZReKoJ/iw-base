@@ -1,3 +1,5 @@
+'use strict';
+
 function mapDesign(mapId) {
 	
 	let canvas = document.getElementById("canvas");

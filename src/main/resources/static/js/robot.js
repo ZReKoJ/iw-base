@@ -1,14 +1,11 @@
+'use strict';
+
 class Robot {
-	constructor(name, path, code, battleGround){
-		this.name = name;
-		
-		let req = new XMLHttpRequest();
-		req.open('GET', '/getName/'+this.name, false);
-		req.send(null);
-		this.driver = req.responseText;
-		
+	constructor(info, path, code, battleGround){
+		this.info = info;
+
 		this.path = path;
-		imageLoader.loadImage("robot_" + this.name, this.path)
+		imageLoader.loadImage("robot_" + this.info.id, this.path)
 		this.width = 0.5;
 		this.height = 0.5;
 		this.proportionX = battleGround.cell.width / battleGround.table.width / 5;
@@ -35,14 +32,16 @@ class Robot {
 		this.def = 1;
 		this.numBullets = 5;
 		
-		$( "#rank" ).append( "<li class=\"list-group-item\" id=\""+this.name+"\">"
-				+this.driver.toUpperCase()
-				+"  HP: "
-				+this.hp
-				+"  Bullets: "
-				+this.numBullets
-				+"</li>" 
+		$( "#rank" ).append( "<li class=\"list-group-item\" id=\""+ this.info.id + "\">"
+				+ this.info.creatorName.toUpperCase() + ": "
+				+ this.info.name 
+				+ "  HP: "
+				+ this.hp
+				+ "  Bullets: "
+				+ this.numBullets
+				+ "</li>" 
 				);
+		
 		this.closeRobots = [];
 		this.block = battleGround.BLOCKS.NOTHING;
 		
@@ -51,7 +50,7 @@ class Robot {
 	
 	get image(){
 		if (this.hp > 0) {
-			return imageLoader.image("robot_" + this.name);
+			return imageLoader.image("robot_" + this.info.id);
 		}
 		else {
 			return imageLoader.image("explosion");
@@ -62,37 +61,34 @@ class Robot {
 		if (this.numBullets > 0) {
 			this.bullets.push(new Bullet(this));
 			this.numBullets--;
-			$( "#"+ this.name).replaceWith( "<li class=\"list-group-item\" id=\""+this.name+"\">"
-					+this.driver.toUpperCase()
-					+" -  HP: "
-					+this.hp
-					+" -  Bullets: "
-					+this.numBullets
-					+"</li>" );
 		}
 	}
 	
+	notify() {
+		$( "#"+ this.info.id).replaceWith( "<li class=\"list-group-item\" id=\"" + this.info.id + "\">"
+				+ this.info.creatorName.toUpperCase() + ": "
+				+ this.info.name 
+				+ "  HP: "
+				+ this.hp
+				+ "  Bullets: "
+				+ this.numBullets
+				+ "</li>" 
+				);
+	}
+	
 	gotHit(bullet, a, b){
-		let hit = bullet.owner != this.name && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
+		let hit = bullet.owner != this.info.id && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
 		if (hit) {
 			this.hp -= (bullet.atk - (this.def * this.block.def));
-			if(this.hp<0){
-				this.hp = 0;
-			}
-			$( "#"+ this.name).replaceWith( "<li class=\"list-group-item\" id=\""+this.name+"\">"
-					+this.driver.toUpperCase()
-					+" -  HP: "
-					+this.hp
-					+" -  Bullets: "
-					+this.numBullets
-					+"</li>" );
+			this.hp = Math.max(0, this.hp);
+			this.notify();
 		}
 		return hit;
 	}
 	
 	makeMove(battleGround){
 		this.moveCounter++;
-		if (this.moveCounter % 10 == 0) {
+		if (this.moveCounter % 100 == 0) {
 			this.numBullets++;
 		}
 		
@@ -121,11 +117,11 @@ class Robot {
 		cells = cells / (battleGround.robots.size - 1);
 		this.closeRobots = [];
 		for (let [key, value] of battleGround.robots) {
-			if (this.name != value.name) {
+			if (this.info.id != value.info.id) {
 				dist = battleGround.toRealPosition(new Point(this.x, this.y)).distanceTo(battleGround.toRealPosition(new Point(value.x, value.y)));
 				if (dist < (cells * 5 * battleGround.cell.width	)){
 					this.closeRobots.push({
-						name : value.name,
+						name : value.info.name,
 						position : battleGround.toRealPosition(new Point(value.x, value.y)),
 						distance : dist
 					});
@@ -135,7 +131,7 @@ class Robot {
 		this.closeRobots.sort(function(a, b) { return (a.distance > b.distance); });
 		
 		let data = {
-			name : this.name,
+			name : this.info.name,
 			atk : this.atk,
 			hp : this.hp,
 			def : this.def,
@@ -163,6 +159,8 @@ class Robot {
 			battleGround.mapCenter.y = Math.floor(battleGround.table.height * this.y);
 			battleGround.defineMapFeature();
 		}
+		
+		this.notify();
 	}
 	
 	calculateCorners(battleGround){
@@ -225,7 +223,7 @@ class Robot {
 		}
 		else {
 			for (let [key, value] of battleGround.robots) {
-				if (this.name != value.name && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
+				if (this.info.id != value.info.id && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
@@ -267,7 +265,7 @@ class Bullet {
 	constructor(robot) {
 		this.x = robot.x;
 		this.y = robot.y;
-		this.owner = robot.name;
+		this.owner = robot.info.id;
 		this.width = 0.1;
 		this.height = 0.1;
 		this.rotation = robot.rotation;

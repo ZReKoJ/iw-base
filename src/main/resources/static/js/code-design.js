@@ -1,3 +1,5 @@
+'use strict';
+
 function codeDesign(codeId) {
 	
 	let codeMirror = document.getElementById("codeText");

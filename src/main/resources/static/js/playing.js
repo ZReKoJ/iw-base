@@ -1,4 +1,6 @@
-function playing(mapId, codeId, enemyIds) {
+'use strict';
+
+function playing(map, code, enemies) {
 	
 	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
@@ -8,11 +10,11 @@ function playing(mapId, codeId, enemyIds) {
 	canvas.height = parent.width();
 	
 	let battleGround = undefined;
-	loadData('/loadMap/' + mapId, function(data){
+	loadData('/loadMap/' + map.id, function(data){
 		data = JSON.parse(data);
 		battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 		battleGround.fillContent(data, function(){
-			start(battleGround, codeId, enemyIds);
+			start(battleGround, code, enemies);
 		});
 	});
 
@@ -66,16 +68,16 @@ function playing(mapId, codeId, enemyIds) {
 
 }
 
-function start(battleGround, codeId, enemyIds){
+function start(battleGround, code, enemies){
 	
 	let robots = new Map();
 	let robot = undefined;
 	
-	loadData('/loadCode/' + codeId, function(data){
-		robot = new Robot(codeId, "/static/img/robot/robot (10).png", data, battleGround).setFollow(true);
+	loadData('/loadCode/' + code.id, function(data){
+		robot = new Robot(code, "/static/img/robot/robot (10).png", data, battleGround).setFollow(true);
 		battleGround.addRobot(robot);
-		enemyIds.forEach(function(element) {
-			loadData('/loadCode/' + element, function(data){
+		enemies.forEach(function(element) {
+			loadData('/loadCode/' + element.id, function(data){
 				robot = new Robot(element, "/static/img/robot/robot (3).png", data, battleGround);
 				battleGround.addRobot(robot);
 			});

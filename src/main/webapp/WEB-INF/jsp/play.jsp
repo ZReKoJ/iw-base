@@ -15,7 +15,7 @@
 				<c:when test="${ownedCodes.size() > 0}">
 					<select id="owned-codes" name="usercode" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="1" multiple>
 						<c:forEach var="code" items="${ownedCodes}">
-							<option id="owned-${code.id}" class="owned-codes-op" value="${code.id}">${code.name}</option>
+							<option id="owned-${code.id}" class="owned-codes-op" value='{"id": ${code.id}, "name": "${code.name}", "creatorId": ${code.creator.id}, "creatorName": "${code.creator.nickname}" }'>${code.name}</option>
 						</c:forEach>
 					</select>
 				</c:when>
@@ -34,7 +34,7 @@
 					<c:when test="${maps.size() > 0}">
 						<select id="all-maps" name="map" class="selectpicker show-tick" data-width="100%"  data-live-search="true" data-max-options="1" multiple>
 							<c:forEach var="map" items="${maps}">
-								<option value="${map.id}">${map.name}</option>
+								<option value='{"id": ${map.id}, "name": "${map.name}" }' data-subtext="${map.creator.nickname}">${map.name}</option>
 							</c:forEach>
 						</select>
 					</c:when>
@@ -52,7 +52,7 @@
 					<c:when test="${codes.size() > 0}">
 	  					<select id="all-codes" name="enemycodes" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="5" multiple>	
 							<c:forEach var="code" items="${codes}">
-								<option id="all-${code.id}" value="${code.id}">${code.name}</option>
+								<option id="all-${code.id}" value='{"id": ${code.id}, "name": "${code.name}", "creatorId": ${code.creator.id}, "creatorName": "${code.creator.nickname}" }' data-subtext="${code.creator.nickname}">${code.name}</option>
 							</c:forEach>
 						</select>
 					</c:when>

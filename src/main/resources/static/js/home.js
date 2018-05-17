@@ -1,3 +1,5 @@
+'use strict';
+
 function home(){
 
 	$(".main.button.homeMenu").mousedown(function(){

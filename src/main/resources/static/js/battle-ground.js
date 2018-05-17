@@ -1,3 +1,5 @@
+'use strict';
+
 class BattleGround {
 	constructor(canvas, numRows, numCols){
 		// canvas 
@@ -98,7 +100,7 @@ class BattleGround {
 	}
 	
 	addRobot(robot){
-		this.robots.set(robot.name, robot);
+		this.robots.set(robot.info.id, robot);
 	}
 	
 	fillContent(data, callback){
@@ -242,12 +244,24 @@ class BattleGround {
 		    	}
 	    	}
 	    	else {
+	    		/*
+	    		$.get( "/addLoss", { "id": value.name, "_csrf": csrf_data.token }, 
+	    				function (data) { console.log("lost response: ", data); }
+	    		);
 	    		
-	    		$.post( "/addLoss/"+value.name, { "_csrf": csrf_data.token } );
+	    		for (let [keyWinner, valueWinner] of this.robots) {
+	    		  if (valueWinner.name != value.name) {
+	    			  $.get( "/addWin", {"id": valueWinner.name,  "_csrf": csrf_data.token }, 
+	    				function (data) { console.log("win response: ", data); }
+	    			  )
+	    		  }
+	    		}
+	    		*/
 	    		this.robots.delete(key);
-	    		console.log(value.name + " was eliminated");
+	    		console.log(value.info.name + " was eliminated");
 	    		console.log("Robots left: " + this.robots.size);
 	    		if (this.robots.size == 1) {
+	    			/*
 	    			 for (let [keyWinner, valueWinner] of this.robots) {
 	    				 $( "#"+ valueWinner.name).replaceWith( "<li class=\"list-group-item active\" id=\""+ valueWinner.name+"\" >"
 	    							+valueWinner.driver.toUpperCase()
@@ -257,14 +271,11 @@ class BattleGround {
 	    							+valueWinner.numBullets
 	    							+ "  Winner"
 	    							+"</li>" );
-	    				 let req = new XMLHttpRequest();
-	    		    	req.open('POST', '/addWin/'+valueWinner.name, false);
-	    		    	req.send(null);
 	    				 this.robots.delete(keyWinner);
 	    				 
 	    			 }
-	    			 
-	    			 document.getElementById("playagain-button").classList.remove("disabled");
+	    			 */
+	    			 //document.getElementById("playagain-button").classList.remove("disabled");
 	    		}
 	    	}
 	    }

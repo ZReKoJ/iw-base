@@ -10,10 +10,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,11 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.ucm.fdi.iw.LocalData;
@@ -63,28 +66,26 @@ public class RootController{
         model.addAttribute("s", "/static");
     }
     
-    @RequestMapping(value = "/addLoss/{id}", method = RequestMethod.POST)
+    @GetMapping(value = "/addLoss")
 	@Transactional
 	public void addLossHandler(
-			@PathVariable("id") long id) 
+			@RequestParam("id") long id) 
     {
     	
-    	User u = entityManager.getReference(User.class, id);
-		u.setLose(u.getLose()+1);
-		entityManager.refresh(u);
-		
+    	User u = entityManager.find(User.class, id);
+		u.setLose(u.getLose()+1);	
+		log.info("Adding a loss to " + id + ": now at " + u.getLose());
 	}
     
-    @RequestMapping(value = "/addWin/{id}", method = RequestMethod.POST)
+    @GetMapping(value = "/addWin")
 	@Transactional
 	public void addWinHandler(
-			@PathVariable("id") long id) 
+			@RequestParam("id") long id) 
     {
     	
-    	User u = entityManager.getReference(User.class, id);
+    	User u = entityManager.find(User.class, id);
 		u.setWin(u.getWin()+1);
-		entityManager.refresh(u);
-		
+		log.info("Adding a win to " + id + ": now at " + u.getLose());
 	}
     
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
@@ -235,31 +236,13 @@ public class RootController{
 			@RequestParam String map,
 			@RequestParam ArrayList<String> enemycodes,
 			Model m) {
-   	    	
-		m.addAttribute("codeId", usercode);
-		m.addAttribute("mapId", map);
-		m.addAttribute("enemyIds", enemycodes);
+    	
+		m.addAttribute("code", usercode);
+		m.addAttribute("map", map);
+		m.addAttribute("enemies", enemycodes);
 		
 		return "playing";
 	}
-	
-    @GetMapping("/getName/{id}")
-	public String getNameHandler(@PathVariable("id") Long id, 
-			HttpServletRequest request,HttpServletResponse response) 
-	throws ServletException, IOException  
-	{
-		
-		response.setContentType("text/plain");
-	    PrintWriter info = response.getWriter();
-		String a = entityManager
-			.createQuery("from User where id = :id", User.class)
-	        .setParameter("id",  id).getSingleResult().getNickname();
-		log.info(a);
-	    info.println(a);
-	    info.close();
-	    
-	    return a;
-	 }
     
 	@GetMapping("/map-design")
 	public String map_design(@RequestParam(required=false) String id,
@@ -335,64 +318,29 @@ public class RootController{
 	}
 	
 	@GetMapping("/loadMap/{id}")
+	@ResponseBody
 	public String loadMap(@PathVariable("id") String id, 
 			HttpServletRequest request, 
 			HttpServletResponse response) 
 	throws ServletException, IOException
 	{
-		
-		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("maps", id)));
-		String everything = "";
-		try {
-		    StringBuilder sb = new StringBuilder();
-		    String line = br.readLine();
-
-		    while (line != null) {
-		        sb.append(line);
-		        sb.append(System.lineSeparator());
-		        line = br.readLine();
-		    }
-		    everything = sb.toString();
-		} finally {
-		    br.close();
-		}
-		
-		
-	    response.setContentType("application/json");
-	    PrintWriter info = response.getWriter();
-	    info.println(everything);
-	    info.close();
-	    return "playing";
+		return new String(Files
+				.readAllBytes(localData.getFile("maps", id)
+						.toPath()),
+				"UTF-8");
 	}
 	
 	@GetMapping("/loadCode/{id}")
+	@ResponseBody
 	public String loadCode(@PathVariable("id") String id, 
 			HttpServletRequest request,HttpServletResponse response) 
 	throws ServletException, IOException  
 	{
-		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("codes", id)));
-		String everything = "";
-		try {
-		    StringBuilder sb = new StringBuilder();
-		    String line = br.readLine();
-
-		    while (line != null) {
-		        sb.append(line);
-		        sb.append(System.lineSeparator());
-		        line = br.readLine();
-		    }
-		    everything = sb.toString();
-		} finally {
-		    br.close();
-		}
-		
-		
-	    response.setContentType("text/plain");
-	    PrintWriter info = response.getWriter();
-	    info.println(everything);
-	    info.close();
-	    return "playing";
-	 }
+		return new String(Files
+				.readAllBytes(localData.getFile("codes", id)
+						.toPath()),
+				"UTF-8");
+	}
 	
 	@RequestMapping(value="/saveAvatar", method=RequestMethod.POST)
 	public String handleFileUpload(

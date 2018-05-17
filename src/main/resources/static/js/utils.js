@@ -1,3 +1,5 @@
+'use strict';
+
 function isFullScreen(){
 	if (document.fullscreenElement) return true;
     else if (document.webkitFullscreenElement) return true;
@@ -12,12 +14,20 @@ function fullscreen(content){
 }
 
 function loadData(path, callback){
-	let req = new XMLHttpRequest();
-	req.onload = function () {
-		callback(req.responseText);
+	$.get(path, function (data) {
+		callback(data);
+	});
+}
+
+class Notifier {
+	constructor(){
+		
 	}
-	req.open('GET', path, false);
-	req.send(null);
+	
+	notify(text, callback){
+		alert(text);
+		if (typeof callback === "function") { callback("si"); }
+	}
 }
 
 class ImageLoader{
@@ -194,3 +204,4 @@ class Square extends Rectangle {
 }
 
 var imageLoader = new ImageLoader();
+var notifier = new Notifier();

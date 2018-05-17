@@ -35,7 +35,7 @@
 
 <script>
 $( document ).ready(function() {
-	playing('${mapId}', '${codeId}', JSON.parse('${enemyIds}'));
+	playing(JSON.parse('${map}'), JSON.parse('${code}'), JSON.parse('${enemies}'));
 });
 </script>
 

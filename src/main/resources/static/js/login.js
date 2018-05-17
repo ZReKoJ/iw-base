@@ -1,3 +1,5 @@
+'use strict';
+
 function login(){
 	
 	$('#login-form-link').click(function(e) {
