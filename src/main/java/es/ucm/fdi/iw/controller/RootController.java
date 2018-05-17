@@ -167,7 +167,8 @@ public class RootController{
         if (json.isEmpty()) {
         	error = "You failed to upload the map";     
         	log.info(error);
-        } else {
+        } 
+        else {
         	
 	    		Map map= new Map();
 	    		User u = (User)s.getAttribute("user");
@@ -186,7 +187,7 @@ public class RootController{
 	    		} catch (Exception e) {
 	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
 	    		}
-	    		 return "/settings";
+	    		return "/map-design";
         }
       
      // exit with error, blame user
@@ -302,9 +303,9 @@ public class RootController{
 		return "profile";
 	}
 	
-	@GetMapping("/settings")
+	@GetMapping("/exception")
 	public String settings() {
-		return "settings";
+		return "exception";
 	}
 	
 	@GetMapping("/ranking")

@@ -44,7 +44,7 @@
     </div>
     <div class="row">
         <div class="btn-toolbar pull-right">
-            <a id="upload" class="btn btn-primary" href="#" role="button">Upload</a>
+            <a id="upload" class="btn btn-primary" role="button">Upload</a>
             <a class="btn btn-primary" href="/" role="button">Cancel</a>
         </div>
     </div>

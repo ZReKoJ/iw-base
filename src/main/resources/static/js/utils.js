@@ -14,6 +14,7 @@ function fullscreen(content){
 }
 
 function loadData(path, callback){
+	console.log(path);
 	$.get(path, function (data) {
 		callback(data);
 	});
@@ -21,10 +22,14 @@ function loadData(path, callback){
 
 class Notifier {
 	constructor(){
-		
+		this.messages = Object.freeze({
+			"ERROR" : 0,
+			"SUCCESS" : 1,
+			"INFO" : 2
+		});
 	}
 	
-	notify(text, callback){
+	notify(text, message, callback){
 		alert(text);
 		if (typeof callback === "function") { callback("si"); }
 	}
