@@ -63,6 +63,30 @@ public class RootController{
         model.addAttribute("s", "/static");
     }
     
+    @RequestMapping(value = "/addLoss/{id}", method = RequestMethod.POST)
+	@Transactional
+	public void addLossHandler(
+			@PathVariable("id") long id) 
+    {
+    	
+    	User u = entityManager.getReference(User.class, id);
+		u.setLose(u.getLose()+1);
+		entityManager.refresh(u);
+		
+	}
+    
+    @RequestMapping(value = "/addWin/{id}", method = RequestMethod.POST)
+	@Transactional
+	public void addWinHandler(
+			@PathVariable("id") long id) 
+    {
+    	
+    	User u = entityManager.getReference(User.class, id);
+		u.setWin(u.getWin()+1);
+		entityManager.refresh(u);
+		
+	}
+    
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	@Transactional
 	public String createUser(
@@ -219,6 +243,24 @@ public class RootController{
 		return "playing";
 	}
 	
+    @GetMapping("/getName/{id}")
+	public String getNameHandler(@PathVariable("id") Long id, 
+			HttpServletRequest request,HttpServletResponse response) 
+	throws ServletException, IOException  
+	{
+		
+		response.setContentType("text/plain");
+	    PrintWriter info = response.getWriter();
+		String a = entityManager
+			.createQuery("from User where id = :id", User.class)
+	        .setParameter("id",  id).getSingleResult().getNickname();
+		log.info(a);
+	    info.println(a);
+	    info.close();
+	    
+	    return a;
+	 }
+    
 	@GetMapping("/map-design")
 	public String map_design(@RequestParam(required=false) String id,
 			Model m) {
@@ -325,13 +367,9 @@ public class RootController{
 	
 	@GetMapping("/loadCode/{id}")
 	public String loadCode(@PathVariable("id") String id, 
-			HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  
-
-	// request is an object of type HttpServletRequest and it's used to obtain information
-	// response is an object of type HttpServletResponse and it's used to generate a response
-	// throws is used to specify the exceptions than a method can throw
-	
-	 {
+			HttpServletRequest request,HttpServletResponse response) 
+	throws ServletException, IOException  
+	{
 		BufferedReader br = new BufferedReader(new FileReader(localData.getFile("codes", id)));
 		String everything = "";
 		try {

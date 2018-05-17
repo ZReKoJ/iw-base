@@ -31,15 +31,12 @@
            		
             </div>
             <div class="row overview whiteBg">
-                <div class="col-md-4 user-pad text-center">
+                <div class="col-md-6 user-pad text-center">
                     <h3>WIN</h3>
                     <h4>${user.win}</h4>
                 </div>
-                <div class="col-md-4 user-pad text-center">
-                    <h3>DRAW</h3>
-                    <h4>${user.draw}</h4>
-                </div>
-                <div class="col-md-4 user-pad text-center">
+                
+                <div class="col-md-6 user-pad text-center">
                     <h3>LOSS</h3>
                     <h4>${user.lose}</h4>
                 </div>

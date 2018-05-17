@@ -1,6 +1,12 @@
 class Robot {
 	constructor(name, path, code, battleGround){
 		this.name = name;
+		
+		let req = new XMLHttpRequest();
+		req.open('GET', '/getName/'+this.name, false);
+		req.send(null);
+		this.driver = req.responseText;
+		
 		this.path = path;
 		imageLoader.loadImage("robot_" + this.name, this.path)
 		this.width = 0.5;
@@ -28,6 +34,15 @@ class Robot {
 		this.hp = 100;
 		this.def = 1;
 		this.numBullets = 5;
+		
+		$( "#rank" ).append( "<li class=\"list-group-item\" id=\""+this.name+"\">"
+				+this.driver.toUpperCase()
+				+"  HP: "
+				+this.hp
+				+"  Bullets: "
+				+this.numBullets
+				+"</li>" 
+				);
 		this.closeRobots = [];
 		this.block = battleGround.BLOCKS.NOTHING;
 		
@@ -47,6 +62,13 @@ class Robot {
 		if (this.numBullets > 0) {
 			this.bullets.push(new Bullet(this));
 			this.numBullets--;
+			$( "#"+ this.name).replaceWith( "<li class=\"list-group-item\" id=\""+this.name+"\">"
+					+this.driver.toUpperCase()
+					+" -  HP: "
+					+this.hp
+					+" -  Bullets: "
+					+this.numBullets
+					+"</li>" );
 		}
 	}
 	
@@ -54,6 +76,16 @@ class Robot {
 		let hit = bullet.owner != this.name && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
 		if (hit) {
 			this.hp -= (bullet.atk - (this.def * this.block.def));
+			if(this.hp<0){
+				this.hp = 0;
+			}
+			$( "#"+ this.name).replaceWith( "<li class=\"list-group-item\" id=\""+this.name+"\">"
+					+this.driver.toUpperCase()
+					+" -  HP: "
+					+this.hp
+					+" -  Bullets: "
+					+this.numBullets
+					+"</li>" );
 		}
 		return hit;
 	}

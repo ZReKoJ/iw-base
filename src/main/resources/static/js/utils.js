@@ -16,7 +16,7 @@ function loadData(path, callback){
 	req.onload = function () {
 		callback(req.responseText);
 	}
-	req.open('GET', path, false); 
+	req.open('GET', path, false);
 	req.send(null);
 }
 

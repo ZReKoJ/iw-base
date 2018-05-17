@@ -242,11 +242,29 @@ class BattleGround {
 		    	}
 	    	}
 	    	else {
+	    		
+	    		$.post( "/addLoss/"+value.name, { "_csrf": csrf_data.token } );
 	    		this.robots.delete(key);
 	    		console.log(value.name + " was eliminated");
 	    		console.log("Robots left: " + this.robots.size);
 	    		if (this.robots.size == 1) {
-	    			window.location.replace("http://localhost:8080/results");
+	    			 for (let [keyWinner, valueWinner] of this.robots) {
+	    				 $( "#"+ valueWinner.name).replaceWith( "<li class=\"list-group-item active\" id=\""+ valueWinner.name+"\" >"
+	    							+valueWinner.driver.toUpperCase()
+	    							+" -  HP: "
+	    							+valueWinner.hp
+	    							+" -  Bullets: "
+	    							+valueWinner.numBullets
+	    							+ "  Winner"
+	    							+"</li>" );
+	    				 let req = new XMLHttpRequest();
+	    		    	req.open('POST', '/addWin/'+valueWinner.name, false);
+	    		    	req.send(null);
+	    				 this.robots.delete(keyWinner);
+	    				 
+	    			 }
+	    			 
+	    			 document.getElementById("playagain-button").classList.remove("disabled");
 	    		}
 	    	}
 	    }
