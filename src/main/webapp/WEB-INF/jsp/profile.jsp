@@ -44,9 +44,9 @@
         </div>
         <div class="col-md-2 user-menu-btns">
             <div class="btn-group-vertical square" id="responsive">
-    			<a class="btn neutralColourLightBg active" href="#" role="button">Chat</a>
-    			<a class="btn neutralColourLightBg" href="#" role="button">Codes</a>
-    			<a class="btn neutralColourLightBg" href="#" role="button">Maps</a>
+    			<a class="btn neutralColourLightBg active" role="button">Chat</a>
+    			<a class="btn neutralColourLightBg" role="button">Codes</a>
+    			<a class="btn neutralColourLightBg" role="button">Maps</a>
     			<a class="btn neutralColourLightBg" onclick="logout()" role="button">Logout</a>
     			<a class="btn neutralColourLightBg" href="/" role="button">Back</a>
             </div>

@@ -23,9 +23,9 @@
 		<div class="row">
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<div class=" btn-group-vertical width-100">
-					<a class="btn btn-primary disabled" id="playagain-button" href="play" role="button" >Play again</a>
-					<a id="fullscreen" class="btn btn-primary" href="#" role="button">FullScreen</a>
+				<div class=" btn-group-vertical">
+					<a class="btn btn-primary btn-block disabled" id="playagain-button" href="play" role="button" >Play again</a>
+					<a id="fullscreen" class="btn btn-primary btn-block" role="button">FullScreen</a>
 				</div>
 			</div>
 			<div class="col-sm-4"></div>
