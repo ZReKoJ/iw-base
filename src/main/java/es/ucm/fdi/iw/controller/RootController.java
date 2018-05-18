@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,23 +93,30 @@ public class RootController{
     
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	@Transactional
+	@ResponseBody
 	public String createUser(
 			@RequestParam String nickname, 
 			@RequestParam String password) 
     {
+    	User u;
+    	try {
+    		 u = entityManager.createQuery("from User where nickname = :nickname", User.class).setParameter("nickname",  nickname).getSingleResult();
+    	}catch(NoResultException e) {
+    		u = new User();
+    		u.setNickname(nickname);
+    		u.setPassword(passwordEncoder.encode(password));
+    		u.setWin(0);
+    		u.setLose(0);
+    		u.setEnabled((byte) 0x01);
+    		u.setRoles("USER");
+    		
+    		entityManager.persist(u);
+    		entityManager.flush();
+    		
+    		return "login";
+    	}
     	
-		User u = new User();
-		u.setNickname(nickname);
-		u.setPassword(passwordEncoder.encode(password));
-		u.setWin(0);
-		u.setLose(0);
-		u.setEnabled((byte) 0x01);
-		u.setRoles("USER");
-		
-		entityManager.persist(u);
-		entityManager.flush();
-		
-		return "login";
+    	return "usernametaken";
 	}
     
     @RequestMapping(value = "/createCode", method=RequestMethod.POST)

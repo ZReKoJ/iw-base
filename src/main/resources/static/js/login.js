@@ -26,11 +26,15 @@ function login(){
 		    		password: $("#regpass").val(),
 		    		_csrf: $("#regextra").val()},
 		    		function (data) {
-		    			submitLogin();
+		    			if(data == "usernametaken"){
+		    				notifier.notify("User name already taken");
+		    			}else{
+		    				submitLogin();
+		    			}
 		    		});
 	    }
 	    else {
-	    	alert("Error");
+	    	notifier.notify("Passwords don't match");
 	    }
 	});
 	
