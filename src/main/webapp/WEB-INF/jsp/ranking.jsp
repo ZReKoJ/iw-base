@@ -16,7 +16,8 @@
         		<tr>
 					<th class ="rank">Rank</th>
 					<th class ="name">Name</th>
-					<th class="points">Points</th>
+					<th class="win">Win</th>
+					<th class="lose">Lose</th>
 				</tr>
         	</thead>
         	<tbody>
@@ -24,7 +25,8 @@
 				<tr>
 					<td class="rank"> ${status.index+1} </td>
 					<td class="name"> ${user.nickname} </td>
-					<td class="points"> ${user.score} </td>
+					<td class="win"> ${user.win} </td>
+					<td class="lose"> ${user.lose} </td>
             	</tr>
 			</c:forEach>
 			</tbody>

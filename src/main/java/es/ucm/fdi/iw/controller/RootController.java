@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,7 +101,6 @@ public class RootController{
 		u.setNickname(nickname);
 		u.setPassword(passwordEncoder.encode(password));
 		u.setWin(0);
-		u.setDraw(0);
 		u.setLose(0);
 		u.setEnabled((byte) 0x01);
 		u.setRoles("USER");
@@ -130,7 +131,6 @@ public class RootController{
 	    		Code codeObject= new Code();
 	    		User u = (User)s.getAttribute("user");
 	    		codeObject.setCreator(u);
-	    		codeObject.setDescription("");
 	    		codeObject.setName(codeFileName);
 	    		codeObject.setCreationTime(Calendar.getInstance().getTime());
 
@@ -312,7 +312,14 @@ public class RootController{
 	public String ranking(Model m) {
 		
 		List<User> users = entityManager.createQuery("from User", User.class).getResultList();
-		users = users.stream().sorted((user1, user2) -> new Integer(user2.getScore()).compareTo(new Integer(user1.getScore()))).collect(Collectors.toList());
+		Collections.sort(users, new Comparator<User>() {
+
+			@Override
+			public int compare(User user1, User user2) {
+				return (user1.getWin() > user2.getWin()) ? -1 : (user1.getLose() < user2.getLose()) ? 1 : 0;
+			}
+			
+		});
 		m.addAttribute("users", users);
 	
 		return "ranking";

@@ -14,7 +14,6 @@ public class Map {
 	private String name;
 	private Date creationTime;
 	private User creator;
-	private byte enabled;
 	
 	@Id
 	@GeneratedValue
@@ -49,13 +48,5 @@ public class Map {
 	
 	public void setCreator(User creator) {
 		this.creator = creator;
-	}
-	
-	public byte getEnabled() {
-		return enabled;
-	}
-	
-	public void setEnabled(byte enabled) {
-		this.enabled = enabled;
 	}
 }

@@ -51,6 +51,10 @@ td.rank {
 	text-align: left;
 }
 
-.points {
+.win {
+	text-align: right;
+}
+
+.lose {
 	text-align: right;
 }

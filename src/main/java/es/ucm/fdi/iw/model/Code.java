@@ -11,10 +11,8 @@ import javax.persistence.ManyToOne;
 public class Code {
 	private long id;
 	private String name;
-	private String description;
 	private Date creationTime;
 	private User creator;
-	private String codeText;
 	
 	@Id
 	@GeneratedValue
@@ -34,14 +32,6 @@ public class Code {
 		this.name = name;
 	}
 	
-	public String getDescription() {
-		return description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 	public Date getCreationTime() {
 		return creationTime;
 	}
@@ -58,14 +48,5 @@ public class Code {
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
-	
-	public String getCodeText() {
-		return codeText;
-	}
-	
-	public void setCodeText(String codeText) {
-		this.codeText = codeText;
-	}
-	
 	
 }

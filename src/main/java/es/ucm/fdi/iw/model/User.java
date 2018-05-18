@@ -18,8 +18,6 @@ public class User {
 	private String password;
 	private int win;
 	private int lose;
-	private int draw;
-	private int score;
 
 	private byte enabled;
 	private String roles; // split by , to separate roles
@@ -93,14 +91,6 @@ public class User {
 		this.lose = lose;
 	}
 
-	public int getDraw() {
-		return draw;
-	}
-
-	public void setDraw(int draw) {
-		this.draw = draw;
-	}
-
 	public String getRoles() {
 		return roles;
 	}
@@ -116,15 +106,6 @@ public class User {
 	public void setEnabled(byte enabled) {
 		this.enabled = enabled;
 	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
 
 }
 

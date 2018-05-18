@@ -1,41 +1,24 @@
--- INSERT INTO user(id,enabled,login,password,roles) VALUES (1, 1, 'a', 'aa', 'USER');
--- INSERT INTO user VALUES (2, 1, 'b', 'bb', 'USER,ADMIN');
-INSERT INTO USER VALUES(1,0,1,0,'a','$2a$04$N78IYN6VzrWZzpsy6Xvz2uCdUm7Su9FDpAqhXjAcSzCgreVM2sUnC','USER',100,0)
-INSERT INTO USER VALUES(2,0,1,0,'b','$2a$04$NwYuA6rd/UbCs3H8mntvPuqyFuUsX8sTKI1WDYwqrXhncXWIklscW','USER,ADMIN',500,0)
+INSERT INTO USER (id, nickname, password, win, lose, enabled, roles) VALUES (1, 'a', '$2a$04$N78IYN6VzrWZzpsy6Xvz2uCdUm7Su9FDpAqhXjAcSzCgreVM2sUnC', 3, 2, 1, 'USER')
+INSERT INTO USER (id, nickname, password, win, lose, enabled, roles) VALUES (2, 'b', '$2a$04$NwYuA6rd/UbCs3H8mntvPuqyFuUsX8sTKI1WDYwqrXhncXWIklscW', 8, 3, 1, 'USER,ADMIN')
+INSERT INTO USER (id, nickname, password, win, lose, enabled, roles) VALUES (3, 'Zihao', '$2a$10$5g5QoyhD/gc0nSfunbcpb.6/Hz.QOCwj1K1fW8K4PysJEL3UHA2na', 3, 4, 1, 'USER,ADMIN')
+INSERT INTO USER (id, nickname, password, win, lose, enabled, roles) VALUES (4, 'Cesar', '$2a$10$EZmm.gv.ut55XfpZb/66v.NqFfOX9iTGmN97m8Oec/MiL2Yui0bzS', 2, 8, 1, 'USER,ADMIN')
+INSERT INTO USER (id, nickname, password, win, lose, enabled, roles) VALUES (5, 'Lorenzo', '$2a$10$cTUZLEdP2z5zfdlpLTfw/.Kyf9vvYnnD5ne4Dhnh5khGmnkh5qTZy', 2, 5, 1, 'USER,ADMIN')
 
-INSERT INTO USER VALUES(3,0,1,0,'Zihao','$2a$10$5g5QoyhD/gc0nSfunbcpb.6/Hz.QOCwj1K1fW8K4PysJEL3UHA2na','USER',0,0)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(1, 'smart', '2018-05-17 18:49:15.849000', 3)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(2, 'random', '2018-05-17 18:49:32.160000', 3)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(3, 'fire', '2018-05-17 18:49:43.435000', 3)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(4, 'smart', '2018-05-17 18:50:10.803000', 4)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(5, 'up', '2018-05-17 18:50:19.039000', 4)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(6, 'left', '2018-05-17 18:50:29.217000', 4)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(7, 'smart', '2018-05-17 18:49:15.849000', 5)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(8, 'down', '2018-05-17 18:51:03.527000', 5)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(9, 'right', '2018-05-17 18:51:17.274000', 5)
 
-INSERT INTO CODE VALUES(1,NULL,'2018-05-17 18:49:15.849000','','smart',3,NULL)
-
-INSERT INTO CODE VALUES(2,NULL,'2018-05-17 18:49:32.160000','','random',3,NULL)
-
-INSERT INTO CODE VALUES(3,NULL,'2018-05-17 18:49:43.435000','','fire',3,NULL)
-
-INSERT INTO USER VALUES(4,0,1,0,'Lorenzo','$2a$10$cTUZLEdP2z5zfdlpLTfw/.Kyf9vvYnnD5ne4Dhnh5khGmnkh5qTZy','USER',0,0)
-
-INSERT INTO CODE VALUES(4,NULL,'2018-05-17 18:50:10.803000','','smart',4,NULL)
-
-INSERT INTO CODE VALUES(5,NULL,'2018-05-17 18:50:19.039000','','up',4,NULL)
-
-INSERT INTO CODE VALUES(6,NULL,'2018-05-17 18:50:29.217000','','left',4,NULL)
-
-INSERT INTO USER VALUES(5,0,1,0,'Cesar','$2a$10$EZmm.gv.ut55XfpZb/66v.NqFfOX9iTGmN97m8Oec/MiL2Yui0bzS','USER',0,0)
-
-INSERT INTO CODE VALUES(7,NULL,'2018-05-17 18:50:54.378000','','smart',5,NULL)
-
-INSERT INTO CODE VALUES(8,NULL,'2018-05-17 18:51:03.527000','','down',5,NULL)
-
-INSERT INTO CODE VALUES(9,NULL,'2018-05-17 18:51:17.274000','','right',5,NULL)
-
-INSERT INTO MAP VALUES(1,'2018-05-17 18:52:02.849000',0,'labyrinth',5,NULL)
-
-INSERT INTO MAP VALUES(2,'2018-05-17 18:53:57.548000',0,'simple',5,NULL)
-
-INSERT INTO MAP VALUES(3,'2018-05-17 18:54:36.228000',0,'cuad-zone',3,NULL)
-
-INSERT INTO MAP VALUES(4,'2018-05-17 18:54:55.239000',0,'rally',3,NULL)
-
-INSERT INTO MAP VALUES(5,'2018-05-17 18:55:40.036000',0,'complex',4,NULL)
+INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(1, 'labyrinth', '2018-05-17 18:52:02.849000', 5)
+INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(2, 'simple', '2018-05-17 18:53:57.548000', 5)
+INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(3, 'cuad-zone', '2018-05-17 18:54:36.228000', 4)
+INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(4, 'rally', '2018-05-17 18:54:55.239000', 4)
+INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(5, 'complex', '2018-05-17 18:55:40.036000', 3)
 
 
 
