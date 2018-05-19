@@ -83,7 +83,7 @@ function start(battleGround, codes){
 				);
 			$("#robot_" + robot.info.id)[0].addEventListener("click", function(e){
 				if (battleGround.followRobot == null || battleGround.followRobot != robot.info.id) {
-					if (battleGround.followRobot != null){
+					if (battleGround.followRobot != null && battleGround.robots.has("robot_" + battleGround.followRobot)){
 						battleGround.robots.get("robot_" + battleGround.followRobot).setFollow(false);
 					}
 					battleGround.followRobot = robot.info.id;

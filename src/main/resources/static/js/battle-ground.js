@@ -253,20 +253,12 @@ class BattleGround {
 		    	}
 	    	}
 	    	else {
-	    		
 	    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
-	    		
 	    		this.robots.delete(key);
-	    		console.log(value.info.name + " was eliminated");
-	    		console.log("Robots left: " + this.robots.size);
 	    		if (this.robots.size == 1) {
-	    			
 	    			 for (let [keyWinner, valueWinner] of this.robots) {
-	   
 	    				 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
-	    				 
 	    			 }
-	    			 
 	    			 document.getElementById("playagain-button").classList.remove("disabled");
 	    		}
 	    	}
