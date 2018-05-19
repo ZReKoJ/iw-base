@@ -9,10 +9,10 @@ INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(2, 'random', '2018
 INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(3, 'fire', '2018-05-17 18:49:43.435000', 3)
 INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(4, 'smart', '2018-05-17 18:50:10.803000', 4)
 INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(5, 'up', '2018-05-17 18:50:19.039000', 4)
-INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(6, 'left', '2018-05-17 18:50:29.217000', 4)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(6, 'left', '2018-05-17 18:50:29.217000', 2)
 INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(7, 'smart', '2018-05-17 18:49:15.849000', 5)
 INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(8, 'down', '2018-05-17 18:51:03.527000', 5)
-INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(9, 'right', '2018-05-17 18:51:17.274000', 5)
+INSERT INTO CODE (id, name, creation_time, creator_id) VALUES(9, 'right', '2018-05-17 18:51:17.274000', 1)
 
 INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(1, 'labyrinth', '2018-05-17 18:52:02.849000', 5)
 INSERT INTO MAP (id, name, creation_time, creator_id) VALUES(2, 'simple', '2018-05-17 18:53:57.548000', 5)

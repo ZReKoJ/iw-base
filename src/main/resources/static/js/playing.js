@@ -14,7 +14,7 @@ function playing(map, code, enemies) {
 		data = JSON.parse(data);
 		battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 		battleGround.fillContent(data, function(){
-			start(battleGround, code, enemies);
+			start(battleGround, new Array(code).concat(enemies));
 		});
 	});
 
@@ -68,19 +68,14 @@ function playing(map, code, enemies) {
 
 }
 
-function start(battleGround, code, enemies){
+function start(battleGround, codes){
 	
-	let robots = new Map();
 	let robot = undefined;
 	
-	loadData('/loadCode/' + code.id, function(data){
-		robot = new Robot(code, "/static/img/robot/robot (10).png", data, battleGround).setFollow(true);
-		battleGround.addRobot(robot);
-		enemies.forEach(function(element) {
-			loadData('/loadCode/' + element.id, function(data){
-				robot = new Robot(element, "/static/img/robot/robot (3).png", data, battleGround);
-				battleGround.addRobot(robot);
-			});
+	codes.forEach(function(element) {
+		loadData('/loadCode/' + element.id, function(data){
+			robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 12) + 1) + ").png", data, battleGround);
+			battleGround.addRobot(robot);
 		});
 	});
 	
