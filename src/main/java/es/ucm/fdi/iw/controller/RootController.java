@@ -100,24 +100,28 @@ public class RootController{
     
     @PostMapping(value = "/addLoss")
 	@Transactional
-	public void addLossHandler(
+	@ResponseBody
+	public String addLossHandler(
 			@RequestParam("id") long id) 
     {
     	
     	User u = entityManager.find(User.class, id);
 		u.setLose(u.getLose()+1);	
 		log.info("Adding a loss to " + id + ": now at " + u.getLose());
+		return "";
 	}
     
     @PostMapping(value = "/addWin")
 	@Transactional
-	public void addWinHandler(
+	@ResponseBody
+	public String addWinHandler(
 			@RequestParam("id") long id) 
     {
     	
     	User u = entityManager.find(User.class, id);
 		u.setWin(u.getWin()+1);
 		log.info("Adding a win to " + id + ": now at " + u.getLose());
+		return "";
 	}
     
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)

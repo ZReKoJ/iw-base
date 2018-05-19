@@ -254,11 +254,7 @@ class BattleGround {
 	    	}
 	    	else {
 	    		
-	    		$.post( "/addLoss", { "id": value.name, "_csrf": csrf_data.token }, 
-	    				function (data) { console.log("lost response: ", data); }
-	    		);
-	    		
-	    		
+	    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
 	    		
 	    		this.robots.delete(key);
 	    		console.log(value.info.name + " was eliminated");
@@ -266,18 +262,8 @@ class BattleGround {
 	    		if (this.robots.size == 1) {
 	    			
 	    			 for (let [keyWinner, valueWinner] of this.robots) {
-	    				 $( "#"+ valueWinner.name).replaceWith( "<li class=\"list-group-item active\" id=\""+ valueWinner.name+"\" >"
-	    							+valueWinner.driver.toUpperCase()
-	    							+" -  HP: "
-	    							+valueWinner.hp
-	    							+" -  Bullets: "
-	    							+valueWinner.numBullets
-	    							+ "  Winner"
-	    							+"</li>" );
-	    				 this.robots.delete(keyWinner);
-	    				 $.post( "/addWin", {"id": valueWinner.name,  "_csrf": csrf_data.token }, 
-	    		    				function (data) { console.log("win response: ", data); }
-	    		    			  );
+	   
+	    				 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
 	    				 
 	    			 }
 	    			 
