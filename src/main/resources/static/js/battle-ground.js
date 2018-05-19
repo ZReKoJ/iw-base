@@ -244,24 +244,18 @@ class BattleGround {
 		    	}
 	    	}
 	    	else {
-	    		/*
-	    		$.get( "/addLoss", { "id": value.name, "_csrf": csrf_data.token }, 
+	    		
+	    		$.post( "/addLoss", { "id": value.name, "_csrf": csrf_data.token }, 
 	    				function (data) { console.log("lost response: ", data); }
 	    		);
 	    		
-	    		for (let [keyWinner, valueWinner] of this.robots) {
-	    		  if (valueWinner.name != value.name) {
-	    			  $.get( "/addWin", {"id": valueWinner.name,  "_csrf": csrf_data.token }, 
-	    				function (data) { console.log("win response: ", data); }
-	    			  )
-	    		  }
-	    		}
-	    		*/
+	    		
+	    		
 	    		this.robots.delete(key);
 	    		console.log(value.info.name + " was eliminated");
 	    		console.log("Robots left: " + this.robots.size);
 	    		if (this.robots.size == 1) {
-	    			/*
+	    			
 	    			 for (let [keyWinner, valueWinner] of this.robots) {
 	    				 $( "#"+ valueWinner.name).replaceWith( "<li class=\"list-group-item active\" id=\""+ valueWinner.name+"\" >"
 	    							+valueWinner.driver.toUpperCase()
@@ -272,10 +266,13 @@ class BattleGround {
 	    							+ "  Winner"
 	    							+"</li>" );
 	    				 this.robots.delete(keyWinner);
+	    				 $.post( "/addWin", {"id": valueWinner.name,  "_csrf": csrf_data.token }, 
+	    		    				function (data) { console.log("win response: ", data); }
+	    		    			  );
 	    				 
 	    			 }
-	    			 */
-	    			 //document.getElementById("playagain-button").classList.remove("disabled");
+	    			 
+	    			 document.getElementById("playagain-button").classList.remove("disabled");
 	    		}
 	    	}
 	    }

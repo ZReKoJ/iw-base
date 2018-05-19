@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,35 @@ public class RootController{
         model.addAttribute("s", "/static");
     }
     
-    @GetMapping(value = "/addLoss")
+    @PostMapping(value = "/deleteCodes")
+    @Transactional
+    @ResponseBody
+	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes)
+    {
+    	
+    	for (String id : codes) {
+    		Code code = entityManager.find(Code.class, Long.parseLong(id));
+    		entityManager.remove(code);
+    	}
+    
+    	 return  "/profile";
+	}
+    
+    @PostMapping(value = "/deleteMaps")
+    @Transactional
+    @ResponseBody
+	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps)
+    {
+    	
+    	for (String id : maps) {
+    		Map map = entityManager.find(Map.class, Long.parseLong(id));
+    		entityManager.remove(map);
+    	}
+    
+    	 return  "/profile";
+	}
+    
+    @PostMapping(value = "/addLoss")
 	@Transactional
 	public void addLossHandler(
 			@RequestParam("id") long id) 
@@ -80,7 +109,7 @@ public class RootController{
 		log.info("Adding a loss to " + id + ": now at " + u.getLose());
 	}
     
-    @GetMapping(value = "/addWin")
+    @PostMapping(value = "/addWin")
 	@Transactional
 	public void addWinHandler(
 			@RequestParam("id") long id) 

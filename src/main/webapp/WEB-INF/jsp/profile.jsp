@@ -70,14 +70,18 @@
                 <h3 class="centered">Your codes</h3>
                 <c:choose>
 					<c:when test="${myCodesSize > 0}">
-					<ul class="list-group">
-						<c:forEach var="code" items="${myCodes}">
-							<a href="code-design?id=${code.id}"><li class="list-group-item">${code.name}</li></a>
-						</c:forEach>
-					</ul>
+						
+							<c:forEach var="code" items="${myCodes}">
+ 								<span class="button-checkbox">
+							        <button type="button" class="btn leftered width-100" data-color="default">${code.name}</button>
+							        <input type="checkbox" class="hidden" name="codes" value="${code.id}"/>
+							    </span>
+ 							</c:forEach>	 
+							<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="deleteCodes()">Delete selected codes</button>
 					</c:when>
 					<c:otherwise>
 						<p class="centered"> No codes uploaded yet!
+						
 					</c:otherwise>
 				</c:choose>
 	        </div>
@@ -85,11 +89,13 @@
                 <h3 class="centered">Your maps</h3>
                 <c:choose>
 					<c:when test="${myMapsSize > 0}">
-					<ul class="list-group">
-						<c:forEach var="map" items="${myMaps}">
-							<a href="map-design?id=${map.id}"><li class="list-group-item">${map.name}</li></a>
-						</c:forEach>
-					</ul>
+					<c:forEach var="map" items="${myMaps}">
+ 								<span class="button-checkbox">
+							        <button type="button" class="btn leftered width-100" data-color="default">${map.name}</button>
+							        <input type="checkbox" name="maps"class="hidden" value="${map.id}"/>
+							    </span>
+ 							</c:forEach>	 
+							<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="deleteMaps()">Delete selected maps</button>
 					</c:when>
 					<c:otherwise>
 						<p class="centered"> No maps uploaded yet!
