@@ -305,6 +305,9 @@ public class RootController{
 	public String profile(HttpServletRequest request, HttpSession s, Model m) {
 		
 		User u = (User) s.getAttribute("user");
+		u = entityManager.find(User.class, u.getId());
+		s.setAttribute("user", u);
+		
 		List<Code> myCodes = entityManager
 				.createQuery("from Code where creator = :nickname", Code.class)
 				.setParameter("nickname", u)
