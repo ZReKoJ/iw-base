@@ -32,11 +32,16 @@ class Notifier {
 	}
 	
 	notify(text, type) { //
-	    var html = '<div class="alert alert-' + type + ' alert-dismissable page-alert">';    
+	    var html = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">';    
 	    html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
 	    html += text;
 	    html += '</div>';    
-	    $(html).hide().prependTo('#noty-holder').slideDown();
+	    $(html).prependTo('#noty-holder');
+	    setTimeout(
+	    		function(){
+	    			$('.alert').last().alert('close')
+	    		},
+	    		4000);
 	}
 }
 
