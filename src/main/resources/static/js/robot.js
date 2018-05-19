@@ -32,15 +32,13 @@ class Robot {
 		this.def = 1;
 		this.numBullets = 5;
 		
-		$( "#rank" ).append( "<li class=\"list-group-item\" id=\""+ this.info.id + "\">"
-				+ this.info.creatorName.toUpperCase() + ": "
-				+ this.info.name 
-				+ "  HP: "
-				+ this.hp
-				+ "  Bullets: "
-				+ this.numBullets
-				+ "</li>" 
-				);
+		$( "#rank" )
+			.append( "<div id=\"robot_" + this.info.id + "\" class=\"progress\">"
+				+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + this.hp + "%;\" aria-valuenow=\"" + this.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
+				+ "<span class=\"progress-type\">" + this.info.name + "/" + this.info.creatorName.toUpperCase() + "</span>"
+				+ "<span class=\"progress-completed\">" + this.hp + "% " + this.numBullets + " bullets</span>"				
+				+ "</div>"
+			);
 		
 		this.closeRobots = [];
 		this.block = battleGround.BLOCKS.NOTHING;
@@ -65,15 +63,12 @@ class Robot {
 	}
 	
 	notify() {
-		$( "#"+ this.info.id).replaceWith( "<li class=\"list-group-item\" id=\"" + this.info.id + "\">"
-				+ this.info.creatorName.toUpperCase() + ": "
-				+ this.info.name 
-				+ "  HP: "
-				+ this.hp
-				+ "  Bullets: "
-				+ this.numBullets
-				+ "</li>" 
-				);
+		$( "#robot_"+ this.info.id).replaceWith( "<div id=\"robot_" + this.info.id + "\" class=\"progress\">"
+				+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + this.hp + "%;\" aria-valuenow=\"" + this.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
+				+ "<span class=\"progress-type\">" + this.info.name + "/" + this.info.creatorName.toUpperCase() + "</span>"
+				+ "<span class=\"progress-completed\">" + this.hp + "% " + this.numBullets + " bullets</span>"				
+				+ "</div>"
+			);
 	}
 	
 	gotHit(bullet, a, b){

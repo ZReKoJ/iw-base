@@ -4,6 +4,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
+<link href="${s}/css/playing.css" rel="stylesheet">
 
 <div class="row" id="game-zone">
 		
@@ -14,9 +15,8 @@
 		<div class="row">
 			<div class="col-sm-2"></div>
 			<div class="col-sm-8">
-				<ul class="list-group" id="rank">
-		  			
-				</ul>
+				<div id="rank" class="row">
+		       	</div>
 			</div>
 			<div class="col-sm-2"></div>
 		</div>

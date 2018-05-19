@@ -100,7 +100,7 @@ class BattleGround {
 	}
 	
 	addRobot(robot){
-		this.robots.set(robot.info.id, robot);
+		this.robots.set("robot_" + robot.info.id, robot);
 	}
 	
 	fillContent(data, callback){
