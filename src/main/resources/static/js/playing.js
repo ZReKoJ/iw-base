@@ -83,12 +83,15 @@ function start(battleGround, codes){
 				);
 			$("#robot_" + robot.info.id)[0].addEventListener("click", function(e){
 				if (battleGround.followRobot == null || battleGround.followRobot != robot.info.id) {
+					if (battleGround.followRobot != null){
+						battleGround.robots.get("robot_" + battleGround.followRobot).setFollow(false);
+					}
 					battleGround.followRobot = robot.info.id;
-					console.log("follow" + robot.info.name);
+					robot.setFollow(true);
 				}
 				else {
 					battleGround.followRobot = null;
-					console.log("unfollow" + robot.info.name);
+					robot.setFollow(false);
 				}
 			});
 		});

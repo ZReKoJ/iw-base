@@ -55,17 +55,20 @@ class Robot {
 	}
 	
 	notify() {
-		let hp = this.hp;
-		let numBullets = this.numBullets;
-		$("#robot_"+ this.info.id)[0].childNodes.forEach(function(element){
+		let childNodes = $("#robot_"+ this.info.id)[0].childNodes;
+		for (let i = 0; i < childNodes.length; ++i) {
+			let element = childNodes[i];
 			if (element.className == 'progress-bar progress-bar-success'){
-				element.style.width = hp + "%";
-				element.setAttribute("aria-valuenow", hp);
+				element.style.width = this.hp + "%";
+				element.setAttribute("aria-valuenow", this.hp);
+			}
+			if (element.className == 'progress-type'){
+				element.innerHTML = ((this.follow) ? "*" : "") + this.info.name + "/" + this.info.creatorName.toUpperCase();
 			}
 			if (element.className == 'progress-completed'){
-				element.innerHTML = hp + "% " + numBullets;
+				element.innerHTML = this.hp + "% " + this.numBullets;
 			}
-		});
+		}
 	}
 	
 	gotHit(bullet, a, b){
