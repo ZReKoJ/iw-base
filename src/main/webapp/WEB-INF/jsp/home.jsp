@@ -17,8 +17,7 @@
 <div class="titlecontainer">
     <div class="titlename"> ROBOTRON 2000 </div>
     <div class="titletext"> Develop a robot to battle against other robots. Show off your mad Javascript skills, try yourself against the best of the best.</div>
-								<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="deleteMaps()">Delete selected maps</button>
-	
+    	
 </div>
 
 <script>
