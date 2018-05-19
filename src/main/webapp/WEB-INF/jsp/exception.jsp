@@ -16,6 +16,6 @@
         <link href="${s}/css/stylesheet.css" rel="stylesheet">
     </head>
     <body>
-    	<h1>Error</h1>
+    	<h1 class="bigpaddingtop text-center page-title text-uppercase font-weight-bold">An error has occurred</h1>
     </body>
 </html>
