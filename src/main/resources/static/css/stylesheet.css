@@ -122,23 +122,7 @@ label{
 	color:black;
 }
 
-/*results*/
-.winner{
-	color: green;
-}
-.loser{
-	color: red;
-}
-
-.progress{
-	margin-bottom: 8px;
-}
-
-.no_margin{
-	margin:0;
-}
-
-/* profile */
+/* NavBar Profile */
 #userProfileIcon {
 	height: 24px;
 	width: 24px;

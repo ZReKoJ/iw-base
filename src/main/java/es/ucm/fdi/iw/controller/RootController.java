@@ -255,17 +255,32 @@ public class RootController{
     
 	@GetMapping("/map-design")
 	public String map_design(@RequestParam(required=false) String id,
-			Model m) {
-		if (id != null && !id.isEmpty())
-			m.addAttribute("mapId", id);
+			Model m, HttpSession s) {
+		if (id != null && !id.isEmpty()) {
+			long uidSession = ((User) s.getAttribute("user")).getId();
+			long uidParam = entityManager.find(Map.class, Long.parseLong(id)).getCreator().getId();
+				
+			if( uidParam == uidSession)
+				m.addAttribute("mapId", id);
+			else
+				return "exception"; //
+		}
+			
 		return "map-design";
 	}
 	
 	@GetMapping("/code-design")
 	public String code_design(@RequestParam(required=false) String id,
-			Model m) {
-		if (id != null && !id.isEmpty())
-			m.addAttribute("codeId", id);
+			Model m, HttpSession s) {
+		if (id != null && !id.isEmpty()) {
+			long uidSession = ((User) s.getAttribute("user")).getId();
+			long uidParam = entityManager.find(Code.class, Long.parseLong(id)).getCreator().getId();
+			
+			if( uidParam == uidSession)
+				m.addAttribute("codeId", id);
+			else
+				return "exception";
+		}
 		return "code-design";
 	}
 	
