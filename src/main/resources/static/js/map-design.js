@@ -155,7 +155,7 @@ function mapDesign(mapId) {
     };
 
 	let path;
-	for (let x = 0; x < 137; x++){
+	for (let x = 0; x <= 30; x++){
 		path = "<img class='icon' src='/static/img/map/component (" + x + ").png'>";
 		$('#grid-element').append(path)
 	}
@@ -179,10 +179,11 @@ function mapDesign(mapId) {
 			$.post("/createMap", {
 				"_csrf" : csrf_data.token, 
 				"json" : battleGround.json(),
-				"mapFileName": document.getElementById("mapFileName").value});
+				"mapFileName": document.getElementById("mapFileName").value},
+				function(data){notifier.success(data)});
 		}
 		else {
-			alert("Error: No file name");
+			notifier.warning("Name is required");
 		}
 	});
 	

@@ -25,9 +25,15 @@ function codeDesign(codeId) {
 	});
 
 	document.getElementById("upload").addEventListener("click", function(e){
+		e.preventDefault();
 		if (document.getElementById("codeFileName").value == ""){
-			e.preventDefault();
-			alert("Error: No file name");
+			notifier.warning("Name is required");
+		}else{
+			$.post("/createCode", {
+				"_csrf" : csrf_data.token, 
+				"code" : codeMirrorEditor.getValue(),
+				"codeFileName": $("#codeFileName").val()},
+				function(data){notifier.success(data)});
 		}
 	});
 	

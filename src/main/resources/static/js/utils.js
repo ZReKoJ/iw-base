@@ -21,18 +21,26 @@ function loadData(path, callback){
 
 class Notifier {
 	
-	notify(text){
-		alert(text);
+	success(text){
+		this.notify(text, "success");
 	}
 	error(text){
-		alert(text);
+		this.notify(text, "danger");
+	}
+	warning(text){
+		this.notify(text, "warning")
 	}
 	
-	notify(text, message, callback){
-		alert(text);
-		if (typeof callback === "function") { callback(); }
+	notify(text, type) { //
+	    var html = '<div class="alert alert-' + type + ' alert-dismissable page-alert">';    
+	    html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
+	    html += text;
+	    html += '</div>';    
+	    $(html).hide().prependTo('#noty-holder').slideDown();
 	}
 }
+
+
 
 class ImageLoader{
 	constructor(){

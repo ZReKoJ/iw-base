@@ -66,7 +66,7 @@ class Robot {
 				element.innerHTML = ((this.follow) ? "*" : "") + this.info.name + "/" + this.info.creatorName.toUpperCase();
 			}
 			if (element.className == 'progress-completed'){
-				element.innerHTML = this.hp + "% " + this.numBullets;
+				element.innerHTML = Math.ceil(this.hp) + "% " + this.numBullets;
 			}
 		}
 	}
