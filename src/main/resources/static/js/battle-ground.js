@@ -35,6 +35,7 @@ class BattleGround {
 		}
 		
 		this.robots = new Map();
+		this.followRobot = null;
 	}
 	
 	defineMouseAt(x, y){
@@ -214,6 +215,14 @@ class BattleGround {
 	}
 	
 	drawMapContent(){
+		if (this.followRobot != null) {
+			let robot = this.robots.get("robot_" + this.followRobot);
+			if (robot != null) {
+				this.mapCenter.x = Math.floor(this.table.width * robot.x);
+				this.mapCenter.y = Math.floor(this.table.height * robot.y);
+				this.defineMapFeature();
+			}
+		}
 	    for (let i = 0; i < this.rows; i++)
 	        for (let j = 0; j < this.cols; j++)
 	            if (this.mapContent[i][j] != undefined && this.mapContent[i][j].image != undefined)
