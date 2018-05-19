@@ -169,7 +169,7 @@ class BattleGround {
 			this.BLOCKS.GRASS,
 			this.BLOCKS.GROUND,
 			this.BLOCKS.BRIDGE,
-			this.BLOCKS.BUSH
+			this.BLOCKS.MAGMA
 		];
 		let yes = false;
 		for (let i in moveOn) {
@@ -181,9 +181,30 @@ class BattleGround {
 	canIShotBulletOn(cell) {
 		let shotBulletOn = [
 			this.BLOCKS.NOTHING,
-			this.BLOCKS.MUD_BARRIER,
-			this.BLOCKS.CEMENT_BARRIER,
-			this.BLOCKS.METAL_BARRIER
+			this.BLOCKS.BARRIER_7,
+			this.BLOCKS.BARRIER_8,
+			this.BLOCKS.BARRIER_9,
+			this.BLOCKS.BARRIER_10,
+			this.BLOCKS.BARRIER_11,
+			this.BLOCKS.BARRIER_12,
+			this.BLOCKS.BARRIER_13,
+			this.BLOCKS.BARRIER_14,
+			this.BLOCKS.BARRIER_15,
+			this.BLOCKS.BARRIER_16,
+			this.BLOCKS.BARRIER_17,
+			this.BLOCKS.BARRIER_18,
+			this.BLOCKS.BARRIER_19,
+			this.BLOCKS.BARRIER_20,
+			this.BLOCKS.BARRIER_21,
+			this.BLOCKS.BARRIER_22,
+			this.BLOCKS.BARRIER_23,
+			this.BLOCKS.BARRIER_24,
+			this.BLOCKS.BARRIER_25,
+			this.BLOCKS.BARRIER_26,
+			this.BLOCKS.BARRIER_27,
+			this.BLOCKS.BARRIER_28,
+			this.BLOCKS.BARRIER_29,
+			this.BLOCKS.BARRIER_30
 		];
 		let yes = false;
 		for (let i in shotBulletOn) {
