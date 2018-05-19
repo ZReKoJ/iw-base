@@ -154,6 +154,7 @@ public class RootController{
     
     @RequestMapping(value = "/createCode", method=RequestMethod.POST)
     @Transactional
+    @ResponseBody
     public String handleCreateCode(
     		HttpServletResponse response,
     		@RequestParam String code,
@@ -187,7 +188,7 @@ public class RootController{
 	    			error = "Upload failed " + codeFileName + " => " + e.getMessage();
 	    		}
 	  
-	            return "/code-design";
+	            return "Code uploaded";
 	            
         }
         // exit with error, blame user
@@ -197,6 +198,7 @@ public class RootController{
     
     @RequestMapping(value="/createMap", method=RequestMethod.POST)
     @Transactional
+    @ResponseBody
     public String handleCreateMap(
     		HttpServletResponse response,
     		@RequestParam String json,
@@ -228,7 +230,7 @@ public class RootController{
 	    		} catch (Exception e) {
 	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
 	    		}
-	    		return "/map-design";
+	    		return "Map uploaded";
         }
       
      // exit with error, blame user

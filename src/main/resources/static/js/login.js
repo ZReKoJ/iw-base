@@ -27,14 +27,14 @@ function login(){
 		    		_csrf: $("#regextra").val()},
 		    		function (data) {
 		    			if(data == "usernametaken"){
-		    				notifier.notify("User name already taken");
+		    				notifier.warning("Username already taken");
 		    			}else{
 		    				submitLogin();
 		    			}
 		    		});
 	    }
 	    else {
-	    	notifier.notify("Passwords don't match");
+	    	notifier.warning("Passwords don't match");
 	    }
 	});
 	

@@ -122,6 +122,13 @@ label{
 	color:black;
 }
 
+#noty-holder{     
+    top: 0;
+    font-weight: bold;    
+    z-index: 1031;
+    text-align: center;
+}
+
 /* NavBar Profile */
 #userProfileIcon {
 	height: 24px;

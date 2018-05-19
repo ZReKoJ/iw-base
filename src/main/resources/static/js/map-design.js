@@ -179,10 +179,11 @@ function mapDesign(mapId) {
 			$.post("/createMap", {
 				"_csrf" : csrf_data.token, 
 				"json" : battleGround.json(),
-				"mapFileName": document.getElementById("mapFileName").value});
+				"mapFileName": document.getElementById("mapFileName").value},
+				function(data){notifier.success(data)});
 		}
 		else {
-			alert("Error: No file name");
+			notifier.warning("Name is required");
 		}
 	});
 	
