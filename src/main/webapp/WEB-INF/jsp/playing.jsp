@@ -12,23 +12,13 @@
         <canvas id="canvas"></canvas>
 	</div>
 	<div class="col-sm-5">
-		<div class="row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
-				<div id="rank" class="row">
-		       	</div>
+		<div class="row" style="margin-left: 1px;">
+			<div id="rank" class="row">
+	       	</div>
+			<div class=" btn-group btn-group-justified">
+				<a class="btn btn-primary btn-block disabled" id="playagain-button" href="play" role="button" >Play again</a>
+				<a id="fullscreen" class="btn btn-primary btn-block" role="button">FullScreen</a>
 			</div>
-			<div class="col-sm-2"></div>
-		</div>
-		<div class="row">
-			<div class="col-sm-4"></div>
-			<div class="col-sm-4">
-				<div class=" btn-group-vertical">
-					<a class="btn btn-primary btn-block disabled" id="playagain-button" href="play" role="button" >Play again</a>
-					<a id="fullscreen" class="btn btn-primary btn-block" role="button">FullScreen</a>
-				</div>
-			</div>
-			<div class="col-sm-4"></div>
 		</div>
 	</div>
 </div>

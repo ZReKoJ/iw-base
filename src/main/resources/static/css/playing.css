@@ -1,6 +1,7 @@
 .progress {
     position: relative;
 	height: 25px;
+	margin: 1px;
 }
 .progress > .progress-type {
 	position: absolute;

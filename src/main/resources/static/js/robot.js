@@ -32,14 +32,6 @@ class Robot {
 		this.def = 1;
 		this.numBullets = 5;
 		
-		$( "#rank" )
-			.append( "<div id=\"robot_" + this.info.id + "\" class=\"progress\">"
-				+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + this.hp + "%;\" aria-valuenow=\"" + this.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
-				+ "<span class=\"progress-type\">" + this.info.name + "/" + this.info.creatorName.toUpperCase() + "</span>"
-				+ "<span class=\"progress-completed\">" + this.hp + "% " + this.numBullets + " bullets</span>"				
-				+ "</div>"
-			);
-		
 		this.closeRobots = [];
 		this.block = battleGround.BLOCKS.NOTHING;
 		
@@ -63,12 +55,17 @@ class Robot {
 	}
 	
 	notify() {
-		$( "#robot_"+ this.info.id).replaceWith( "<div id=\"robot_" + this.info.id + "\" class=\"progress\">"
-				+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + this.hp + "%;\" aria-valuenow=\"" + this.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
-				+ "<span class=\"progress-type\">" + this.info.name + "/" + this.info.creatorName.toUpperCase() + "</span>"
-				+ "<span class=\"progress-completed\">" + this.hp + "% " + this.numBullets + " bullets</span>"				
-				+ "</div>"
-			);
+		let hp = this.hp;
+		let numBullets = this.numBullets;
+		$("#robot_"+ this.info.id)[0].childNodes.forEach(function(element){
+			if (element.className == 'progress-bar progress-bar-success'){
+				element.style.width = hp + "%";
+				element.setAttribute("aria-valuenow", hp);
+			}
+			if (element.className == 'progress-completed'){
+				element.innerHTML = hp + "% " + numBullets;
+			}
+		});
 	}
 	
 	gotHit(bullet, a, b){
@@ -147,12 +144,6 @@ class Robot {
 			if (battleGround.BLOCKS[block].id == battleGround.checkPosition(new Point(this.x, this.y))){
 				this.block = battleGround.BLOCKS[block];
 			}
-		}
-		
-		if (this.follow){
-			battleGround.mapCenter.x = Math.floor(battleGround.table.width * this.x);
-			battleGround.mapCenter.y = Math.floor(battleGround.table.height * this.y);
-			battleGround.defineMapFeature();
 		}
 		
 		this.notify();

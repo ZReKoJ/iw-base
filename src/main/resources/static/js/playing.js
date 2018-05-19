@@ -70,12 +70,27 @@ function playing(map, code, enemies) {
 
 function start(battleGround, codes){
 	
-	let robot = undefined;
-	
 	codes.forEach(function(element) {
 		loadData('/loadCode/' + element.id, function(data){
-			robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 12) + 1) + ").png", data, battleGround);
+			let robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 12) + 1) + ").png", data, battleGround);
 			battleGround.addRobot(robot);
+			$("#rank")
+				.append( "<div id=\"robot_" + robot.info.id + "\" class=\"progress\">"
+					+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + robot.hp + "%;\" aria-valuenow=\"" + robot.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
+					+ "<span class=\"progress-type\">" + robot.info.name + "/" + robot.info.creatorName.toUpperCase() + "</span>"
+					+ "<span class=\"progress-completed\">" + robot.hp + "% " + robot.numBullets + " bullets</span>"				
+					+ "</div>"
+				);
+			$("#robot_" + robot.info.id)[0].addEventListener("click", function(e){
+				if (battleGround.followRobot == null || battleGround.followRobot != robot.info.id) {
+					battleGround.followRobot = robot.info.id;
+					console.log("follow" + robot.info.name);
+				}
+				else {
+					battleGround.followRobot = null;
+					console.log("unfollow" + robot.info.name);
+				}
+			});
 		});
 	});
 	
