@@ -32,11 +32,21 @@ class Notifier {
 	}
 	
 	notify(text, type) { //
-	    var html = '<div class="alert alert-' + type + ' alert-dismissable page-alert">';    
-	    html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>';
-	    html += text;
-	    html += '</div>';    
-	    $(html).hide().prependTo('#noty-holder').slideDown();
+	    let html = '<div class="alert alert-' + type + ' alert-dismissable page-alert">'    
+	    	+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+	    	+ '<span aria-hidden="true">'
+	    	+ '×'
+	    	+ '</span>'
+	    	+ '<span class="sr-only">'
+	    	+ 'Close'
+	    	+ '</span>'
+	    	+ '</button>'
+	    	+ text 
+	    	+ '</div>';
+	    let element = $(html);
+	    element.hide().prependTo('#noty-holder').slideDown().delay(3000).fadeOut("slow", function(){
+	    	element.remove();
+	    });
 	}
 }
 
