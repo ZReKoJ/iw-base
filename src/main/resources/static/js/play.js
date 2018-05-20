@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 	$("#owned-codes").change(function() {
 		$("#all-codes option:disabled").prop("disabled", false);
-		var selectedCodeId = $("#owned-codes option:selected").attr("id")
+		let selectedCodeId = $("#owned-codes option:selected").attr("id")
 		if (selectedCodeId != undefined)
 			selectedCodeId.replace("owned-", "");
 		$("#all-" + selectedCodeId).prop("disabled", true);
@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		
 		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
 			$("#play-submit").prop("disabled", false);
-		}else{
+		}
+		else{
 			$("#play-submit").prop("disabled", true);
 		}
 	});
@@ -20,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	$("#all-maps").change(function() {
 		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
 			$("#play-submit").prop("disabled", false);
-		}else{
+		}
+		else{
 			$("#play-submit").prop("disabled", true);
 		}
 	});
@@ -28,7 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	$("#all-codes").change(function() {
 		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
 			$("#play-submit").prop("disabled", false);
-		}else{
+		}
+		else{
 			$("#play-submit").prop("disabled", true);
 		}
 	});
