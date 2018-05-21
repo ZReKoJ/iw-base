@@ -9,13 +9,12 @@
 <div class="row user-menu-container square whiteBg">
         <div class="col-md-7 user-details">
             <div class="row neutralColourDarkBg white">
-            	<div class="col-md-3 class="circle-avatar"">
+            	<div class="col-md-3" class="circle-avatar">
             		<img src="avatar/${user.id}" class="circle-avatar">
             	</div>
             	<div class="col-md-9 no-pad">
                     <div class="user-pad">
                         <h3>Welcome back, ${user.nickname}</h3>
-                        <h4 class="white"><i class="fa fa-check-circle-o"></i>Platino</h4>
                     </div>
                 </div>
             </div>
@@ -70,14 +69,20 @@
                 <h3 class="centered">Your codes</h3>
                 <c:choose>
 					<c:when test="${myCodesSize > 0}">
-						
 							<c:forEach var="code" items="${myCodes}">
- 								<span class="button-checkbox">
-							        <button type="button" class="btn leftered width-100" data-color="default">${code.name}</button>
-							        <input type="checkbox" class="hidden" name="codes" value="${code.id}"/>
-							    </span>
+								<div class="row profile-list">
+									<div class="col-sm-7">
+										${code.name}
+									</div>
+									<div class="col-sm-2">
+										<a href="code-design?codeId=${code.id }"> Edit </a>
+									</div>
+									<div class="col-sm-2">
+										<a href="deleteCode?codeId=${code.id }"> Delete </a>
+									</div>
+								</div>
  							</c:forEach>	 
-							<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="deleteCodes()">Delete selected codes</button>
+							
 					</c:when>
 					<c:otherwise>
 						<p class="centered"> No codes uploaded yet!
@@ -90,12 +95,18 @@
                 <c:choose>
 					<c:when test="${myMapsSize > 0}">
 					<c:forEach var="map" items="${myMaps}">
- 								<span class="button-checkbox">
-							        <button type="button" class="btn leftered width-100" data-color="default">${map.name}</button>
-							        <input type="checkbox" name="maps"class="hidden" value="${map.id}"/>
-							    </span>
+ 								<div class="row profile-list">
+									<div class="col-sm-7">
+										${map.name}
+									</div>
+									<div class="col-sm-2">
+										<a href="map-design?mapId=${map.id }"> Edit </a>
+									</div>
+									<div class="col-sm-2">
+										<a href="deleteMap?mapId=${map.id }"> Delete </a>
+									</div>
+								</div>
  							</c:forEach>	 
-							<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="deleteMaps()">Delete selected maps</button>
 					</c:when>
 					<c:otherwise>
 						<p class="centered"> No maps uploaded yet!

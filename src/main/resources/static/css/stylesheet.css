@@ -248,6 +248,28 @@ label{
 	margin-bottom:6%;
  }
  
+ @media only screen and (max-width: 992px) {
+    .circle-avatar{
+ 	width: 40%;
+ 	margin-left:30%;
+ 	margin-right:30%;
+	height: 120px;
+	border-radius: 50%;
+	position: relative;
+    overflow: hidden;
+	
+ 	}
+ 	 .circle-avatar img{
+ 	display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+ }
+ 	.user-pad{
+ 	text-align:center;
+ 	}
+}
+ 
  .circle-avatar img{
  	display: inline;
     margin: 0 auto;
@@ -310,3 +332,9 @@ label{
 	margin-bottom:5px;
 }
 
+.profile-list{
+	border:solid 1px lightgrey;
+	border-radius:5px;
+	margin:3px;
+	line-height:150%;
+}
