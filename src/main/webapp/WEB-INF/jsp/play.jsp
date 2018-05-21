@@ -15,7 +15,7 @@
 				<c:when test="${ownedCodes.size() > 0}">
 					<select id="owned-codes" name="usercode" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-max-options="1" multiple>
 						<c:forEach var="code" items="${ownedCodes}">
-							<option id="owned-${code.id}" class="owned-codes-op" value='{"id": ${code.id}, "name": "${code.name}", "creatorId": ${code.creator.id}, "creatorName": "${code.creator.nickname}" }'>${code.name}</option>
+							<option id="${code.id}" class="owned-codes-op" value='{"id": ${code.id}, "name": "${code.name}", "creatorId": ${code.creator.id}, "creatorName": "${code.creator.nickname}" }'>${code.name}</option>
 						</c:forEach>
 					</select>
 				</c:when>
