@@ -73,12 +73,16 @@ public class RootController{
     @PostMapping(value = "/deleteCodes")
     @Transactional
     @ResponseBody
-	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes)
+	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes, HttpSession s)
     {
     	
     	for (String id : codes) {
     		Code code = entityManager.find(Code.class, Long.parseLong(id));
-    		entityManager.remove(code);
+    		User u = (User) s.getAttribute("user");
+    		if(code.getCreator().getId() == u.getId())
+    			entityManager.remove(code);
+    		else
+    			return "exception";
     	}
     
     	 return  "/profile";
@@ -87,12 +91,16 @@ public class RootController{
     @PostMapping(value = "/deleteMaps")
     @Transactional
     @ResponseBody
-	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps)
+	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps, HttpSession s)
     {
     	
     	for (String id : maps) {
     		Map map = entityManager.find(Map.class, Long.parseLong(id));
-    		entityManager.remove(map);
+    		User u = (User) s.getAttribute("user");
+    		if(map.getCreator().getId() == u.getId())
+    			entityManager.remove(map);
+    		else
+    			return "exception";
     	}
     
     	 return  "/profile";
