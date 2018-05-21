@@ -102,12 +102,17 @@ public class RootController{
 	@Transactional
 	@ResponseBody
 	public String addLossHandler(
-			@RequestParam("id") long id) 
+			@RequestParam("id") long id,
+			HttpSession s)
     {
     	
     	User u = entityManager.find(User.class, id);
 		u.setLose(u.getLose()+1);	
 		log.info("Adding a loss to " + id + ": now at " + u.getLose());
+		User currentu = (User) s.getAttribute("user");
+		if(id == currentu.getId()) {
+			currentu.setLose(currentu.getLose()+1);
+		}
 		return "";
 	}
     
@@ -115,12 +120,17 @@ public class RootController{
 	@Transactional
 	@ResponseBody
 	public String addWinHandler(
-			@RequestParam("id") long id) 
+			@RequestParam("id") long id,
+			HttpSession s) 
     {
     	
     	User u = entityManager.find(User.class, id);
 		u.setWin(u.getWin()+1);
 		log.info("Adding a win to " + id + ": now at " + u.getLose());
+		User currentu = (User) s.getAttribute("user");
+		if(id == currentu.getId()) {
+			currentu.setWin(currentu.getWin()+1);
+		}
 		return "";
 	}
     
