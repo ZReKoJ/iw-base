@@ -222,13 +222,13 @@ class BattleGround {
 		}
 	}
 	
-	drawCell(x, y, image=undefined){
+	drawCell(x, y, image){
 	    this.ctx.fillStyle = "#00FFEE";
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows) {
 			x = x * this.cell.width + this.margin.left;
 			y = y * this.cell.height + this.margin.top;
 			if (-this.cell.width <= x && x <= this.frame.width && -this.cell.height <= y && y <= this.frame.height){
-				if (image == undefined)
+				if (image == undefined || image == null)
 					this.ctx.fillRect(x, y, this.cell.width, this.cell.height);
 				else this.ctx.drawImage(image, x, y, this.cell.width, this.cell.height);
 			}
