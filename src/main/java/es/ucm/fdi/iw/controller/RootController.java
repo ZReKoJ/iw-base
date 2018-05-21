@@ -70,50 +70,74 @@ public class RootController{
         model.addAttribute("s", "/static");
     }
     
-    @PostMapping(value = "/deleteCodes")
+    @GetMapping(value = "/deleteCode")
     @Transactional
-    @ResponseBody
-	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes, HttpSession s)
-    {
+	public String deleteCodesHandler(@RequestParam("codeId") String id, HttpSession s, Model m)
+{
+    	if (id != null && !id.isEmpty()) {
+			long uidSession = ((User) s.getAttribute("user")).getId();
+			long uidParam = entityManager
+					.find(Code.class, Long.parseLong(id))
+					.getCreator()
+					.getId();
+				
+			if( uidParam == uidSession) {
+				if (localData.getFile("/codes", id).delete()) {
+					entityManager.remove(entityManager.find(Code.class, Long.parseLong(id)));
+				}
+				else
+			        log.info("El fichero no pudo ser borrado");
+				
+			}
+				
+			else
+				return "exception"; 
+		}else
+			return "exception"; 
+			
+    	 return  "redirect:/profile";
+
     	
-    	for (String id : codes) {
-    		Code code = entityManager.find(Code.class, Long.parseLong(id));
-    		User u = (User) s.getAttribute("user");
-    		if(code.getCreator().getId() == u.getId())
-    			entityManager.remove(code);
-    		else
-    			return "exception";
-    	}
-    
-    	 return  "/profile";
+    	
 	}
     
-    @PostMapping(value = "/deleteMaps")
+    @GetMapping(value = "/deleteMap")
     @Transactional
-    @ResponseBody
-	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps, HttpSession s)
+	public String deleteMapsHandler(@RequestParam("mapId") String id, HttpSession s, Model m)
     {
-    	
-    	for (String id : maps) {
-    		Map map = entityManager.find(Map.class, Long.parseLong(id));
-    		User u = (User) s.getAttribute("user");
-    		if(map.getCreator().getId() == u.getId())
-    			entityManager.remove(map);
-    		else
-    			return "exception";
-    	}
     
-    	 return  "/profile";
+    	if (id != null && !id.isEmpty()) {
+			long uidSession = ((User) s.getAttribute("user")).getId();
+			long uidParam = entityManager
+					.find(Map.class, Long.parseLong(id))
+					.getCreator()
+					.getId();
+				
+			if( uidParam == uidSession) {
+				if (localData.getFile("/maps", id).delete()) {
+					entityManager.remove(entityManager.find(Map.class, Long.parseLong(id)));
+				}
+				else
+			        log.info("El fichero no pudo ser borrado");
+				
+			}
+				
+			else
+				return "exception"; 
+		}else
+			return "exception"; 
+			
+    	 return  "redirect:/profile";
 	}
     
     @PostMapping(value = "/addLoss")
 	@Transactional
 	@ResponseBody
+
 	public String addLossHandler(
 			@RequestParam("id") long id,
 			HttpSession s)
     {
-    	
     	User u = entityManager.find(User.class, id);
 		u.setLose(u.getLose()+1);	
 		log.info("Adding a loss to " + id + ": now at " + u.getLose());
@@ -127,11 +151,12 @@ public class RootController{
     @PostMapping(value = "/addWin")
 	@Transactional
 	@ResponseBody
+
 	public String addWinHandler(
 			@RequestParam("id") long id,
 			HttpSession s) 
+
     {
-    	
     	User u = entityManager.find(User.class, id);
 		u.setWin(u.getWin()+1);
 		log.info("Adding a win to " + id + ": now at " + u.getLose());
@@ -145,13 +170,14 @@ public class RootController{
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	@Transactional
 	@ResponseBody
-	public String createUser(
-			@RequestParam String nickname, 
-			@RequestParam String password) 
+	public String createUser(@RequestParam String nickname, @RequestParam String password) 
     {
     	User u;
     	try {
-    		 u = entityManager.createQuery("from User where nickname = :nickname", User.class).setParameter("nickname",  nickname).getSingleResult();
+    		u = entityManager
+    				.createQuery("from User where nickname = :nickname", User.class)
+    				.setParameter("nickname",  nickname)
+    				.getSingleResult();
     	}catch(NoResultException e) {
     		u = new User();
     		u.setNickname(nickname);
@@ -223,7 +249,6 @@ public class RootController{
     		@RequestParam String mapFileName,
     		HttpSession s)
     {
-
     	String error = "";
         if (json.isEmpty()) {
         	error = "You failed to upload the map";     
@@ -258,14 +283,13 @@ public class RootController{
 	}
     
 	@GetMapping({"/", "/index"})
-	public String root(Model model, Principal principal, HttpSession s) {
-		
+	public String root(Model model, Principal principal, HttpSession s) 
+	{
 		if (s.getAttribute("user") == null) {
 			s.setAttribute("user", entityManager
 					.createQuery("from User where nickname = :nickname", User.class)
 					.setParameter("nickname", principal.getName())
 	                .getSingleResult());
-				
 		}
 		
 		return "home";
@@ -311,11 +335,14 @@ public class RootController{
 	}
     
 	@GetMapping("/map-design")
-	public String map_design(@RequestParam(required=false) String id,
-			Model m, HttpSession s) {
+	public String map_design(@RequestParam(required=false) String id, Model m, HttpSession s) 
+	{
 		if (id != null && !id.isEmpty()) {
 			long uidSession = ((User) s.getAttribute("user")).getId();
-			long uidParam = entityManager.find(Map.class, Long.parseLong(id)).getCreator().getId();
+			long uidParam = entityManager
+					.find(Map.class, Long.parseLong(id))
+					.getCreator()
+					.getId();
 				
 			if( uidParam == uidSession)
 				m.addAttribute("mapId", id);
@@ -327,11 +354,14 @@ public class RootController{
 	}
 	
 	@GetMapping("/code-design")
-	public String code_design(@RequestParam(required=false) String id,
-			Model m, HttpSession s) {
+	public String code_design(@RequestParam(required=false) String id, Model m, HttpSession s) 
+	{
 		if (id != null && !id.isEmpty()) {
 			long uidSession = ((User) s.getAttribute("user")).getId();
-			long uidParam = entityManager.find(Code.class, Long.parseLong(id)).getCreator().getId();
+			long uidParam = entityManager
+					.find(Code.class, Long.parseLong(id))
+					.getCreator()
+					.getId();
 			
 			if( uidParam == uidSession)
 				m.addAttribute("codeId", id);
@@ -416,9 +446,9 @@ public class RootController{
 	throws ServletException, IOException
 	{
 		return new String(Files
-				.readAllBytes(localData.getFile("maps", id)
-						.toPath()),
-				"UTF-8");
+							.readAllBytes(localData.getFile("maps", id)
+							.toPath()),
+							"UTF-8");
 	}
 	
 	@GetMapping("/loadCode/{id}")
@@ -428,15 +458,13 @@ public class RootController{
 	throws ServletException, IOException  
 	{
 		return new String(Files
-				.readAllBytes(localData.getFile("codes", id)
-						.toPath()),
-				"UTF-8");
+							.readAllBytes(localData.getFile("codes", id)
+							.toPath()), 
+							"UTF-8");
 	}
 	
 	@RequestMapping(value="/saveAvatar", method=RequestMethod.POST)
-	public String handleFileUpload(
-			@RequestParam MultipartFile photo, 
-			HttpSession s)
+	public String handleFileUpload(@RequestParam MultipartFile photo, HttpSession s)
 	{
 		String error = "";
 		if (photo.isEmpty()) {
@@ -457,15 +485,15 @@ public class RootController{
 	}
 	
 
-	@RequestMapping(value="/avatar/{id}", 		
-			produces = MediaType.IMAGE_JPEG_VALUE)
-	public void userPhoto(@PathVariable("id") String id, 
-			HttpServletResponse response) {
+	@RequestMapping(value="/avatar/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public void userPhoto(@PathVariable("id") String id, HttpServletResponse response) {
 	    File f = localData.getFile("users/" + id, "avatar");
 	    try (InputStream in = f.exists() ? 
-		    	new BufferedInputStream(new FileInputStream(f)) :
-		    	new BufferedInputStream(this.getClass().getClassLoader()
-		    			.getResourceAsStream("static/img/avatar.png"))) {
+	    		new BufferedInputStream(new FileInputStream(f)) :
+		    	new BufferedInputStream(this.getClass()
+		    								.getClassLoader()
+		    								.getResourceAsStream("static/img/avatar.png"))) 
+	    {
 	    	FileCopyUtils.copy(in, response.getOutputStream());
 	    } catch (IOException ioe) {
 	    	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
