@@ -100,9 +100,9 @@ function start(battleGround, codes){
 	function loop(timestamp) {
 		var progress = (timestamp - lastRender)
 		
-		for (let [key, value] of battleGround.robots) {
+		battleGround.robots.forEach(function(value, key){
 			value.makeMove(battleGround);
-		}
+		});
 		
 		battleGround.clear().drawMapContent();
 		  

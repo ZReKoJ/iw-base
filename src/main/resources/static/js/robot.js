@@ -111,7 +111,7 @@ class Robot {
 		let cells = Math.max(battleGround.rows, battleGround.cols);
 		cells = cells / (battleGround.robots.size - 1);
 		this.closeRobots = [];
-		for (let [key, value] of battleGround.robots) {
+		battleGround.robots.forEach(function(value, key) {
 			if (this.info.id != value.info.id) {
 				dist = battleGround.toRealPosition(new Point(this.x, this.y)).distanceTo(battleGround.toRealPosition(new Point(value.x, value.y)));
 				if (dist < (cells * 5 * battleGround.cell.width	)){
@@ -122,7 +122,7 @@ class Robot {
 					});
 				}
 			}
-		}
+		});
 		this.closeRobots.sort(function(a, b) { return (a.distance > b.distance); });
 		
 		let data = {
