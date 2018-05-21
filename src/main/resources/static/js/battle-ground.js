@@ -248,25 +248,26 @@ class BattleGround {
 	        for (let j = 0; j < this.cols; j++)
 	            if (this.mapContent[i][j] != undefined && this.mapContent[i][j].image != undefined)
 	                this.drawCell(j, i, this.mapContent[i][j].image);
+	    let self = this;
 	    this.robots.forEach(function(value, key) {
 	    	if (value.hp > 0) {
-			    this.ctx.save();
-		    	this.ctx.translate(
-	    			this.margin.left + Math.floor(this.table.width * value.x),
-	    			this.margin.top + Math.floor(this.table.height * value.y));
-			    this.ctx.rotate(toRadians(value.rotation));
-		    	this.ctx.drawImage(value.image, -this.cell.center.x * value.width, -this.cell.center.y * value.height, this.cell.width * value.width, this.cell.height * value.height);
-		    	this.ctx.restore();
+			    self.ctx.save();
+		    	self.ctx.translate(
+	    			self.margin.left + Math.floor(self.table.width * value.x),
+	    			self.margin.top + Math.floor(self.table.height * value.y));
+			    self.ctx.rotate(toRadians(value.rotation));
+		    	self.ctx.drawImage(value.image, -self.cell.center.x * value.width, -self.cell.center.y * value.height, self.cell.width * value.width, self.cell.height * value.height);
+		    	self.ctx.restore();
 		    	for (let x in value.bullets) {
-		    		value.bullets[x].next(this);
+		    		value.bullets[x].next(self);
 		    		if (value.bullets[x].state != value.bullets[x].STATES.DELETE) {
-			    	    this.ctx.save();
-				    	this.ctx.translate(
-			    			this.margin.left + Math.floor(this.table.width * value.bullets[x].x),
-			    			this.margin.top + Math.floor(this.table.height * value.bullets[x].y));
-					    this.ctx.rotate(toRadians(value.bullets[x].rotation));
-					    this.ctx.drawImage(value.bullets[x].image, -this.cell.center.x * value.bullets[x].width, -this.cell.center.y * value.bullets[x].height, this.cell.width * value.bullets[x].width, this.cell.height * value.bullets[x].height);
-				    	this.ctx.restore();
+			    	    self.ctx.save();
+				    	self.ctx.translate(
+			    			self.margin.left + Math.floor(self.table.width * value.bullets[x].x),
+			    			self.margin.top + Math.floor(self.table.height * value.bullets[x].y));
+					    self.ctx.rotate(toRadians(value.bullets[x].rotation));
+					    self.ctx.drawImage(value.bullets[x].image, -self.cell.center.x * value.bullets[x].width, -self.cell.center.y * value.bullets[x].height, self.cell.width * value.bullets[x].width, self.cell.height * value.bullets[x].height);
+				    	self.ctx.restore();
 		    		}
 		    		else {
 		    			value.bullets.splice(x, 1);
@@ -275,9 +276,9 @@ class BattleGround {
 	    	}
 	    	else {
 	    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
-	    		this.robots.delete(key);
-	    		if (this.robots.size == 1) {
-	    			 this.robots.forEach(function(valueWinner, keyWinner){
+	    		self.robots.delete(key);
+	    		if (self.robots.size == 1) {
+	    			 self.robots.forEach(function(valueWinner, keyWinner){
 	    				 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
 	    			 });
 	    			 document.getElementById("playagain-button").classList.remove("disabled");

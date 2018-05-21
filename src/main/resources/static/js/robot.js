@@ -303,9 +303,10 @@ class Bullet {
 				this.y += this.proportionY * Math.cos(toRadians(this.rotation));
 			}
 			else {
+				let self = this;
 				battleGround.robots.forEach(function(value, key){
-	    			if (value.gotHit(this, new Point(this.x, this.y), p)) {
-	    				this.state = this.STATES.EXPLODE;
+	    			if (value.gotHit(self, new Point(self.x, self.y), p)) {
+	    				self.state = self.STATES.EXPLODE;
 	    			}
 				});
 			}
