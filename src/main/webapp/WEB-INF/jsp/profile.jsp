@@ -10,7 +10,18 @@
         <div class="col-md-7 user-details">
             <div class="row neutralColourDarkBg white">
             	<div class="col-md-3" class="circle-avatar">
-            		<img src="avatar/${user.id}" class="circle-avatar">
+            		
+            		<form action="/saveAvatar" enctype="multipart/form-data" method="post">
+            			<span class="userProfilePic">
+            			 <label for="file">
+							
+							<img id="userProfilePicture" class="icon rounded" src="avatar/${user.id}" />
+					    </label>
+		                	<input type="file" name="photo" id="file" class="inputfile" onchange="form.submit()" />
+		                	<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
+		                </span>
+		             
+	                </form>
             	</div>
             	<div class="col-md-9 no-pad">
                     <div class="user-pad">
@@ -21,11 +32,7 @@
             <div class="row  neutralColourDarkBg">
             
             	<div class="col-sm-3">
-            	<form action="/saveAvatar" enctype="multipart/form-data" method="post">
-					<input type="file" name="photo" id="file" class="inputfile" onchange="form.submit()" />
-					<label for="file">Change avatar</label>
-					<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
-				</form>
+            	
             	</div>
            		
             </div>
@@ -71,13 +78,13 @@
 					<c:when test="${myCodesSize > 0}">
 							<c:forEach var="code" items="${myCodes}">
 								<div class="row profile-list">
-									<div class="col-sm-7">
+									<div class="col-sm-5">
 										${code.name}
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-3">
 										<a href="code-design?id=${code.id }"> Edit </a>
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-4">
 										<a href="deleteCode?codeId=${code.id }"> Delete </a>
 									</div>
 								</div>
@@ -96,13 +103,13 @@
 					<c:when test="${myMapsSize > 0}">
 					<c:forEach var="map" items="${myMaps}">
  								<div class="row profile-list">
-									<div class="col-sm-7">
+									<div class="col-sm-5">
 										${map.name}
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-3">
 										<a href="map-design?id=${map.id }"> Edit </a>
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-4">
 										<a href="deleteMap?mapId=${map.id }"> Delete </a>
 									</div>
 								</div>

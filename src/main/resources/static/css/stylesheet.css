@@ -135,9 +135,16 @@ label{
 	width: 24px;
 }
 
+
+
 #userProfilePicture {
-	height: 280px;
-	width: 280px;
+	height: 150px;
+	width: 150px;
+}
+
+#userProfilePicture-mini {
+	height: 120px;
+	width: 120px;
 }
 
 #profileCard {
@@ -250,10 +257,53 @@ label{
  
  @media only screen and (max-width: 992px) {
     .circle-avatar{
+ 	width: 30%;
+ 	margin-left:35%;
+ 	margin-right:35%;
+	height: 120px;
+	border-radius: 50%;
+	position: relative;
+    overflow: hidden;
+	
+ 	}
+ 	 .circle-avatar img{
+ 	display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+ }
+ 	.user-pad{
+ 	text-align:center;
+ 	}
+}
+@media only screen and (max-width:800px) {
+    .circle-avatar{
  	width: 40%;
  	margin-left:30%;
  	margin-right:30%;
 	height: 120px;
+	border-radius: 50%;
+	position: relative;
+    overflow: hidden;
+	
+ 	}
+ 	 .circle-avatar img{
+ 	display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+ }
+ 	.user-pad{
+ 	text-align:center;
+ 	}
+}
+
+@media only screen and (max-width:550px) {
+    .circle-avatar{
+ 	width: 50%;
+ 	margin-left:25%;
+ 	margin-right:25%;
+	height: 100px;
 	border-radius: 50%;
 	position: relative;
     overflow: hidden;
@@ -290,13 +340,9 @@ label{
 	object-fit:cover;
  }
  
- .inputfile {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+#file
+{
+    display: none;
 }
 
 .inputfile + label {

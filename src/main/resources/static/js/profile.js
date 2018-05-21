@@ -55,4 +55,3 @@ function profile(socket) {
 		log.val(log.val() + '\n' + e.data);
 	}
 }
-

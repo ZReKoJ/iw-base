@@ -85,6 +85,8 @@ div.user-menu-btns div.btn-group-vertical>a.active:after{
 /* -- The main tab & content styling of the vertical buttons info-- */
 div.user-menu-content {
     color: #323232;
+    overflow:scroll;
+    height:260px;
 }
 
 ul.user-menu-list {
