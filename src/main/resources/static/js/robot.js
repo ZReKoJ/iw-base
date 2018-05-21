@@ -211,14 +211,14 @@ class Robot {
 			move = false;
 		}
 		else {
-			for (let [key, value] of battleGround.robots) {
+			battleGround.robots.forEach(function(value, key){
 				if (this.info.id != value.info.id && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
 					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
 					move = false;
 				}
-			}
+			});
 		}
 		
 		if (!move){
