@@ -212,11 +212,12 @@ class Robot {
 			move = false;
 		}
 		else {
+			let self = this;
 			battleGround.robots.forEach(function(value, key){
-				if (this.info.id != value.info.id && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
+				if (self.info.id != value.info.id && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.topLeftCorner, self.topRightCorner)
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.downLeftCorner, self.downRightCorner)
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.topRightCorner, self.downRightCorner) 
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.topLeftCorner, self.downLeftCorner))) {
 					move = false;
 				}
 			});
