@@ -118,7 +118,7 @@
     
     <script>
 	$( document ).ready(function() {
-		profile(new WebSocket("${endpoint}"));
+		profile(new WebSocket("${endpoint}"), "${deletedName}");
 	});
 	</script>
 

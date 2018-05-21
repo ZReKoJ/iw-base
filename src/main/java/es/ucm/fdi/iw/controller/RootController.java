@@ -74,6 +74,7 @@ public class RootController{
     @Transactional
 	public String deleteCodesHandler(@RequestParam("codeId") String id, HttpSession s, Model m)
 {
+    	String name = "";
     	if (id != null && !id.isEmpty()) {
 			long uidSession = ((User) s.getAttribute("user")).getId();
 			long uidParam = entityManager
@@ -83,7 +84,9 @@ public class RootController{
 				
 			if( uidParam == uidSession) {
 				if (localData.getFile("/codes", id).delete()) {
-					entityManager.remove(entityManager.find(Code.class, Long.parseLong(id)));
+					Code code = entityManager.find(Code.class, Long.parseLong(id));
+					name = code.getName();
+					entityManager.remove(code);
 				}
 				else
 			        log.info("El fichero no pudo ser borrado");
@@ -95,7 +98,7 @@ public class RootController{
 		}else
 			return "exception"; 
 			
-    	 return  "redirect:/profile";
+    	 return  "redirect:/profile?deleted=" + name;
 
     	
     	
@@ -105,7 +108,7 @@ public class RootController{
     @Transactional
 	public String deleteMapsHandler(@RequestParam("mapId") String id, HttpSession s, Model m)
     {
-    
+    	String name = "";
     	if (id != null && !id.isEmpty()) {
 			long uidSession = ((User) s.getAttribute("user")).getId();
 			long uidParam = entityManager
@@ -115,7 +118,9 @@ public class RootController{
 				
 			if( uidParam == uidSession) {
 				if (localData.getFile("/maps", id).delete()) {
-					entityManager.remove(entityManager.find(Map.class, Long.parseLong(id)));
+					Map map = entityManager.find(Map.class, Long.parseLong(id));
+					name = map.getName();
+					entityManager.remove(map);
 				}
 				else
 			        log.info("El fichero no pudo ser borrado");
@@ -127,7 +132,7 @@ public class RootController{
 		}else
 			return "exception"; 
 			
-    	 return  "redirect:/profile";
+    	 return  "redirect:/profile?deleted=" + name;
 	}
     
     @PostMapping(value = "/addLoss")
@@ -389,11 +394,13 @@ public class RootController{
 	}
 	
 	@GetMapping("/profile")
-	public String profile(HttpServletRequest request, HttpSession s, Model m) {
+	public String profile( @RequestParam(value = "deleted", required=false) String deletedName,HttpServletRequest request, HttpSession s, Model m) {
 		
 		User u = (User) s.getAttribute("user");
 		u = entityManager.find(User.class, u.getId());
 		s.setAttribute("user", u);
+		
+		m.addAttribute("deletedName", deletedName);
 		
 		List<Code> myCodes = entityManager
 				.createQuery("from Code where creator = :nickname", Code.class)
