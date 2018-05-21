@@ -273,7 +273,11 @@ public class RootController{
 	
 	
 	@GetMapping("/login")
-	public String login() {
+	public String login(@RequestParam(required=false) String error, Model m) {
+		if(error != null) {
+			m.addAttribute("loginError", error);
+		}
+		
 		return "login";
 	}
 	
