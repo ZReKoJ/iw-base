@@ -301,11 +301,11 @@ class Bullet {
 				this.y += this.proportionY * Math.cos(toRadians(this.rotation));
 			}
 			else {
-	    		for (let [key, value] of battleGround.robots) {
+				battleGround.robots.forEach(function(value, key){
 	    			if (value.gotHit(this, new Point(this.x, this.y), p)) {
 	    				this.state = this.STATES.EXPLODE;
 	    			}
-	    		}
+				});
 			}
 			break;
 		case this.STATES.EXPLODE:
