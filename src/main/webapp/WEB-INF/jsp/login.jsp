@@ -23,10 +23,10 @@
             <div class="panel-body">
                 <form id="login-form" action="/login" method="post" role="form">
                     <div class="form-group">
-                        <input id="logname" class="form-control" type="text" name="username" placeholder="Username"/>
+                        <input id="logname" class="form-control" type="text" name="username" placeholder="Username" required/>
                     </div>
                     <div class="form-group">
-                        <input id="logpass" class="form-control" type="password" name="password" placeholder="Password"/>
+                        <input id="logpass" class="form-control" type="password" name="password" placeholder="Password" required/>
                     </div>
                     <input id="logextra" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group text-center">
@@ -63,7 +63,7 @@
 
 <script>
 $( document ).ready(function() {
-	login();
+	login('${loginError}');
 });
 </script>
 

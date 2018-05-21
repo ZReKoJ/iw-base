@@ -1,6 +1,9 @@
 'use strict';
 
-function login(){
+function login(loginError){
+	
+	if (loginError == "true")
+		notifier.error("Invalid username or password");
 	
 	$('#login-form-link').click(function(e) {
 		$("#login-form").delay(100).fadeIn(100);

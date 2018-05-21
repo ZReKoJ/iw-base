@@ -73,7 +73,7 @@ public class RootController{
     @GetMapping(value = "/deleteCode")
     @Transactional
 	public String deleteCodesHandler(@RequestParam("codeId") String id, HttpSession s, Model m)
-    {
+{
     	if (id != null && !id.isEmpty()) {
 			long uidSession = ((User) s.getAttribute("user")).getId();
 			long uidParam = entityManager
@@ -96,9 +96,10 @@ public class RootController{
 			return "exception"; 
 			
     	 return  "redirect:/profile";
-	}
+
     	
-	
+    	
+	}
     
     @GetMapping(value = "/deleteMap")
     @Transactional
@@ -114,8 +115,6 @@ public class RootController{
 				
 			if( uidParam == uidSession) {
 				if (localData.getFile("/maps", id).delete()) {
-					log.info(id);
-					log.info("El fichero ha sido borrado satisfactoriamente");
 					entityManager.remove(entityManager.find(Map.class, Long.parseLong(id)));
 				}
 				else
@@ -134,22 +133,37 @@ public class RootController{
     @PostMapping(value = "/addLoss")
 	@Transactional
 	@ResponseBody
-	public String addLossHandler(@RequestParam("id") long id) 
+
+	public String addLossHandler(
+			@RequestParam("id") long id,
+			HttpSession s)
     {
     	User u = entityManager.find(User.class, id);
 		u.setLose(u.getLose()+1);	
 		log.info("Adding a loss to " + id + ": now at " + u.getLose());
+		User currentu = (User) s.getAttribute("user");
+		if(id == currentu.getId()) {
+			currentu.setLose(currentu.getLose()+1);
+		}
 		return "";
 	}
     
     @PostMapping(value = "/addWin")
 	@Transactional
 	@ResponseBody
-	public String addWinHandler(@RequestParam("id") long id) 
+
+	public String addWinHandler(
+			@RequestParam("id") long id,
+			HttpSession s) 
+
     {
     	User u = entityManager.find(User.class, id);
 		u.setWin(u.getWin()+1);
 		log.info("Adding a win to " + id + ": now at " + u.getLose());
+		User currentu = (User) s.getAttribute("user");
+		if(id == currentu.getId()) {
+			currentu.setWin(currentu.getWin()+1);
+		}
 		return "";
 	}
     
@@ -283,7 +297,11 @@ public class RootController{
 	
 	
 	@GetMapping("/login")
-	public String login() {
+	public String login(@RequestParam(required=false) String error, Model m) {
+		if(error != null) {
+			m.addAttribute("loginError", error);
+		}
+		
 		return "login";
 	}
 	
