@@ -277,9 +277,9 @@ class BattleGround {
 	    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
 	    		this.robots.delete(key);
 	    		if (this.robots.size == 1) {
-	    			 for (let [keyWinner, valueWinner] of this.robots) {
+	    			 this.robots.forEach(function(valueWinner, keyWinner){
 	    				 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
-	    			 }
+	    			 });
 	    			 document.getElementById("playagain-button").classList.remove("disabled");
 	    		}
 	    	}
