@@ -14,9 +14,9 @@ function fullscreen(content){
 }
 
 function loadData(path, callback){
-	$.get(path, function (data) {
+	$.get(path, {}, function (data) {
 		callback(data);
-	});
+	}, "text");
 }
 
 class Notifier {
