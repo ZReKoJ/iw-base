@@ -75,7 +75,7 @@
 										${code.name}
 									</div>
 									<div class="col-sm-2">
-										<a href="code-design?codeId=${code.id }"> Edit </a>
+										<a href="code-design?id=${code.id }"> Edit </a>
 									</div>
 									<div class="col-sm-2">
 										<a href="deleteCode?codeId=${code.id }"> Delete </a>
@@ -100,7 +100,7 @@
 										${map.name}
 									</div>
 									<div class="col-sm-2">
-										<a href="map-design?mapId=${map.id }"> Edit </a>
+										<a href="map-design?id=${map.id }"> Edit </a>
 									</div>
 									<div class="col-sm-2">
 										<a href="deleteMap?mapId=${map.id }"> Delete </a>
