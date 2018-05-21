@@ -1,9 +1,13 @@
 'use strict';
 
-function profile(socket) {
+function profile(socket, deletedName) {
 	
     let buttons = $('#responsive');
     let links = buttons.find('a');
+    
+    
+    if(deletedName != "")
+    	notifier.warning("" + deletedName + " deleted");
  
     links.click(function(e) {
     	

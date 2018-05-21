@@ -111,18 +111,19 @@ class Robot {
 		let cells = Math.max(battleGround.rows, battleGround.cols);
 		cells = cells / (battleGround.robots.size - 1);
 		this.closeRobots = [];
-		for (let [key, value] of battleGround.robots) {
-			if (this.info.id != value.info.id) {
-				dist = battleGround.toRealPosition(new Point(this.x, this.y)).distanceTo(battleGround.toRealPosition(new Point(value.x, value.y)));
+		let self = this;
+		battleGround.robots.forEach(function(value, key) {
+			if (self.info.id != value.info.id) {
+				dist = battleGround.toRealPosition(new Point(self.x, self.y)).distanceTo(battleGround.toRealPosition(new Point(value.x, value.y)));
 				if (dist < (cells * 5 * battleGround.cell.width	)){
-					this.closeRobots.push({
+					self.closeRobots.push({
 						name : value.info.name,
 						position : battleGround.toRealPosition(new Point(value.x, value.y)),
 						distance : dist
 					});
 				}
 			}
-		}
+		});
 		this.closeRobots.sort(function(a, b) { return (a.distance > b.distance); });
 		
 		let data = {
@@ -211,14 +212,15 @@ class Robot {
 			move = false;
 		}
 		else {
-			for (let [key, value] of battleGround.robots) {
-				if (this.info.id != value.info.id && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.topRightCorner)
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.downLeftCorner, this.downRightCorner)
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topRightCorner, this.downRightCorner) 
-					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, this.topLeftCorner, this.downLeftCorner))) {
+			let self = this;
+			battleGround.robots.forEach(function(value, key){
+				if (self.info.id != value.info.id && (intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.topLeftCorner, self.topRightCorner)
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.downLeftCorner, self.downRightCorner)
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.topRightCorner, self.downRightCorner) 
+					|| intersect(value.topRightCorner, value.downRightCorner, value.downLeftCorner, value.topLeftCorner, self.topLeftCorner, self.downLeftCorner))) {
 					move = false;
 				}
-			}
+			});
 		}
 		
 		if (!move){
@@ -301,11 +303,12 @@ class Bullet {
 				this.y += this.proportionY * Math.cos(toRadians(this.rotation));
 			}
 			else {
-	    		for (let [key, value] of battleGround.robots) {
-	    			if (value.gotHit(this, new Point(this.x, this.y), p)) {
-	    				this.state = this.STATES.EXPLODE;
+				let self = this;
+				battleGround.robots.forEach(function(value, key){
+	    			if (value.gotHit(self, new Point(self.x, self.y), p)) {
+	    				self.state = self.STATES.EXPLODE;
 	    			}
-	    		}
+				});
 			}
 			break;
 		case this.STATES.EXPLODE:
