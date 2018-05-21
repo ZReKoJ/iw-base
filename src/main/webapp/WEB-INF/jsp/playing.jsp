@@ -16,7 +16,8 @@
 			<div id="rank" class="row">
 	       	</div>
 			<div class=" btn-group btn-group-justified">
-				<a class="btn btn-primary btn-block disabled" id="playagain-button" href="play" role="button" >Play again</a>
+				<a id="playagain-button" class="btn btn-primary btn-block disabled" href="play" role="button" >Play again</a>
+				<a id="play-pause" class="btn btn-primary btn-block" role="button">Pause</a>
 				<a id="fullscreen" class="btn btn-primary btn-block" role="button">FullScreen</a>
 			</div>
 		</div>

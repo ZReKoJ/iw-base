@@ -97,19 +97,37 @@ function start(battleGround, codes){
 		});
 	});
 	
+	let playPause = true;
+	
 	function loop(timestamp) {
-		var progress = (timestamp - lastRender)
+		let progress = (timestamp - lastRender)
 		
 		battleGround.robots.forEach(function(value, key){
 			value.makeMove(battleGround);
 		});
 		
 		battleGround.clear().drawMapContent();
-		  
-		lastRender = timestamp
-		window.requestAnimationFrame(loop);
+		
+		if (playPause) {
+			lastRender = timestamp
+			window.requestAnimationFrame(loop);
+		}
 	}
-	var lastRender = 0;
+	let lastRender = 0;
 	window.requestAnimationFrame(loop);
+
+	let playPauseButton = document.getElementById("play-pause");
+	playPauseButton.addEventListener("click", function(){
+		if (playPause){
+			playPause = false;
+			playPauseButton.innerHTML = "Play";
+		}
+		else {
+			playPause = true;
+			playPauseButton.innerHTML = "Pause";
+			lastRender = 0
+			window.requestAnimationFrame(loop);
+		}
+	});
 	
 }
