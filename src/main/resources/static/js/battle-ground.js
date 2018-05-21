@@ -248,7 +248,7 @@ class BattleGround {
 	        for (let j = 0; j < this.cols; j++)
 	            if (this.mapContent[i][j] != undefined && this.mapContent[i][j].image != undefined)
 	                this.drawCell(j, i, this.mapContent[i][j].image);
-	    for (let [key, value] of this.robots) {
+	    this.robots.forEach(function(value, key) {
 	    	if (value.hp > 0) {
 			    this.ctx.save();
 		    	this.ctx.translate(
@@ -283,7 +283,7 @@ class BattleGround {
 	    			 document.getElementById("playagain-button").classList.remove("disabled");
 	    		}
 	    	}
-	    }
+	    });
 	    return this;
 	}
 	
