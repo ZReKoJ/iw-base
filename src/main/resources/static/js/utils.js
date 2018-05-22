@@ -14,7 +14,9 @@ function fullscreen(content){
 }
 
 function loadData(path, callback){
+	console.log(path);
 	$.get(path, {}, function (data) {
+		console.log(data);
 		callback(data);
 	}, "text");
 }

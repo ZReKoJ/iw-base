@@ -1,40 +1,6 @@
 'use strict';
 
 function play() {
-	document.addEventListener('DOMContentLoaded', function () {
-		$("#owned-codes").change(function() {
-			$("#all-codes option:disabled").prop("disabled", false);
-			let selectedCodeId = $("#owned-codes option:selected").attr("id")
-			$("#all-" + selectedCodeId).prop("disabled", true);
-			$("#all-" + selectedCodeId).prop("selected", false);
-			$("#all-codes").selectpicker("refresh");
-			
-			if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
-				$("#play-submit").prop("disabled", false);
-			}
-			else{
-				$("#play-submit").prop("disabled", true);
-			}
-		});
-		
-		$("#all-maps").change(function() {
-			if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
-				$("#play-submit").prop("disabled", false);
-			}
-			else{
-				$("#play-submit").prop("disabled", true);
-			}
-		});
-		
-		$("#all-codes").change(function() {
-			if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
-				$("#play-submit").prop("disabled", false);
-			}
-			else{
-				$("#play-submit").prop("disabled", true);
-			}
-		});
-	});
 	
 	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
@@ -54,4 +20,70 @@ function play() {
 		maxHighlightLength : Infinity,
 		extraKeys: {"Ctrl-Space": "autocomplete"}
 	});
+	
+	function getId(element){
+		element = element.attr("value");
+		console.log(element);
+		if (element != undefined && element != null){
+			console.log(JSON.parse(element).id);
+			return JSON.parse(element).id;
+		}
+		return null;
+	}
+		
+	$("#owned-codes").change(function() {
+		$("#all-codes option:disabled").prop("disabled", false);
+		let selectedCodeId = $("#owned-codes option:selected").attr("id")
+		$("#all-" + selectedCodeId).prop("disabled", true);
+		$("#all-" + selectedCodeId).prop("selected", false);
+		$("#all-codes").selectpicker("refresh");
+		
+		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
+			$("#play-submit").prop("disabled", false);
+		}
+		else{
+			$("#play-submit").prop("disabled", true);
+		}
+		let id = getId($("#owned-codes option:selected:last"));
+		if (id != null){
+			loadData('/loadCode/' + id, function(data){
+		    	codeMirrorEditor.setValue(data);
+			});
+		}
+	});
+	
+	$("#all-maps").change(function() {
+		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
+			$("#play-submit").prop("disabled", false);
+		}
+		else{
+			$("#play-submit").prop("disabled", true);
+		}
+		let id = getId($("#all-maps option:selected:last"));
+		if (id != null){
+			loadData('/loadMap/' + id, function(data){
+				data = JSON.parse(data);
+				let battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
+				battleGround.fillContent(data, function(){
+				    battleGround.clear().drawMapContent();
+				});
+			});
+		}
+	});
+	
+	$("#all-codes").change(function() {
+		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
+			$("#play-submit").prop("disabled", false);
+		}
+		else{
+			$("#play-submit").prop("disabled", true);
+		}
+		let id = getId($("#all-codes option:selected:last"));
+		if (id != null){
+			loadData('/loadCode/' + id, function(data){
+		    	codeMirrorEditor.setValue(data);
+			});
+		}
+	});
+	
 }

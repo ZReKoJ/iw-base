@@ -101,6 +101,8 @@
     });
 </script>
 
+<script src="${s}/js/map-properties.js"></script>
+<script src="${s}/js/battle-ground.js"></script>
 <script src="${s}/js/codemirror.js"></script>
 <script src="${s}/js/javascriptMode.js"></script>
 <script src="${s}/js/play.js"></script>
