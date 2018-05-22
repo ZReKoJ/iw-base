@@ -19,6 +19,12 @@ function loadData(path, callback){
 	}, "text");
 }
 
+function hasJavascript(text) {
+	let html = document.createElement('html');
+	html.innerHTML = text;
+	return Boolean(html.getElementsByTagName('script').length);
+}
+
 class Notifier {
 	
 	success(text){

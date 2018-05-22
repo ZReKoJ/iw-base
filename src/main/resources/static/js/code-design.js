@@ -28,12 +28,19 @@ function codeDesign(codeId) {
 		e.preventDefault();
 		if (document.getElementById("codeFileName").value == ""){
 			notifier.warning("Name is required");
-		}else{
-			$.post("/createCode", {
-				"_csrf" : csrf_data.token, 
-				"code" : codeMirrorEditor.getValue(),
-				"codeFileName": $("#codeFileName").val()},
-				function(data){notifier.success(data)});
+		}
+		else{
+			let title = $("#codeFileName").val();
+			if (!hasJavascript(title)) {
+				$.post("/createCode", {
+					"_csrf" : csrf_data.token, 
+					"code" : codeMirrorEditor.getValue(),
+					"codeFileName": title},
+					function(data){notifier.success(data)});
+			}
+			else {
+				notifier.error("The title has javascript!");
+			}
 		}
 	});
 	
