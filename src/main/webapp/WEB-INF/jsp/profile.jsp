@@ -9,7 +9,7 @@
 <div class="row user-menu-container square whiteBg">
         <div class="col-md-7 user-details">
             <div class="row neutralColourDarkBg white">
-            	<div class="col-md-3" class="circle-avatar">
+            	<div class="col-md-4" class="circle-avatar">
             		
             		<form action="/saveAvatar" enctype="multipart/form-data" method="post">
             			<span class="userProfilePic">
@@ -23,7 +23,7 @@
 		             
 	                </form>
             	</div>
-            	<div class="col-md-9 no-pad">
+            	<div class="col-md-8 no-pad">
                     <div class="user-pad">
                         <h3>Welcome back, ${user.nickname}</h3>
                     </div>
