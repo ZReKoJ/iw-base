@@ -176,7 +176,8 @@ function mapDesign(mapId) {
 	document.getElementById("upload").addEventListener("click", function(){
 		if (document.getElementById("mapFileName").value != ""){
 			let title = document.getElementById("mapFileName").value;
-			if (!hasJavascript(title)) {
+			let error = hasJavascript(title);
+			if (error == null) {
 				$.post("/createMap", {
 					"_csrf" : csrf_data.token, 
 					"json" : battleGround.json(),
@@ -184,7 +185,7 @@ function mapDesign(mapId) {
 					function(data){notifier.success(data)});
 				}
 			else {
-				notifier.error("The title has javascript!");
+				notifier.error(error);
 			}
 		}
 		else {

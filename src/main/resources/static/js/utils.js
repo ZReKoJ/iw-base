@@ -22,7 +22,10 @@ function loadData(path, callback){
 function hasJavascript(text) {
 	let html = document.createElement('html');
 	html.innerHTML = text;
-	return Boolean(html.getElementsByTagName('script').length);
+	if (Boolean(html.getElementsByTagName('script').length)){
+		return "The title has javascript!";
+	}
+	return null;
 }
 
 class Notifier {

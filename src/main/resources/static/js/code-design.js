@@ -31,7 +31,8 @@ function codeDesign(codeId) {
 		}
 		else{
 			let title = $("#codeFileName").val();
-			if (!hasJavascript(title)) {
+			let error = hasJavascript(title);
+			if (error == null) {
 				$.post("/createCode", {
 					"_csrf" : csrf_data.token, 
 					"code" : codeMirrorEditor.getValue(),
@@ -39,7 +40,7 @@ function codeDesign(codeId) {
 					function(data){notifier.success(data)});
 			}
 			else {
-				notifier.error("The title has javascript!");
+				notifier.error(error);
 			}
 		}
 	});
