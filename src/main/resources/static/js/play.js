@@ -39,8 +39,8 @@ function play() {
 	let canvas = document.getElementById("canvas");
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
-	canvas.width = parent.width() / 2;
-	canvas.height = parent.width() / 2;
+	canvas.width = parent.width();
+	canvas.height = parent.height();
 	
 	let codeMirror = document.getElementById("codeText");
 	

@@ -74,11 +74,15 @@
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	
 	<div class="row">
-		<div class="warningText centered">DISCLAIMER: We take no responsibility on the effects that may cause executing javaScript code created by others in your own device.</div>
+		<div class="preview pull-left">
+			<canvas id="canvas"></canvas>
+		</div>
+		<div class="preview pull-right">
+        	<textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+        </div>
 	</div>
 	<div class="row">
-		<canvas id="canvas" name="canvas"></canvas>
-        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+		<div class="warningText centered">DISCLAIMER: We take no responsibility on the effects that may cause executing javaScript code created by others in your own device.</div>
 	</div>
 
 	<div class="row">
