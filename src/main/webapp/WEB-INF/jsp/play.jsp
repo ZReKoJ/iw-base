@@ -69,6 +69,11 @@
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 	<div class="row">
+		<canvas id="canvas" name="canvas"></canvas>
+        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+	</div>
+
+	<div class="row">
 		<div class="col-sm-5"></div>
 		<div class="col-sm-2">
 			<input type="submit" id="play-submit" name="play-submit" value="Play" class="btn btn-primary max_width" disabled>
@@ -77,7 +82,14 @@
 	</div>
 
 </form>
+<script>
+    $( document ).ready(function() {
+    	play();
+    });
+</script>
 
+<script src="${s}/js/codemirror.js"></script>
+<script src="${s}/js/javascriptMode.js"></script>
 <script src="${s}/js/play.js"></script>
 
 <%@ include file="../jspf/footer.jspf"%>
