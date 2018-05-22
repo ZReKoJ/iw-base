@@ -63,13 +63,13 @@ function mapDesign(mapId) {
 	    if(valueCurrent >= minValue) {
 	        $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
 	    } else {
-	        alert('Sorry, the minimum value was reached');
+	    	notifier.warning('Sorry, the minimum value was reached');
 	        $(this).val($(this).data('oldValue'));
 	    }
 	    if(valueCurrent <= maxValue) {
 	        $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
 	    } else {
-	        alert('Sorry, the maximum value was reached');
+	    	notifier.warning('Sorry, the maximum value was reached');
 	        $(this).val($(this).data('oldValue'));
 	    }
 	    
@@ -175,7 +175,6 @@ function mapDesign(mapId) {
 	
 	document.getElementById("upload").addEventListener("click", function(){
 		if (document.getElementById("mapFileName").value != ""){
-			console.log(battleGround.json());
 			$.post("/createMap", {
 				"_csrf" : csrf_data.token, 
 				"json" : battleGround.json(),
