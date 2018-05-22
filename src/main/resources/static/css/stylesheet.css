@@ -174,7 +174,7 @@ label{
 	filter: alpha(opacity=0);
 }
 
-/* map-design */
+/* Map */
 #canvas {
 	width: 100%;
 	height: auto;
@@ -202,18 +202,6 @@ label{
 .selection {
     border: 2px solid red;
 }
-
-/* playing*/
- #game-zone{
- 	margin-top: 70px;
- }
- 
- /* pre-play-screen */
- .play-select{
- 	width: 100%;
- 	background-color: #f5fafe;
- 	text-align: center;
- }
  
  .stats-cards{
  	padding-bottom:30px;
@@ -383,4 +371,10 @@ label{
 	border-radius:5px;
 	margin:3px;
 	line-height:150%;
+}
+
+.warningText{
+  font: 21px/20px Alegreya Sans, sans-serif;
+  color: white;
+  position: relative;
 }
