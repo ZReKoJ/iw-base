@@ -82,6 +82,7 @@
         	<textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
         </div>
 	</div>
+	<hr class="my-4">
 	<div class="row">
 		<div class="warningText centered">DISCLAIMER: We take no responsibility on the effects that may cause executing javaScript code created by others in your own device.</div>
 	</div>

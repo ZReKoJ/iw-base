@@ -8,6 +8,18 @@ function play() {
 	canvas.width = parent.width();
 	canvas.height = parent.height();
 	
+	let battleGround = null;
+	
+	window.onresize = function() {
+		
+		canvas.width = parent.width();
+		canvas.height = parent.height();
+		
+		battleGround.reset(canvas);
+	    battleGround.clear().drawMapContent();
+    
+    };
+	
 	let codeMirror = document.getElementById("codeText");
 	
 	let codeMirrorEditor = CodeMirror.fromTextArea(codeMirror, {
@@ -23,9 +35,7 @@ function play() {
 	
 	function getId(element){
 		element = element.attr("value");
-		console.log(element);
 		if (element != undefined && element != null){
-			console.log(JSON.parse(element).id);
 			return JSON.parse(element).id;
 		}
 		return null;
@@ -44,7 +54,7 @@ function play() {
 		else{
 			$("#play-submit").prop("disabled", true);
 		}
-		let id = getId($("#owned-codes option:selected:last"));
+		let id = getId($("#owned-codes option:selected"));
 		if (id != null){
 			loadData('/loadCode/' + id, function(data){
 		    	codeMirrorEditor.setValue(data);
@@ -59,11 +69,13 @@ function play() {
 		else{
 			$("#play-submit").prop("disabled", true);
 		}
-		let id = getId($("#all-maps option:selected:last"));
+		let id = getId($("#all-maps option:selected"));
 		if (id != null){
 			loadData('/loadMap/' + id, function(data){
+				if (battleGround != null)
+					battleGround.reset(canvas);
 				data = JSON.parse(data);
-				let battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
+				battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 				battleGround.fillContent(data, function(){
 				    battleGround.clear().drawMapContent();
 				});
