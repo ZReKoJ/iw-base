@@ -4,22 +4,11 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
+<link href="${s}/css/admin.css" rel="stylesheet">
+
 <div class="starter-template">
 	<h1>Admin</h1>
-	<p class="lead">Información muy confidencial</p>
-
-	<hr/>
-
-	<form action="/admin/addUser" method="post">
-		<label for="login">login<input name="login"/></label>
-		<label for="password">password<input type="password" name="password"/></label>
-		<label for="isAdmin">is admin?<input type="checkbox" name="isAdmin"></label>
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            
-            <div class="form-actions">
-                <button type="submit" class="btn">Create user</button>
-            </div>
-	</form>
+	<p class="page-title">Admin page</p>
 	
 	<hr/>
 	
@@ -35,8 +24,32 @@
 	</c:forEach>
 	</tbody>
 	</table>
-
-	<%@ include file="../jspf/authinfo.jspf"%>		
+	
+	<table>
+	<thead>
+	<tr><th>id<th>mapName<th>creator</tr>
+	</thead>
+	<tbody>
+	<c:forEach items="${maps}" var="map">
+		<tr>
+		<td>${map.id}<td>${map.name}<td>${map.creator.id}
+		</tr>	
+	</c:forEach>
+	</tbody>
+	</table>
+	
+	<table>
+	<thead>
+	<tr><th>id<th>codeName<th>creator</tr>
+	</thead>
+	<tbody>
+	<c:forEach items="${codes}" var="code">
+		<tr>
+		<td>${code.id}<td>${code.name}<td>${code.creator.id}
+		</tr>	
+	</c:forEach>
+	</tbody>
+	</table>
 </div>
 
 <%@ include file="../jspf/footer.jspf"%>

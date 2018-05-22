@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.model.Code;
+import es.ucm.fdi.iw.model.Map;
 import es.ucm.fdi.iw.model.User;
 
 @Controller	
@@ -53,84 +56,17 @@ public class AdminController {
 
 	@GetMapping({"", "/"})
 	public String root(Model m) {
+		
 		m.addAttribute("users", entityManager
 				.createQuery("select u from User u").getResultList());
+		
+		List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
+		m.addAttribute("maps", maps);
+		
+		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
+		m.addAttribute("codes", codes);
 		
 		return "admin";	
 	}
 
-	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
-	@Transactional
-	public String addUser(
-			@RequestParam String nickname, 
-			@RequestParam String password, 
-			@RequestParam(required=false) String isAdmin, Model m) {
-		User u = new User();
-		u.setNickname(nickname);
-		u.setPassword(passwordEncoder.encode(password));
-		u.setRoles("on".equals(isAdmin) ? "ADMIN,USER" : "USER");
-		entityManager.persist(u);
-		
-		entityManager.flush();
-		m.addAttribute("users", entityManager
-				.createQuery("select u from User u").getResultList());
-		
-		return "admin";
-	}
-	
-	/**
-	 * Returns a users' photo
-	 * @param id of user to get photo from
-	 * @return the image, or error
-	 */
-	@RequestMapping(value="/photo/{id}", 
-			method = RequestMethod.GET, 
-			produces = MediaType.IMAGE_JPEG_VALUE)
-	public void userPhoto(@PathVariable("id") String id, 
-			HttpServletResponse response) {
-	    File f = localData.getFile("user", id);
-	    try (InputStream in = f.exists() ? 
-		    	new BufferedInputStream(new FileInputStream(f)) :
-		    	new BufferedInputStream(this.getClass().getClassLoader()
-		    			.getResourceAsStream("unknown-user.jpg"))) {
-	    	FileCopyUtils.copy(in, response.getOutputStream());
-	    } catch (IOException ioe) {
-	    	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
-	    	log.info("Error retrieving file: " + f + " -- " + ioe.getMessage());
-	    }
-	}
-	
-	/**
-	 * Uploads a photo for a user. Intended to be used via Ajax
-	 * @param id of user 
-	 * @param photo to upload
-	 * @return a textual response indicating success, status code
-	 */
-	@RequestMapping(value="/photo/{id}", method=RequestMethod.POST)
-    public @ResponseBody String handleFileUpload(
-    		HttpServletResponse response,
-    		@RequestParam("photo") MultipartFile photo,
-    		@PathVariable("id") String id){
-
-		String error = "";
-        if (photo.isEmpty()) {
-        	error = "You failed to upload a photo for " 
-                + id + " because the file was empty.";        
-        } else {
-	        File f = localData.getFile("user", id);
-	        try (BufferedOutputStream stream =
-	                new BufferedOutputStream(
-	                    new FileOutputStream(f))) {
-	            stream.write(photo.getBytes());
-	            return "Uploaded " + id 
-	            		+ " into " + f.getAbsolutePath() + "!";
-	        } catch (Exception e) {
-		    	error = "Upload failed " 
-		    			+ id + " => " + e.getMessage();
-	        }
-        }
-        // exit with error, blame user
-    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        return error;
-	}
 }
