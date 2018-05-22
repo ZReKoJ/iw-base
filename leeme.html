@@ -82,6 +82,10 @@
                 <p class="mb-1">Comprobación de nombre de usuario en uso en el formulario de registro</p>
 				<p class="mb-1">Comprobación de acceso a mapas y códigos. Solo el usuario creador del mapa o código puede editar dichos elementos</p>
 				<p class="mb-1">Refactorización de elementos de mapa y modificación de lógica interna asociada</p>
+                <p class="mb-1">Scroll añadido a las secciones correspondientes del perfil: mapas y códigos.</p>
+                <p class="mb-1">Refactorización de la funcionalidad de Change avatar. Ahora se lleva a cabo clickando en el avatar actual.</p>
+    			<p class="mb-1">Arreglado problema visual en la foto de perfil con resoluciones intermedias</p>
+    
                 <small class="text-muted">Terminado</small>
             </a>
         </div>
@@ -94,6 +98,14 @@
                 <li> Integración: Parte donde se hace el intercambio de datos entre la aplicación y base de datos. Se responsabiliza César, el cual crea en código el modelo de dominio y hace sus conexiones.</li>
             </ul>
             <p>Lo decidimos así para que podamos trabajar en paralelo y así minimizar lo máximo los conflictos, a parte de que si uno se encarga de una capa no se vería diferencias de estilo de código en un mismo fichero. A medida que vamos avanzando, cada uno enseña a los otro dos como está haciendo su parte.</p>
+       		<p>Por otro lado, otro de los retos a los que nos hemos enfrentado es a la evasión de acciones malintencionadas como podría ser la manipulación del resultado de las partidas. Hemos conseguido hacer nuestra aplicación bastante robusta, evitando que un usuario pueda acceder a los datos de otro a través de peticiones al servidor. Con estas medidas evitamos:</p>
+       		<ul>
+                <li> Edición de mapas ajenos</li>
+                <li> Eliminación de mapas ajenos</li>
+                <li> Edición de códigos ajenos</li>
+                <li> Eliminación de códigos ajenos</li>
+        	</ul>
+        	<p>No obstante, y debido a que la ejecución del código se ejecuta en el lado cliente, no podemos asegurar que los datos que se reciben en el lado servidor referentes a cada partida sean legítimas.</p>
         </div>
         <h2 align="center">Vistas</h2>
         <div class="list-group">
