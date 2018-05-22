@@ -69,7 +69,7 @@
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	
 	<div class="row">
-		<div class="warningText centered">WARNING: We take no responsibility on the effects that may cause executing javaScript code created by others in your own device.</div>
+		<div class="warningText centered">DISCLAIMER: We take no responsibility on the effects that may cause executing javaScript code created by others in your own device.</div>
 	</div>
 	<div class="row">
 		<div class="col-sm-5"></div>
