@@ -83,5 +83,4 @@ else {
 	else if (0.75 <= rand && rand < 0.9) this.right();
 	else if (0.9 <= rand && rand < 0.95) this.down();
 	else if (0.95 <= rand && rand < 1) this.fire();
-	else alert('error');
 }
