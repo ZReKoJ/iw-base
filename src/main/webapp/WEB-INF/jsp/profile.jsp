@@ -72,7 +72,7 @@
 	        		</div>
 				</form>
             </div>
-            <div class="user-menu-content">
+            <div class="user-menu-content" style="overflow:scroll; height:260px;">
                 <h3 class="centered">Your codes</h3>
                 <c:choose>
 					<c:when test="${myCodesSize > 0}">
@@ -97,7 +97,7 @@
 					</c:otherwise>
 				</c:choose>
 	        </div>
-            <div class="user-menu-content">
+            <div class="user-menu-content" style="overflow:scroll; height:260px;">
                 <h3 class="centered">Your maps</h3>
                 <c:choose>
 					<c:when test="${myMapsSize > 0}">
