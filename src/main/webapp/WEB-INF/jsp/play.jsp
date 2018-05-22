@@ -5,6 +5,7 @@
 <%@ include file="../jspf/header.jspf"%>
 
 <link href="${s}/css/bootstrap-select.css" rel="stylesheet">
+<link href="${s}/css/play.css" rel="stylesheet">
 <script src="${s}/js/bootstrap-select.js"></script>
 
 <!-- Tema del editor de codemirror -->
