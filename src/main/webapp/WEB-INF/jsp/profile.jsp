@@ -29,13 +29,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row  neutralColourDarkBg">
-            
-            	<div class="col-sm-3">
-            	
-            	</div>
-           		
-            </div>
             <div class="row overview whiteBg">
                 <div class="col-md-6 user-pad text-center">
                     <h3>WIN</h3>
