@@ -7,6 +7,11 @@
 <link href="${s}/css/bootstrap-select.css" rel="stylesheet">
 <script src="${s}/js/bootstrap-select.js"></script>
 
+<!-- Tema del editor de codemirror -->
+<link href="${s}/css/code-design-theme.css" rel="stylesheet">
+<!-- Codemirror editor -->
+<link href="${s}/css/codemirror.css" rel="stylesheet">
+
 <form id="play-form" action="/playing" method="post" role="form">
 	<div class = "row bigpaddingtop" >
 		<div class="col-sm-4 no_margin">
