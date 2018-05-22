@@ -216,4 +216,34 @@ div.user-menu div.user-menu-content:not(.active){
 	resize: none;
 }
 
+#file
+{
+    display: none;
+}
 
+.inputfile + label {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    width:70%;
+    margin-right:15%;
+    margin-left:15%;
+    line-height:160%;
+    padding:2%;
+    border: solid 1px black;
+    border-radius:5px;
+    background-color: #2B7093;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: #3F8CB3;
+}
+
+.profile-list{
+	border:solid 1px lightgrey;
+	border-radius:5px;
+	margin:3px;
+	line-height:150%;
+}

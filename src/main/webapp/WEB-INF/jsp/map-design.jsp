@@ -3,6 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
+
+<link href="${s}/css/map-design.css" rel="stylesheet">
+
+
 <div class="jumbotron">
     <div class="page-title">Design your map</div>
     <hr class="my-4">

@@ -9,6 +9,8 @@
 <!-- Codemirror editor -->
 <link href="${s}/css/codemirror.css" rel="stylesheet">
 
+<link href="${s}/css/code-design.css" rel="stylesheet">
+
 <div class="jumbotron">
     <div class="page-title">Design your code</div>
     <hr class="my-4">

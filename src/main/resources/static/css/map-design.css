@@ -1,0 +1,20 @@
+#grid-element {
+	padding: 10px;
+	display: inline-block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 30%;
+	height: 100%;
+	float: right;
+	background-color: black;
+}
+
+.map-content {
+	float : left;
+	width: 70%;
+	height: 100%;
+}
+
+.selection {
+    border: 2px solid red;
+}
