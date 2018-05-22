@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Code;
@@ -179,6 +180,9 @@ public class RootController{
     				.getSingleResult();
     	}catch(NoResultException e) {
     		u = new User();
+
+    		nickname = HtmlUtils.htmlEscape(nickname);
+    		
     		u.setNickname(nickname);
     		u.setPassword(passwordEncoder.encode(password));
     		u.setWin(0);
@@ -216,6 +220,9 @@ public class RootController{
 	    		Code codeObject= new Code();
 	    		User u = (User)s.getAttribute("user");
 	    		codeObject.setCreator(u);
+	    		
+	    		codeFileName = HtmlUtils.htmlEscape(codeFileName);
+	    		
 	    		codeObject.setName(codeFileName);
 	    		codeObject.setCreationTime(Calendar.getInstance().getTime());
 
@@ -258,6 +265,9 @@ public class RootController{
 	    		Map map= new Map();
 	    		User u = (User)s.getAttribute("user");
 	    		map.setCreator(u);
+	    		
+	    		mapFileName = HtmlUtils.htmlEscape(mapFileName);
+	    		
 	    		map.setName(mapFileName);
 	    		map.setCreationTime(Calendar.getInstance().getTime());
 
