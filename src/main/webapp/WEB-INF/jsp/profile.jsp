@@ -53,7 +53,7 @@
     			<a class="btn neutralColourLightBg active" role="button">Chat</a>
     			<a class="btn neutralColourLightBg" role="button">Codes</a>
     			<a class="btn neutralColourLightBg" role="button">Maps</a>
-    			<a class="btn neutralColourLightBg" onclick="logout()" role="button">Logout</a>
+    			<a class="btn neutralColourLightBg" role="button">Logout</a>
     			<a class="btn neutralColourLightBg" href="/" role="button">Back</a>
             </div>
         </div>
@@ -119,6 +119,13 @@
 						<p class="centered"> No maps uploaded yet!
 					</c:otherwise>
 				</c:choose>
+            </div>
+            <div class="user-menu-content">
+                <h3 class="centered">Are you sure you want to logout?</h3>
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-primary" role="button" onclick="logout()">Yes</a>
+                    <a class="btn btn-primary" href="profile" role="button">No</a>
+                </div>
             </div>
         </div>
     </div>
