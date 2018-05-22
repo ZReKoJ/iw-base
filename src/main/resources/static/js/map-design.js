@@ -175,11 +175,17 @@ function mapDesign(mapId) {
 	
 	document.getElementById("upload").addEventListener("click", function(){
 		if (document.getElementById("mapFileName").value != ""){
-			$.post("/createMap", {
-				"_csrf" : csrf_data.token, 
-				"json" : battleGround.json(),
-				"mapFileName": document.getElementById("mapFileName").value},
-				function(data){notifier.success(data)});
+			let title = document.getElementById("mapFileName").value;
+			if (!hasJavascript(title)) {
+				$.post("/createMap", {
+					"_csrf" : csrf_data.token, 
+					"json" : battleGround.json(),
+					"mapFileName": title},
+					function(data){notifier.success(data)});
+				}
+			else {
+				notifier.error("The title has javascript!");
+			}
 		}
 		else {
 			notifier.warning("Name is required");
