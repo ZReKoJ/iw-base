@@ -55,11 +55,11 @@ function mapDesign(mapId) {
 	});
 	$('.input-number').change(function() {
 	    
-	    minValue =  parseInt($(this).attr('min'));
-	    maxValue =  parseInt($(this).attr('max'));
-	    valueCurrent = parseInt($(this).val());
+	    let minValue =  parseInt($(this).attr('min'));
+	    let maxValue =  parseInt($(this).attr('max'));
+	    let valueCurrent = parseInt($(this).val());
 	    
-	    name = $(this).attr('name');
+	    let name = $(this).attr('name');
 	    if(valueCurrent >= minValue) {
 	        $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
 	    } else {
