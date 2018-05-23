@@ -123,6 +123,7 @@ class BattleGround {
 	    		}
 	    	}
 	    }
+		callback();
 	}
 	
 	findEmptyCell(){
