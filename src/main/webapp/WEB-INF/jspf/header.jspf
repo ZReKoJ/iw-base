@@ -80,3 +80,4 @@
             </div>
         </nav>
         <div class="container">
+		    <div id="noty-holder" class="smallpaddingtop"></div>
