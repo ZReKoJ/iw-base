@@ -29,35 +29,36 @@ function hasJavascript(text) {
 }
 
 class Notifier {
+	constructor(){
+		this.lastNotification = new Date().getTime();
+		this.element = null;
+	}
 	
 	success(text){
-		this.notify(text, "success");
+		this.notify(text, "#5cb85c");
 	}
 	error(text){
-		this.notify(text, "danger");
+		this.notify(text, "#d9534f");
 	}
 	warning(text){
-		this.notify(text, "warning")
+		this.notify(text, "#f0ad4e")
 	}
 	
 	notify(text, type) {
-		
-	    let html = '<div class="alert alert-' + type + ' alert-dismissable page-alert">'    
-	    	+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
-	    	+ '<span aria-hidden="true">'
-	    	+ '×'
-	    	+ '</span>'
-	    	+ '<span class="sr-only">'
-	    	+ 'Close'
-	    	+ '</span>'
-	    	+ '</button>'
-	    	+ text 
-	    	+ '</div>';
-	    let element = $(html);
-	    element.hide().prependTo('#noty-holder').slideDown().delay(3000).fadeOut("slow", function(){
-	    	element.remove();
-	    });
-	    $('html, body').animate({ scrollTop: 0 }, 'fast');
+		let self = this;
+		self.element = $('#noty-holder');
+		self.lastNotification = new Date().getTime();
+		self.element[0].innerHTML = text;
+		self.element[0].removeAttribute('style');
+		self.element[0].setAttribute('style', "color: " + type + ";");
+		window.setTimeout(function() {
+			if (self.lastNotification + 3000 <= new Date().getTime()){
+				self.element.fadeOut("slow", function(){
+	    			self.element[0].innerHTML = '';
+	    			self.element[0].removeAttribute('style');
+	    		});
+			}
+		}, 3000);
 	}
 }
 

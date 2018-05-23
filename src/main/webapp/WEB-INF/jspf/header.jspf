@@ -42,6 +42,7 @@
 	                    	<a class="navbar-brand brand_title" href="/admin">Admin</a>
 	                    </sec:authorize>
                     </sec:authorize>
+                	<span id="noty-holder" class="navbar-text"></span>
                 </div>
                 <c:if test="${user.id != null}">
 	                <div id="navbar" class="collapse navbar-collapse">
@@ -80,4 +81,3 @@
             </div>
         </nav>
         <div class="container">
-		    <div id="noty-holder" class="smallpaddingtop"></div>
