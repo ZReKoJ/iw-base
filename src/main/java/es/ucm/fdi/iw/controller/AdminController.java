@@ -7,10 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,7 +69,73 @@ public class AdminController {
 		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
 		m.addAttribute("codes", codes);
 		
-		return "admin";	
+		return "admin";
 	}
+	
+	@PostMapping(value = "/deleteUsers")
+	@ResponseBody
+    @Transactional
+	public String deleteUsersHandler(@RequestParam("users[]") ArrayList<String> users)
+{
+		
+    	for(String user: users) {
+    		if (localData.getFile("/users", user).delete()) {
+				User element = entityManager.find(User.class, Long.parseLong(user));
+				entityManager.remove(element);
+			}
+			else
+		        log.info("El fichero no pudo ser borrado");
+    	}
+				
+			
+			
+    	return  "/admin";
 
+	}
+    
+    	
+
+	@PostMapping(value = "/deleteCodes")
+	@ResponseBody
+    @Transactional
+	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes)
+{
+		
+    	for(String code: codes) {
+    		if (localData.getFile("/codes", code).delete()) {
+				Code element = entityManager.find(Code.class, Long.parseLong(code));
+				entityManager.remove(element);
+			}
+			else
+		        log.info("El fichero no pudo ser borrado");
+    	}
+				
+			
+			
+    	return  "/admin";
+
+	}
+	
+	@PostMapping(value = "/deleteMaps")
+	@ResponseBody
+    @Transactional
+	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps)
+{
+		
+    	for(String map: maps) {
+    		if (localData.getFile("/maps", map).delete()) {
+				Map element = entityManager.find(Map.class, Long.parseLong(map));
+				entityManager.remove(element);
+			}
+			else
+		        log.info("El fichero no pudo ser borrado");
+    	}
+				
+			
+			
+    	return  "/admin";
+
+	}
+    
+    
 }

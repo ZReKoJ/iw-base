@@ -264,3 +264,17 @@ label{
 	border:1px solid #c3c3c3;
 	background-color: black; 
 }
+
+.margin-top-80{
+	margin-top:80px;
+}
+
+.form-actions {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.divList{
+	max-height:350px;
+	overflow:auto;
+}
