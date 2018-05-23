@@ -11,19 +11,14 @@
 	<div class="col-sm-1"></div>
 	<div class="col-sm-3">
 		<div class="list-group" id="myListSelect" role="tablist">
-		  <a class="list-group-item list-group-item-action active" role="tab" id="users">Users </a>
-		  <a class="list-group-item list-group-item-action" role="tab" id="codes">Codes</a>
+		  <a class="list-group-item list-group-item-action active" role="tab" id="codes">Codes</a>
 		  <a class="list-group-item list-group-item-action" role="tab" id="maps">Maps</a>	  
 		</div>
 	</div>
 	<div class="col-sm-7" id="listZone">
 		<div class="divList">
-			<div class="list-group lista" role="tablist" id="users">
-				<c:forEach var="user" items="${users}">
-						<a class="list-group-item list-group-item-action" id="${user.id}">${user.id}: ${user.nickname}</a>
-				</c:forEach>
-			</div>
-	 		<div class="list-group lista"  role="tablist"  id="codes" hidden="true">
+			
+	 		<div class="list-group lista"  role="tablist"  id="codes">
 				<c:forEach var="code" items="${codes}">
 						<a class="list-group-item list-group-item-action" id="${code.id}">${code.creator.nickname}: ${code.name}</a>
 				</c:forEach>

@@ -41,18 +41,7 @@ function deleteSelectedItems(){
 	let selectList = $('#myListSelect');
 	let active = selectList.find('a.active');
 
-	if(active.first().attr('id') == "users"){
-		
-		var users = [];
-		selectedItems.each(function () {
-		   users.push(this.id);
-		});
-		$.post("admin/deleteUsers",{"users":users, "_csrf": csrf_data.token}, function(data){
-			window.location = data;
-		}); 
-		
-
-	}else if(active.first().attr('id') == "codes"){
+	if(active.first().attr('id') == "codes"){
 		
 		var codes = [];
 		selectedItems.each(function () {

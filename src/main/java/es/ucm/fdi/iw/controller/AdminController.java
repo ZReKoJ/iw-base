@@ -60,9 +60,6 @@ public class AdminController {
 	@GetMapping({"", "/"})
 	public String root(Model m) {
 		
-		m.addAttribute("users", entityManager
-				.createQuery("select u from User u").getResultList());
-		
 		List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
 		m.addAttribute("maps", maps);
 		
@@ -72,33 +69,13 @@ public class AdminController {
 		return "admin";
 	}
 	
-	@PostMapping(value = "/deleteUsers")
-	@ResponseBody
-    @Transactional
-	public String deleteUsersHandler(@RequestParam("users[]") ArrayList<String> users)
-{
-		
-    	for(String user: users) {
-    		if (localData.getFile("/users", user).delete()) {
-				User element = entityManager.find(User.class, Long.parseLong(user));
-				entityManager.remove(element);
-			}
-			else
-		        log.info("El fichero no pudo ser borrado");
-    	}
-				
-			
-			
-    	return  "/admin";
-
-	}
-    
+	
     	
 
 	@PostMapping(value = "/deleteCodes")
 	@ResponseBody
     @Transactional
-	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes)
+	public String deleteCodesHandler(@RequestParam("codes[]") ArrayList<String> codes, Model m)
 {
 		
     	for(String code: codes) {
@@ -110,7 +87,11 @@ public class AdminController {
 		        log.info("El fichero no pudo ser borrado");
     	}
 				
-			
+    	List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
+		m.addAttribute("maps", maps);
+		
+		List<Code> cod = entityManager.createQuery("from Code", Code.class).getResultList();
+		m.addAttribute("codes", cod);
 			
     	return  "/admin";
 
@@ -119,7 +100,7 @@ public class AdminController {
 	@PostMapping(value = "/deleteMaps")
 	@ResponseBody
     @Transactional
-	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps)
+	public String deleteMapsHandler(@RequestParam("maps[]") ArrayList<String> maps, Model m)
 {
 		
     	for(String map: maps) {
@@ -131,6 +112,12 @@ public class AdminController {
 		        log.info("El fichero no pudo ser borrado");
     	}
 				
+    	
+    	List<Map> ma = entityManager.createQuery("from Map", Map.class).getResultList();
+		m.addAttribute("maps", ma);
+		
+		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
+		m.addAttribute("codes", codes);
 			
 			
     	return  "/admin";
