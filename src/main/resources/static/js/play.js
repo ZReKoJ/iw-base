@@ -7,8 +7,8 @@ function play() {
 	let parent = $(canvas).parent();
 	canvas.width = parent.width();
 	canvas.height = parent.height();
-	
-	let battleGround = null;
+
+	let battleGround = new BattleGround(canvas, 10, 10);
 	
 	window.onresize = function() {
 		
@@ -71,15 +71,10 @@ function play() {
 		else{
 			$("#play-submit").prop("disabled", true);
 		}
-		let fullid = $("#all-maps option:selected").attr("id");
-		let id;
-		if (fullid !=null){
-			id = fullid.substring(4);
-		}
+		let id = getId($("#all-maps option:selected"));
 		if (id != null){
 			loadData('/loadMap/' + id, function(data){
-				if (battleGround != null)
-					battleGround.reset(canvas);
+				battleGround.reset(canvas);
 				data = JSON.parse(data);
 				battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 				battleGround.fillContent(data, function(){
@@ -99,7 +94,7 @@ function play() {
 		
 		let fullid = $("#all-codes option:selected").not(".selectedFlag").attr("id")
 		let id;
-		if (fullid !=null){
+		if (fullid != null){
 			id = fullid.substring(4);
 			$("#all-" + id).addClass("selectedFlag");
 		}
