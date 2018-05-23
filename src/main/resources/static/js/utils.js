@@ -57,6 +57,7 @@ class Notifier {
 	    element.hide().prependTo('#noty-holder').slideDown().delay(3000).fadeOut("slow", function(){
 	    	element.remove();
 	    });
+	    $('html, body').animate({ scrollTop: 0 }, 'fast');
 	}
 }
 

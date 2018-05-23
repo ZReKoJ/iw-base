@@ -7,8 +7,8 @@ function play() {
 	let parent = $(canvas).parent();
 	canvas.width = parent.width();
 	canvas.height = parent.height();
-	
-	let battleGround = null;
+
+	let battleGround = new BattleGround(canvas, 10, 10);
 	
 	window.onresize = function() {
 		
@@ -46,6 +46,7 @@ function play() {
 		let selectedCodeId = $("#owned-codes option:selected").attr("id")
 		$("#all-" + selectedCodeId).prop("disabled", true);
 		$("#all-" + selectedCodeId).prop("selected", false);
+		$("#all-codes option:not(:selected)").removeClass("selectedFlag");
 		$("#all-codes").selectpicker("refresh");
 		
 		if($("#owned-codes option:selected").length == 1 && $("#all-maps option:selected").length == 1 && $("#all-codes option:selected").length >= 1){
@@ -54,6 +55,7 @@ function play() {
 		else{
 			$("#play-submit").prop("disabled", true);
 		}
+		
 		let id = getId($("#owned-codes option:selected"));
 		if (id != null){
 			loadData('/loadCode/' + id, function(data){
@@ -72,8 +74,7 @@ function play() {
 		let id = getId($("#all-maps option:selected"));
 		if (id != null){
 			loadData('/loadMap/' + id, function(data){
-				if (battleGround != null)
-					battleGround.reset(canvas);
+				battleGround.reset(canvas);
 				data = JSON.parse(data);
 				battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 				battleGround.fillContent(data, function(){
@@ -90,7 +91,15 @@ function play() {
 		else{
 			$("#play-submit").prop("disabled", true);
 		}
-		let id = getId($("#all-codes option:selected:last"));
+		
+		let fullid = $("#all-codes option:selected").not(".selectedFlag").attr("id")
+		let id;
+		if (fullid != null){
+			id = fullid.substring(4);
+			$("#all-" + id).addClass("selectedFlag");
+		}
+		$("#all-codes option:not(:selected)").removeClass("selectedFlag");
+		$("#all-codes").selectpicker("refresh");
 		if (id != null){
 			loadData('/loadCode/' + id, function(data){
 		    	codeMirrorEditor.setValue(data);

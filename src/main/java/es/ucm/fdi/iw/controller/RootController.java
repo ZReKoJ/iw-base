@@ -209,7 +209,9 @@ public class RootController{
     		HttpSession s)
     {
     	response.setHeader("X-XSS-Protection", "0");
-    	
+
+		codeFileName = HtmlUtils.htmlEscape(codeFileName);
+		
 		String error = "";
         if (code.isEmpty()) {
         	error = "You failed to upload a photo for " 
@@ -220,8 +222,6 @@ public class RootController{
 	    		Code codeObject= new Code();
 	    		User u = (User)s.getAttribute("user");
 	    		codeObject.setCreator(u);
-	    		
-	    		codeFileName = HtmlUtils.htmlEscape(codeFileName);
 	    		
 	    		codeObject.setName(codeFileName);
 	    		codeObject.setCreationTime(Calendar.getInstance().getTime());
@@ -255,6 +255,9 @@ public class RootController{
     		@RequestParam String mapFileName,
     		HttpSession s)
     {
+		
+		mapFileName = HtmlUtils.htmlEscape(mapFileName);
+		
     	String error = "";
         if (json.isEmpty()) {
         	error = "You failed to upload the map";     
@@ -265,8 +268,6 @@ public class RootController{
 	    		Map map= new Map();
 	    		User u = (User)s.getAttribute("user");
 	    		map.setCreator(u);
-	    		
-	    		mapFileName = HtmlUtils.htmlEscape(mapFileName);
 	    		
 	    		map.setName(mapFileName);
 	    		map.setCreationTime(Calendar.getInstance().getTime());

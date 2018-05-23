@@ -40,7 +40,7 @@
 					<c:when test="${maps.size() > 0}">
 						<select id="all-maps" name="map" class="selectpicker show-tick" data-width="100%"  data-live-search="true" data-max-options="1" multiple>
 							<c:forEach var="map" items="${maps}">
-								<option value='{"id": ${map.id}, "name": "${map.name}" }' data-subtext="${map.creator.nickname}">${map.name}</option>
+								<option id="map-${map.id}" value='{"id": ${map.id}, "name": "${map.name}" }' data-subtext="${map.creator.nickname}">${map.name}</option>
 							</c:forEach>
 						</select>
 					</c:when>

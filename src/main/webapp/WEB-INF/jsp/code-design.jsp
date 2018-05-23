@@ -32,7 +32,7 @@
 	        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
 	    </div>
 	    <div class="btn-toolbar pull-right">
-	    	<button id="upload" class="btn btn-primary" role="button" type="submit">Upload</button>
+	    	<a id="upload" class="btn btn-primary" role="button" type="submit">Upload</a>
 	        <a class="btn btn-primary" href="/" role="button">Cancel</a>
 	    </div>
 	    <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />

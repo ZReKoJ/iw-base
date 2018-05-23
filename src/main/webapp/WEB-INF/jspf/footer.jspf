@@ -1,5 +1,4 @@
 		<%@ page pageEncoding="UTF-8"%>
-		<div id="noty-holder"></div>
 		</div><!-- /.container -->
 		<script>
 			var csrf_data = {
