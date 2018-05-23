@@ -133,7 +133,7 @@
 
 
 
-/************ General ****************+++*/
+/************ General *****************/
 body {
   height: 100%;
   width: 100%;
@@ -256,6 +256,10 @@ label{
     font-weight: bold;    
     z-index: 1031;
     text-align: center;
+}
+
+.smallpaddingtop{
+	padding-top:2%;
 }
 
 #canvas {

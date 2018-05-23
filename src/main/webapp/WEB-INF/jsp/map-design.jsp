@@ -8,6 +8,7 @@
 
 
 <div class="jumbotron">
+	<div id="noty-holder" class="smallpaddingtop"></div>
     <div class="page-title">Design your map</div>
     <hr class="my-4">
     <input type="text" id="mapFileName" name="mapFileName" class="form-control" placeholder="Set the name for your map">
@@ -48,7 +49,7 @@
     </div>
     <div class="row">
         <div class="btn-toolbar pull-right">
-            <a id="upload" class="btn btn-primary" role="button">Upload</a>
+            <a id="upload" href="#" class="btn btn-primary" role="button">Upload</a>
             <a class="btn btn-primary" href="/" role="button">Cancel</a>
         </div>
     </div>

@@ -12,6 +12,7 @@
 <link href="${s}/css/code-design.css" rel="stylesheet">
 
 <div class="jumbotron">
+	<div id="noty-holder" class="smallpaddingtop"></div>
     <div class="page-title">Design your code</div>
     <hr class="my-4">
     <form id="code-form" action="/createCode" 
@@ -32,7 +33,7 @@
 	        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
 	    </div>
 	    <div class="btn-toolbar pull-right">
-	    	<button id="upload" class="btn btn-primary" role="button" type="submit">Upload</button>
+	    	<a id="upload" href="#" class="btn btn-primary" role="button" type="submit">Upload</a>
 	        <a class="btn btn-primary" href="/" role="button">Cancel</a>
 	    </div>
 	    <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
