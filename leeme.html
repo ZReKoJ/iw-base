@@ -62,7 +62,7 @@
                 <p class="mb-1">Conexión con base de datos, subir y coger datos</p>
                 <small class="text-muted">Terminado</small>
             </a>
-            <a href="#v1.2.0" id="v1.3.0" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a href="#v1.3.0" id="v1.3.0" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Version 1.3.0</h5>
                     <small class="text-muted">19 de mayo de 2018</small>
@@ -73,7 +73,7 @@
                 <p class="mb-1">Create y delete de maps y codes</p>
                 <small class="text-muted">Terminado</small>
             </a>
-			<a href="#v1.2.0" id="v1.3.0" class="list-group-item list-group-item-action flex-column align-items-start">
+			<a href="#v2.0.0" id="v2.0.0" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">Version 2.0.0</h5>
                     <small class="text-muted">22 de mayo de 2018</small>
@@ -85,6 +85,18 @@
                 <p class="mb-1">Scroll añadido a las secciones correspondientes del perfil: mapas y códigos.</p>
                 <p class="mb-1">Refactorización de la funcionalidad de Change avatar. Ahora se lleva a cabo clickando en el avatar actual.</p>
     			<p class="mb-1">Arreglado problema visual en la foto de perfil con resoluciones intermedias</p>
+    
+                <small class="text-muted">Terminado</small>
+            </a>
+			<a href="#v2.1.0" id="v2.1.0" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Version 2.1.0</h5>
+                    <small class="text-muted">9 de junio de 2018</small>
+                </div>
+                <p class="mb-1">Comentarios en js</p>
+                <p class="mb-1">Simulador en code-design</p>
+				<p class="mb-1">Control de errores de los códigos</p>
+				<p class="mb-1">Correcciones varias</p>
     
                 <small class="text-muted">Terminado</small>
             </a>
@@ -160,11 +172,13 @@
                    <p>En esta vista se llevará a cabo la ejecución de la partida de manera automática. Los robots se comportarán acorde a los códigos seleccionados previamente. Batallarán entre ellos hasta que solo quede 1. Los robots tienen unos valores de ataque y defensa base. Los cálculos de daño se calculan en función de el valor de ataque del atacante y el valor de defensa del atacado. Además se mueven a una velocidad determinada. Estas tres características se ven afectadas por los elementos del terreno sobre los que esté situado el robot.</p>
                   <p></p>
 				   <p>Durante el juego el usuario solo podrá espectar la partida y hacer zoom (con la rueda del ratón) para ver con más detalle la partida, además de seguir continuamente los movimientos de un robot. Esta acción se realiza clickando en barra de vida del robot que se quiere seguir. El robot seguido se mostrará en con un asterisco al lado del nombre.</p>
-                   <p>Barras de vida: se situa en la parte superior derecha de la vista con los siguientes datos: nombre del código/nombre del creador --- porcentaje de la vida del robot,número de balas</p>
+                   <p>Además, si un código de un robot produce excepciones, se captará y se envían mensajes de error y el motivo se mostrará por console.log</p>
+				   <p>Barras de vida: se situa en la parte superior derecha de la vista con los siguientes datos: nombre del código/nombre del creador --- porcentaje de la vida del robot,número de balas</p>
 				   <p>Botón Play again: este botón se mantendrá desactivado hasta el final de la partida. Una vez finalizada, permitirá al usuario volver a la pantalla de configuración de partida (vista play).</p>
 				   <p>Botón Play/Pause: controlar el desarrollo del juego, puedes parar el juego y guardar el instante del juego en un imagen y despues iniciar otra vez el juego.</p>
 				   <p>Botón FullScreen: permite al usuario introducirse en el modo pantalla completa. Para salir de él se pulsará el botón Escape.</p>
 					<p></p>
+					<p>El juego termina cuando sólo quede un robot vivo, y se parará toda ejecución una vez que haya un ganador.</p>
 				</div>
             </a>
 
@@ -176,6 +190,15 @@
                 <div style = "margin-top:20px">
                     <p> En esta vista cada usuario podrá editar, cargar, y guardar sus códigos. Dichos códigos determinarán el comportamiento de los robots en partida. La herramienta de edición de código resaltará de manera inteligente los elementos típicos de JavaScript. Es necesario nombrar el código para poder guardarlo.</p>
                     <p> Se puede editar código directamente en esta vista o subir código desde tu ordenador.</p>
+					<p> Hay un botón help que cada vez que se pulse se mostrará el texto de ayuda, y si lo pulsa de nuevo vuelve al texto que estaba. </p>
+					<p> Además, existe un botón de test que si se pulsa se simula una partida entre un robot con el código escrito y el robot manejado por teclado. </p>
+					<ul>
+					<li>Disparar: Tecla espacio</li>
+					<li>Arriba: Tecla arriba</li>
+					<li>Abajo: Tecla abajo</li>
+					<li>Izquierda: Tecla izquierda</li>
+					<li>Derecha: Tecla derecha</li>
+					</ul>
                 </div>
             </a>
             <a target="_blank"  href="http://localhost:8080/map-design" id="map-design" class="list-group-item list-group-item-action flex-column align-items-start">
