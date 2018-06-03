@@ -171,6 +171,7 @@ class Robot {
 		// Constructs the data for the abstraction
 		let data = {
 			name : this.info.name,
+			creator: this.info.creatorName,
 			atk : this.atk,
 			hp : this.hp,
 			def : this.def,
@@ -389,6 +390,7 @@ class RobotAbstraction {
 		this.command = "";
 		// Any history of the battle the designer wants to keep
 		this.dataMap = new Map();
+		this.error = false;
 	}
 	
 	fire(){
@@ -413,7 +415,17 @@ class RobotAbstraction {
 	
 	makeMove(data){
 		this.command = "";
-		eval(this.code);
+		if (!this.error) {
+			try {
+				eval(this.code);
+			}
+			catch(err) {
+				notifier.error("" + data.name + "/" + data.creator + ": I have issues with my code, check log");
+				console.log("" + data.name + "/" + data.creator + ": " + err.message);
+				this.error = true;
+				return "";
+			}
+		}
 		return this.command;
 	}
 }
