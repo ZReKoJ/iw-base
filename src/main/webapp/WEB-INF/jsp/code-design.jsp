@@ -29,9 +29,16 @@
 	        </div>
 	    </div>
 	    <div class="row">
-	        <textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
-	    </div>
+			<div class="pull-left" style="width: 60%; height: 300px;">
+	        	<textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+	        </div>
+			<div class="pull-right" style="width: 40%; height: 300px;">
+				<canvas id="canvas"></canvas>
+			</div>
+		</div>
 	    <div class="btn-toolbar pull-right">
+	   		<a id="help" class="btn btn-primary" role="button">Help</a>
+	   		<a id="test" class="btn btn-primary" role="button">Test</a>
 	    	<a id="upload" class="btn btn-primary" role="button" type="submit">Upload</a>
 	        <a class="btn btn-primary" href="/" role="button">Cancel</a>
 	    </div>
@@ -45,6 +52,9 @@ $( document ).ready(function() {
 });
 </script>
 
+<script src="${s}/js/map-properties.js"></script>
+<script src="${s}/js/battle-ground.js"></script>
+<script src="${s}/js/robot.js"></script>
 <script src="${s}/js/codemirror.js"></script>
 <script src="${s}/js/javascriptMode.js"></script>
 <script src="${s}/js/code-design.js"></script>

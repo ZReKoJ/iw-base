@@ -88,18 +88,21 @@ class Robot {
 	
 	// When playing, this function will notify its progress bar its info
 	notify() {
-		let childNodes = $("#robot_"+ this.info.id)[0].childNodes;
-		for (let i = 0; i < childNodes.length; ++i) {
-			let element = childNodes[i];
-			if (element.className == 'progress-bar progress-bar-success'){
-				element.style.width = this.hp + "%";
-				element.setAttribute("aria-valuenow", this.hp);
-			}
-			if (element.className == 'progress-type'){
-				element.innerHTML = ((this.follow) ? "*" : "") + this.info.name + "/" + this.info.creatorName.toUpperCase();
-			}
-			if (element.className == 'progress-completed'){
-				element.innerHTML = Math.ceil(this.hp) + "% " + this.numBullets;
+		let childNodes = $("#robot_"+ this.info.id);
+		if (childNodes[0] != null && childNodes[0] != undefined) {
+			childNodes = childNodes[0].childNodes;
+			for (let i = 0; i < childNodes.length; ++i) {
+				let element = childNodes[i];
+				if (element.className == 'progress-bar progress-bar-success'){
+					element.style.width = this.hp + "%";
+					element.setAttribute("aria-valuenow", this.hp);
+				}
+				if (element.className == 'progress-type'){
+					element.innerHTML = ((this.follow) ? "*" : "") + this.info.name + "/" + this.info.creatorName.toUpperCase();
+				}
+				if (element.className == 'progress-completed'){
+					element.innerHTML = Math.ceil(this.hp) + "% " + this.numBullets;
+				}
 			}
 		}
 	}

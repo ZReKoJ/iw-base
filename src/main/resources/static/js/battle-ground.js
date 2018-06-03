@@ -47,6 +47,8 @@ class BattleGround {
 		this.robots = new Map();
 		// If theres a robot that has to be followed
 		this.followRobot = null;
+		// Boolean that says if it is real playing or just a test
+		this.play = true;
 	}
 	
 	// Calculations for where the mouse is at
@@ -305,14 +307,21 @@ class BattleGround {
 	    	}
 	    	// If the robot has no hp left then adds a loss to the robot, and if it has only one robot left then add win to that robot
 	    	else {
-	    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
+	    		if (self.play) {
+		    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
+	    		}
 	    		self.robots.delete(key);
 	    		if (self.robots.size == 1) {
 	    			 self.robots.forEach(function(valueWinner, keyWinner){
-	    				 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
+	    				 if (self.play) {
+	    					 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
+	    				 }
 	    				 notifier.success("" + valueWinner.info.name + "/" + valueWinner.info.creatorName + " has won!!!");
 	    			 });
-	    			 document.getElementById("playagain-button").classList.remove("disabled");
+
+    				 if (self.play) {
+    					 document.getElementById("playagain-button").classList.remove("disabled");
+    				 }
 	    		}
 	    	}
 	    });
