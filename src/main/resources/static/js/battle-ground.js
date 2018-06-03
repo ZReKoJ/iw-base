@@ -310,6 +310,7 @@ class BattleGround {
 	    		if (self.robots.size == 1) {
 	    			 self.robots.forEach(function(valueWinner, keyWinner){
 	    				 $.post( "/addWin", {"id": valueWinner.info.creatorId,  "_csrf": csrf_data.token });
+	    				 notifier.success("" + valueWinner.info.name + "/" + valueWinner.info.creatorName + " has won!!!");
 	    			 });
 	    			 document.getElementById("playagain-button").classList.remove("disabled");
 	    		}

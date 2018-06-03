@@ -118,6 +118,11 @@ function start(battleGround, codes){
 		// Redraw map
 		battleGround.clear().drawMapContent();
 		
+		if (battleGround.robots.size == 1) {
+			playPause = false;
+			playPauseButton.classList.add("disabled");
+		}
+		
 		// Checking if keep playing
 		if (playPause) {
 			lastRender = timestamp
