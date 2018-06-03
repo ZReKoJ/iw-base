@@ -8,36 +8,48 @@ class BattleGround {
 		// numCells
 		this.rows = numRows;
 		this.cols = numCols;
-		// BLOCKS
+		// The different sorts of ground the map has defined in map-properties.js
 		this.BLOCKS = Object.freeze(mapProperties);
-		// status 
+		// Status : The window frame, the map and cell dimensions
 		this.frame = new Rectangle(canvas.width, canvas.height);
 		this.cell = new Square(Math.floor(this.frame.width / this.cols), Math.floor(this.frame.height / this.rows));
 		this.table = new Rectangle(this.cols * this.cell.width, this.rows * this.cell.height);
 		// the center of the battleGround
 		this.mapCenter = this.table.center;
 		
+		// For zoom
 		this.zoomScale = 1,
+		// For the camera movements
 		this.moveScale = 5,
+		
+		// When designing, line features
 		this.lineDash = 0,
 		this.lineWidth = 1,
-		this.zoomZone = 0.6,
-		this.margin = undefined;
 		
+		// Only the 60% of the window (internal) can be used for zoom, the others are for movements
+		this.zoomZone = 0.6,
+		
+		// Borders
+		this.margin = undefined;
 		this.defineMapFeature();
 		
+		// Çreating map content
 		this.mapContent = createArray(this.rows, this.cols);
 		
+		// Mouse info
 		this.mouseAt = {
 			windowPosition: { x: "x", y: "y" },
 			mapPosition: { x: "x", y: "y" },
 			cellPosition: { x: "x", y: "y" }
 		}
 		
+		// Map (key, value) which contains the robots in the game
 		this.robots = new Map();
+		// If theres a robot that has to be followed
 		this.followRobot = null;
 	}
 	
+	// Calculations for where the mouse is at
 	defineMouseAt(x, y){
 		let mouseAt = {
 			windowPosition: { x: "x", y: "y" },
@@ -57,6 +69,7 @@ class BattleGround {
 		return mouseAt;
 	}
 	
+	// Redefining all measures for the map
 	defineMapFeature(){
 		this.lineDash = (this.table.width < this.frame.width || this.table.height < this.frame.height) ? 0 : 1; 
 		
@@ -70,6 +83,7 @@ class BattleGround {
 	    }
 	}
 	
+	// Zooming in 
 	zoomIn(){
 		let windowCenter = this.frame.center;
 		let horizontal = this.mouseAt.windowPosition.x - windowCenter.x;
@@ -85,6 +99,7 @@ class BattleGround {
 		}
 	}
 	
+	// Zooming out
 	zoomOut(){
 		let windowCenter = this.frame.center;
 		let horizontal = this.mouseAt.windowPosition.x - windowCenter.x;
@@ -100,10 +115,12 @@ class BattleGround {
 		}
 	}
 	
+	// Adds a robot to the map (key, value)
 	addRobot(robot){
 		this.robots.set("robot_" + robot.info.id, robot);
 	}
 	
+	// Fills the map content with data
 	fillContent(data, callback){
 		let set = new Set();
 		for (let i = 0; i < data.cellDim.rows; i++)
@@ -126,6 +143,7 @@ class BattleGround {
 		callback();
 	}
 	
+	// Search an empty cell, if theres no empty cell, it will return null
 	findEmptyCell(){
 		let x = Math.floor((Math.random() * (this.rows - 1)));
 		let y = Math.floor((Math.random() * (this.cols - 1)));
@@ -145,10 +163,12 @@ class BattleGround {
 		return null;
 	}
 	
+	// Transform relative position to real
 	toRealPosition(point){
 		return new Point(Math.floor(this.table.width * point.x), Math.floor(this.table.height * point.y));
 	}
 	
+	// Given a point, returns the cell this point is at
 	getCellPosition(point){
 		let mouseAt = this.defineMouseAt(
 			this.margin.left + this.table.width * point.x,
@@ -156,6 +176,7 @@ class BattleGround {
 		return new Point(mouseAt.cellPosition.x, mouseAt.cellPosition.y);
 	}
 	
+	// Checks the ground a point is at
 	checkPosition(point){
 		point = this.getCellPosition(point);
 		if (0 <= point.x && point.x < this.cols && 0 <= point.y && point.y < this.rows) {
@@ -164,6 +185,7 @@ class BattleGround {
 		else return this.BLOCKS.NOTHING.id;
 	}
 	
+	// Checks if a robot can move through this cell
 	canIMoveOn(cell) {
 		let moveOn = [
 			this.BLOCKS.PLATFORM,
@@ -179,6 +201,7 @@ class BattleGround {
 		return yes;
 	}
 	
+	// Checks if a bullet can explode on this cell
 	canIShotBulletOn(cell) {
 		let shotBulletOn = [
 			this.BLOCKS.NOTHING,
@@ -214,6 +237,7 @@ class BattleGround {
 		return yes;
 	}
 	
+	// While designing a map, sets an image to the cell
 	setImageOnCell(x, y, image, index){
 		if (0 <= x && x < this.rows && 0 <= y && y < this.cols){
 			this.mapContent[x][y] = {
@@ -223,6 +247,7 @@ class BattleGround {
 		}
 	}
 	
+	// Draws a cell with an image in an especified position
 	drawCell(x, y, image){
 	    this.ctx.fillStyle = "#00FFEE";
 		if (0 <= x && x < this.cols && 0 <= y && y < this.rows) {
@@ -236,6 +261,7 @@ class BattleGround {
 		}
 	}
 	
+	// Draws all map content
 	drawMapContent(){
 		if (this.followRobot != null) {
 			let robot = this.robots.get("robot_" + this.followRobot);
@@ -250,6 +276,7 @@ class BattleGround {
 	            if (this.mapContent[i][j] != undefined && this.mapContent[i][j].image != undefined)
 	                this.drawCell(j, i, this.mapContent[i][j].image);
 	    let self = this;
+	    // Here draws all robots
 	    this.robots.forEach(function(value, key) {
 	    	if (value.hp > 0) {
 			    self.ctx.save();
@@ -259,6 +286,7 @@ class BattleGround {
 			    self.ctx.rotate(toRadians(value.rotation));
 		    	self.ctx.drawImage(value.image, -self.cell.center.x * value.width, -self.cell.center.y * value.height, self.cell.width * value.width, self.cell.height * value.height);
 		    	self.ctx.restore();
+		    	// Here draws all bullets
 		    	for (let x in value.bullets) {
 		    		value.bullets[x].next(self);
 		    		if (value.bullets[x].state != value.bullets[x].STATES.DELETE) {
@@ -275,6 +303,7 @@ class BattleGround {
 		    		}
 		    	}
 	    	}
+	    	// If the robot has no hp left then adds a loss to the robot, and if it has only one robot left then add win to that robot
 	    	else {
 	    		$.post( "/addLoss", { "id": value.info.creatorId, "_csrf": csrf_data.token });
 	    		self.robots.delete(key);
@@ -289,6 +318,7 @@ class BattleGround {
 	    return this;
 	}
 	
+	// Draw the matrix of the cell map when designing
 	drawCellMap() {
 
 	    this.ctx.setLineDash([this.lineDash, this.lineDash]);
@@ -321,6 +351,7 @@ class BattleGround {
 	    return this;
 	}
 	
+	// Function which shows some info for the user to draw map while designing
 	writeInfo(){
 		let distancesTo;
 		this.ctx.fillStyle = "white";
@@ -342,6 +373,7 @@ class BattleGround {
 		*/return this;
 	}
 	
+	// Translate all data to json
 	json(){
 		let result = {
 			cellDim : undefined,
@@ -365,6 +397,7 @@ class BattleGround {
 		return JSON.stringify(result);
 	}
 	
+	// Reset sizes 
 	reset(canvas){
 		this.canvas = canvas;
 		this.frame = new Rectangle(canvas.width, canvas.height);
@@ -374,6 +407,7 @@ class BattleGround {
 		this.defineMapFeature();
 	}
 	
+	// Clear all data 
 	clear() {
 	    this.ctx.save();
 	    this.ctx.beginPath();

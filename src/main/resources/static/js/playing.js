@@ -6,17 +6,21 @@ function playing(map, code, enemies) {
 	let ctx = canvas.getContext("2d");
 	let parent = $(canvas).parent();
 	
+	// Making it square
 	canvas.width = parent.width();
 	canvas.height = parent.width();
 	
 	let battleGround = undefined;
+	// Starts to load all battle info
 	loadData('/loadMap/' + map.id, function(data){
 		data = JSON.parse(data);
 		battleGround = new BattleGround(canvas, data.cellDim.rows, data.cellDim.cols);
 		battleGround.fillContent(data, function(){
+			// Redirects a function below
 			start(battleGround, new Array(code).concat(enemies));
 		});
 		
+		// Listeners for canvas
 		canvas.addEventListener('mousemove', function(event) {
 			let rect = canvas.getBoundingClientRect();
 			let x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
@@ -45,6 +49,7 @@ function playing(map, code, enemies) {
 		    
 		});
 
+		// Resizing when the windows has changed on size
 		window.onresize = function() {
 			
 			if (isFullScreen()) {
@@ -69,11 +74,12 @@ function playing(map, code, enemies) {
 }
 
 function start(battleGround, codes){
-	
+	// Starts to load all codes
 	codes.forEach(function(element) {
 		loadData('/loadCode/' + element.id, function(data){
 			let robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 12) + 1) + ").png", data, battleGround);
 			battleGround.addRobot(robot);
+			// Create all progress bars
 			$("#rank")
 				.append( "<div id=\"robot_" + robot.info.id + "\" class=\"progress\">"
 					+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + robot.hp + "%;\" aria-valuenow=\"" + robot.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
@@ -97,17 +103,22 @@ function start(battleGround, codes){
 		});
 	});
 	
+	// Parameter to play or stop the game
 	let playPause = true;
 	
+	// The game loop
 	function loop(timestamp) {
 		let progress = (timestamp - lastRender)
 		
+		// Calls each robot to move
 		battleGround.robots.forEach(function(value, key){
 			value.makeMove(battleGround);
 		});
 		
+		// Redraw map
 		battleGround.clear().drawMapContent();
 		
+		// Checking if keep playing
 		if (playPause) {
 			lastRender = timestamp
 			window.requestAnimationFrame(loop);
@@ -116,6 +127,7 @@ function start(battleGround, codes){
 	let lastRender = 0;
 	window.requestAnimationFrame(loop);
 
+	// Listener for play pause
 	let playPauseButton = document.getElementById("play-pause");
 	playPauseButton.addEventListener("click", function(){
 		if (playPause){

@@ -1,43 +1,74 @@
 'use strict';
 
+/**
+ * This is the class Robot, which defines all functionalities and moves that a robot performs.
+ */
 class Robot {
+	/*
+	 * info: id and name for the robot and its creator.
+	 * path: the path for its image
+	 * code: its logic for the functionality
+	 * battleGround: contains all battle data which helps the robot to move through
+	 */
 	constructor(info, path, code, battleGround){
 		this.info = info;
 
 		this.path = path;
-		imageLoader.loadImage("robot_" + this.info.id, this.path)
+		// Loading image
+		imageLoader.loadImage("robot_" + this.info.id, this.path);
+		
+		// Parameters definition
+		// These dimensions depend on a cell dimension in battleGround. (Half sized)
 		this.width = 0.5;
 		this.height = 0.5;
+		// Its movements scale depends on a relation between a cell dimension and the whole map
 		this.proportionX = battleGround.cell.width / battleGround.table.width / 5;
 		this.proportionY = battleGround.cell.height / battleGround.table.height / 5;
+		// 1 degree per turn when changing direction
 		this.rotationScale = 1;
+		// Starts at 0 degrees (direction to north)
 		this.rotation = 0;
 		
+		// Finds an empty position in map to situate the robot
 		let newPosition = battleGround.findEmptyCell();
+		
 		this.x = newPosition.x;
 		this.y = newPosition.y;
 		
+		// The corners for the robot and other measures that helps on their calculations
 		this.topRightCorner = undefined;
 		this.downRightCorner = undefined;
 		this.downLeftCorner = undefined;
 		this.topLeftCorner = undefined;
 		this.diagonal = battleGround.cell.diagonal / 4;
+		
+		// If it is true, the "camera" follows this robot when moving
 		this.follow = false;
+		
+		// Calculating some parameters before defined
 		this.calculateCorners(battleGround);
+		
+		// Array containing shot bullets by the robot
 		this.bullets = [];
 		
+		// Counter which by each 100 moves increments 1 bullet for the robot
 		this.moveCounter = 0;
+		// Robot stats
 		this.atk = 10;
 		this.hp = 100;
 		this.def = 1;
 		this.numBullets = 5;
 		
+		// Info about enemy robots that are situated close to the robot
 		this.closeRobots = [];
+		// Defines what sort of ground this robot is on. (Different ground, different stats)
 		this.block = battleGround.BLOCKS.NOTHING;
 		
+		// An abstraction for this robot that restricts the code written by other designers not corrupt this class
 		this.abstraction = new RobotAbstraction(code);
 	}
 	
+	// Function that returns an image, if the robot dies it is an explosion image
 	get image(){
 		if (this.hp > 0) {
 			return imageLoader.image("robot_" + this.info.id);
@@ -47,6 +78,7 @@ class Robot {
 		}
 	}
 	
+	// The robot shoots a bullet
 	fireBullet(){
 		if (this.numBullets > 0) {
 			this.bullets.push(new Bullet(this));
@@ -54,6 +86,7 @@ class Robot {
 		}
 	}
 	
+	// When playing, this function will notify its progress bar its info
 	notify() {
 		let childNodes = $("#robot_"+ this.info.id)[0].childNodes;
 		for (let i = 0; i < childNodes.length; ++i) {
@@ -71,7 +104,9 @@ class Robot {
 		}
 	}
 	
+	// Function that redefines the hp when getting hit by bullets
 	gotHit(bullet, a, b){
+		// Check if this robot has gotten a hit
 		let hit = bullet.owner != this.info.id && intersect(this.topRightCorner, this.downRightCorner, this.downLeftCorner, this.topLeftCorner, a, b);
 		if (hit) {
 			this.hp -= (bullet.atk - (this.def * this.block.def));
@@ -81,13 +116,17 @@ class Robot {
 		return hit;
 	}
 	
+	// Performs a movement
 	makeMove(battleGround){
 		this.moveCounter++;
+		// Checking counter
 		if (this.moveCounter % 100 == 0) {
 			this.numBullets++;
 		}
 		
+		// Get the cell position of the robot in map
 		let position = battleGround.getCellPosition(new Point(this.x, this.y));
+		// Creates a 5x5 dimension map that contains the ground around the robot
 		position = new Point(position.x - 2, position.y - 2);
 		let mapContent = battleGround.mapContent;
 		let mapData = {
@@ -108,10 +147,12 @@ class Robot {
 		position = new Point(position.x + 2, position.y + 2);
 		
 		let dist = undefined;
+		// This cells means a relation of distance for the robot to capt other robots, it depends on the number of robotss left
 		let cells = Math.max(battleGround.rows, battleGround.cols);
 		cells = cells / (battleGround.robots.size - 1);
 		this.closeRobots = [];
 		let self = this;
+		// Checking if other robots are in this robot capt area
 		battleGround.robots.forEach(function(value, key) {
 			if (self.info.id != value.info.id) {
 				dist = battleGround.toRealPosition(new Point(self.x, self.y)).distanceTo(battleGround.toRealPosition(new Point(value.x, value.y)));
@@ -124,8 +165,10 @@ class Robot {
 				}
 			}
 		});
+		// Sorting all robots by distance
 		this.closeRobots.sort(function(a, b) { return (a.distance > b.distance); });
 		
+		// Constructs the data for the abstraction
 		let data = {
 			name : this.info.name,
 			atk : this.atk,
@@ -138,12 +181,14 @@ class Robot {
 			mapData : mapData
 		}
 		
+		// Execute the code through abstraction
 		let command = this.abstraction.makeMove(data);
 		if (command != "") {
 			command = "this." + command + "(battleGround);";
 			eval(command);
 		}
 		
+		// Checking the ground the robot is on
 		for (let block in battleGround.BLOCKS){
 			if (battleGround.BLOCKS[block].id == battleGround.checkPosition(new Point(this.x, this.y))){
 				this.block = battleGround.BLOCKS[block];
@@ -153,6 +198,7 @@ class Robot {
 		this.notify();
 	}
 	
+	// Calculating the corners of the robot
 	calculateCorners(battleGround){
 		this.diagonal = battleGround.cell.diagonal / 4;
 		this.topRightCorner = new Point(
@@ -169,11 +215,13 @@ class Robot {
 				this.diagonal / battleGround.table.height * Math.sin(toRadians(this.rotation + 225)) + this.y);
 	}
 	
+	// Sets if the robot has to be followed
 	setFollow(follow){
 		this.follow = follow;
 		return this;
 	}
 	
+	// Changing the rotation for the robot
 	changeRotation(degrees, battleGround){
 		this.rotation += degrees;
 		this.rotation %= 360;
@@ -183,12 +231,14 @@ class Robot {
 		this.calculateCorners(battleGround);
 	}
 	
+	// Moving forward or backward
 	moveTo(x, y, battleGround){
 		this.x += x;
 		this.y += y;
 		
 		this.calculateCorners(battleGround);
 		
+		// Checks
 		let movementsAvailable = {
 			topRight : battleGround.canIMoveOn(battleGround.checkPosition(this.topRightCorner)),
 			downRight : battleGround.canIMoveOn(battleGround.checkPosition(this.downRightCorner)),
@@ -229,10 +279,12 @@ class Robot {
 		}
 	}
 	
+	// Left movement
 	moveToLeft(battleGround){
 		this.changeRotation(-this.rotationScale, battleGround);
 	}
 	
+	// Up movement
 	moveToUp(battleGround){
 		this.moveTo(
 			this.proportionX * Math.sin(toRadians(this.rotation)) * this.block.speed,
@@ -240,10 +292,12 @@ class Robot {
 			battleGround);
 	}
 	
+	// Right movement
 	moveToRight(battleGround){
 		this.changeRotation(this.rotationScale, battleGround);
 	}
 	
+	// Down movement
 	moveToDown(battleGround){
 		this.moveTo(
 			-this.proportionX * Math.sin(toRadians(this.rotation)) * this.block.speed,
@@ -252,16 +306,21 @@ class Robot {
 	}
 }
 
+// A class for the bullet
 class Bullet {
 	constructor(robot) {
+		// The robot starts at the robot location
 		this.x = robot.x;
 		this.y = robot.y;
 		this.owner = robot.info.id;
+		// These dimensions depend on a cell dimension in battleGround. (10%)
 		this.width = 0.1;
 		this.height = 0.1;
 		this.rotation = robot.rotation;
+		// Its movements speed is the robot's one x 2
 		this.proportionX = robot.proportionX * 2;
 		this.proportionY = robot.proportionY * 2;
+		// States of the bullet
 		this.STATES = Object.freeze({
 			"MOVING": 1,
 			"EXPLODE": 2,
@@ -272,6 +331,7 @@ class Bullet {
 		this.atk = robot.atk * robot.block.atk;
 	}
 	
+	// Returns an image depending on the state of the bullet
 	get image(){
 		switch (this.state){
 		case this.STATES.MOVING:
@@ -291,6 +351,7 @@ class Bullet {
 		}
 	}
 	
+	// Moves forward
 	next(battleGround){
 		switch (this.state){
 		case this.STATES.MOVING:
@@ -321,10 +382,12 @@ class Bullet {
 	}
 }
 
+// The abstraction class for the robot
 class RobotAbstraction {
 	constructor(code) {
 		this.code = code;
 		this.command = "";
+		// Any history of the battle the designer wants to keep
 		this.dataMap = new Map();
 	}
 	

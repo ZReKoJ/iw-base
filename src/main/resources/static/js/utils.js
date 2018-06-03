@@ -1,5 +1,6 @@
 'use strict';
 
+// Function that tell us if canvas is fullscreen or not
 function isFullScreen(){
 	if (document.fullscreenElement) return true;
     else if (document.webkitFullscreenElement) return true;
@@ -7,18 +8,21 @@ function isFullScreen(){
     else return false;
 }
 
+// Make content fullscreen
 function fullscreen(content){
 	if(content.webkitRequestFullScreen) 
 		content.webkitRequestFullScreen();
 	else content.mozRequestFullScreen();
 }
 
+// Given a path returns by callback the content of that path
 function loadData(path, callback){
 	$.get(path, {}, function (data) {
 		callback(data);
 	}, "text");
 }
 
+// Function that checks if something has javascript written in it to prevent javascript injection
 function hasJavascript(text) {
 	let html = document.createElement('html');
 	html.innerHTML = text;
@@ -28,6 +32,7 @@ function hasJavascript(text) {
 	return null;
 }
 
+// Class to notify all kind of messages ( warn, error, success)
 class Notifier {
 	constructor(){
 		this.lastNotification = new Date().getTime();
@@ -62,6 +67,7 @@ class Notifier {
 	}
 }
 
+// Class to load messages, with callbacks functions it controls when an image has loaded
 class ImageLoader{
 	constructor(){
 		this.images = new Map();
@@ -95,10 +101,12 @@ class ImageLoader{
 	}
 }
 
+// Function which tranforms angle to radians
 function toRadians (angle) {
   return angle * (Math.PI / 180);
 }
 
+// Function that checks if a square or rectangle intersects with a straight line
 function intersect(topRightCorner, downRightCorner, downLeftCorner, topLeftCorner, a, b){
 	
 	function side(p1, p2, p3, p4) {
@@ -129,6 +137,7 @@ function intersect(topRightCorner, downRightCorner, downLeftCorner, topLeftCorne
 			|| inside(topLeftCorner, downRightCorner, a, b));
 }
 
+// Creates array, matrix, 3dimensionMatrix by giving this function x params
 function createArray(length) {
     let arr = new Array(length || 0),
         i = length;
@@ -141,6 +150,7 @@ function createArray(length) {
     return arr;
 }
 
+// Geometric class: Point
 class Point {
 	constructor(x, y){
 		this.x = x;
@@ -159,6 +169,7 @@ class Point {
 	}
 }
 
+// Geometric class: Rectangle
 class Rectangle {
 	constructor(width, height) {
 		this.width = width;
@@ -216,6 +227,7 @@ class Rectangle {
 	
 }
 
+// Geometric class: Square
 class Square extends Rectangle {
 	constructor(width, height){
 		super(width, height);
@@ -235,5 +247,6 @@ class Square extends Rectangle {
 	}
 }
 
+// Global params
 var imageLoader = new ImageLoader();
 var notifier = new Notifier();
