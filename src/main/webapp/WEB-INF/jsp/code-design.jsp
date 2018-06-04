@@ -38,6 +38,7 @@
 		</div>
 	    <div class="btn-toolbar pull-right">
 	   		<a id="help" class="btn btn-primary" role="button">Help</a>
+	   		<a id="code" class="btn btn-primary btn-success" role="button">Code</a>
 	   		<a id="test" class="btn btn-primary" role="button">Test</a>
 	    	<a id="upload" class="btn btn-primary" role="button" type="submit">Upload</a>
 	        <a class="btn btn-primary" href="/" role="button">Cancel</a>

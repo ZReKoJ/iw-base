@@ -34,8 +34,8 @@ function codeDesign(codeId) {
 	});
 	
 	let help = undefined;
-	let codeAux = undefined;
-	let helpClicked = false;
+	let codeAux = "";
+	let codeOrHelp = true;
 	
 	loadData("/static/js/example.js", function(data){
 		help = data;
@@ -47,17 +47,26 @@ function codeDesign(codeId) {
 			});
 		}
 	});
-	
-	document.getElementById("help").addEventListener("click", function(e){
-		if (helpClicked) {
-			helpClicked = false;
+
+	let buttonCode = document.getElementById("code");
+	buttonCode.addEventListener("click", function(e){
+		if (!codeOrHelp) {
 			codeMirrorEditor.setValue(codeAux);
 		}
-		else {
-			helpClicked = true;
+		codeOrHelp = true;
+		buttonCode.classList.add('btn-success');
+		buttonHelp.classList.remove('btn-success');
+	});
+	
+	let buttonHelp = document.getElementById("help");
+	buttonHelp.addEventListener("click", function(e){
+		if (codeOrHelp) {
 			codeAux = codeMirrorEditor.getValue();
-			codeMirrorEditor.setValue(help);
 		}
+		codeMirrorEditor.setValue(help);
+		codeOrHelp = false;
+		buttonHelp.classList.add('btn-success');
+		buttonCode.classList.remove('btn-success');
 	});
 	
 	let robot = undefined;
