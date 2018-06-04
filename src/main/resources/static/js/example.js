@@ -119,56 +119,6 @@ You are right! ;)
 Good luck and have fun!
  */
 
-
-
-class Robot {
-	constructor(code){
-		// Enables the posibility of writing a new code for the robot while execution
-		this.code = code;
-		// Storage for data
-		this.dataMap = new Map();
-	}
-	
-	// The robot fires a bullet
-	fire(){}
-	
-	// The robot turns left
-	left(){}
-	
-	// The robot moves up
-	up(){}
-	
-	// The robot turns right
-	right(){}
-	
-	// The robot moves down
-	down(){}
-	
-	/*
-	@Param data is an object which contains the following informations :
-		name : The name for the robot.
-		atk : The current attack power the robot has.
-		hp : The current life the robot has.
-		def : The current defense the robot has.
-		bullets : The number of bullets the robot has left.
-		position : Current position the robot is at.
-		rotation : Rotation of the robot.
-		robots : List of enemies in a distance range.
-		mapData : {
-			dimension : Rows and columns for the map.
-			cellDimension : The dimension for one single cell.
-			mapDimension : The dimension for the whole map.
-			area : Matrix (5x5) which contains the map data around the robot.
-		}
-	*/
-	makeMove(data){
-		eval(this.code);
-	}
-	// For further information about data write in console "console.log(data)" and see its properties.
-	
-}
-
-
 // The code below can only aim the direction for bullet but cannot move through labyrinths.
 function toDegrees(radians){
 	return radians * (180 / Math.PI);

@@ -423,7 +423,7 @@ class RobotAbstraction {
 				eval(this.code);
 			}
 			catch(err) {
-				notifier.error("" + data.name + "/" + data.creator + ": I have issues with my code, check log");
+				notifier.error("" + data.name + "/" + data.creator + ": I have issues with my code, check log F12");
 				console.log("" + data.name + "/" + data.creator + ": " + err.message);
 				this.error = true;
 				return "";
