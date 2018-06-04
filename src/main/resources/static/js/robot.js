@@ -98,10 +98,15 @@ class Robot {
 					element.setAttribute("aria-valuenow", this.hp);
 				}
 				if (element.className == 'progress-type'){
-					element.innerHTML = ((this.follow) ? "*" : "") + this.info.name + "/" + this.info.creatorName.toUpperCase();
+					element.innerHTML = ((this.follow) ? "👀" : "") + this.info.name + "/" + this.info.creatorName.toUpperCase();
 				}
 				if (element.className == 'progress-completed'){
-					element.innerHTML = Math.ceil(this.hp) + "% " + this.numBullets;
+					if (this.hp > 0) {
+						element.innerHTML = Math.ceil(this.hp) + "% " + this.numBullets;
+					}
+					else {
+						element.innerHTML = "☠";
+					}
 				}
 			}
 		}
