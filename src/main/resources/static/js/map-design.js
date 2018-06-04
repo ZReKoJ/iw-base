@@ -154,9 +154,16 @@ function mapDesign(mapId) {
     
     };
 
-	let path;
+    let path;
+	let mapPropertiesArray = Object.values(mapProperties);
+	let mapProperty;
 	for (let x = 0; x <= 30; x++){
-		path = "<img class='icon' src='/static/img/map/component (" + x + ").png'>";
+		mapProperty = mapPropertiesArray[x];
+		mapProperty = "Atk: " + mapProperty.atk * 100 + "%\n" +
+					"Hp: " + mapProperty.hp * 100 + "%\n" + 
+					"Def: " + mapProperty.def * 100 + "%\n" +
+					"Speed: " + mapProperty.speed * 100 + "%";
+		path = "<img class='icon' src='/static/img/map/component (" + x + ").png' data-toggle='tooltip' title='" + mapProperty + "'>";
 		$('#grid-element').append(path)
 	}
     
