@@ -6,8 +6,21 @@
 
 <link href="${s}/css/admin.css" rel="stylesheet">
 
+<!-- Tema del editor de codemirror -->
+<link href="${s}/css/code-design-theme.css" rel="stylesheet">
+<!-- Codemirror editor -->
+<link href="${s}/css/codemirror.css" rel="stylesheet">
 
 <div class="row margin-top-80">
+	<div class="preview pull-left">
+		<canvas id="canvas"></canvas>
+	</div>
+	<div class="preview pull-right">
+       	<textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+    </div>
+</div>
+<div class="row" style="height: 10px"></div>
+<div class="row">
 	<div class="col-sm-1"></div>
 	<div class="col-sm-3">
 		<div class="list-group" id="myListSelect" role="tablist">
@@ -46,5 +59,10 @@
     	admin();
     });
 </script>
+
+<script src="${s}/js/map-properties.js"></script>
+<script src="${s}/js/battle-ground.js"></script>
+<script src="${s}/js/codemirror.js"></script>
+<script src="${s}/js/javascriptMode.js"></script>
 <script src="${s}/js/admin.js"></script>
 <%@ include file="../jspf/footer.jspf"%>

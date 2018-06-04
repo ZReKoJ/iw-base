@@ -282,3 +282,8 @@ label{
 	max-height:350px;
 	overflow:auto;
 }
+
+.preview {
+	width: 50%;
+	height: 300px;
+}
