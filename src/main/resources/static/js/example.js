@@ -14,7 +14,7 @@ Now if you want your robot to perform any of this actions you can write:
 For example, if you want your robot to fire you may write:
 	this.fire();
 	
-Here is a basic example code for a robot. A robot that will perform one of the 5 action randomly:
+Here is a basic example code for a robot. A robot that will perform one of the 5 actions randomly:
 
 	let rand = Math.random();
 	if (0 <= rand && rand < 0.6) this.up();
@@ -35,23 +35,35 @@ Info of the robot itself:
 	- hp : The current hit points the robot has.
 	- bullets : The number of bullets the robot has left (automatically increases over time).
 	- position : Current position of the robot in the map (position.x and position.y).
-	- rotation : Rotation of the robot.
+	- rotation : Direction in which the robot is pointing (in degrees).
 	- atk : The current attack power the robot has.*
 	- def : The current defense the robot has.*
 *The last two will vary depending on the type of terrain the robot is in.
 
 Info of the robot's surroundings:
 	- robots : List of the enemy robots that are near you within a certain range, ordered from closest to farthest.
+			   Each robot of this list has the following information:
+			   	- name : The name of the robot.
+			   	- position : Current position of the robot in the map (position.x and position.y).
+			   	- distance : Distance between you and this robot.
 	- mapData : 
 	  {
-		dimension : Number of rows and columns the map has.
-		cellDimension : The size of one single cell of the map.
-		mapDimension : The size of the whole map.
-		area : Matrix (5x5) which contains the map data around the robot.
+		dimension : Number of columns(dimension.x) and rows(dimension.y) the map has.
+		cellDimension : A Square with the size of one single cell of the map.
+		mapDimension : A Rectangle with the size of the whole map.
+		area : Matrix (5x5) which contains the data of the cells around the robot (the robot is in area[2][2]).
+			   The value of each position depends on the type of terrain on that cell:
+				   	1: Platform
+				   	2: Ground	
+				   	3: Grass
+				   	4: Bridge
+				   	5: Magma
+				   	6: Water
+				  >=7: Barrier
 	  }
 	  
 Now, for example, if you want to know how many bullets your robot has left, you can write:
-	this.data.bullets();
+	data.bullets;
 	
 Use this information to take smart decisions and be the last robot standing.
 Hunt your closest enemies, search for advantageous terrain, hide in the corner of the map... possibilities are endless!
