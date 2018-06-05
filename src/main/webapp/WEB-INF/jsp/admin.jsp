@@ -4,8 +4,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../jspf/header.jspf"%>
 
-<link href="${s}/css/admin.css" rel="stylesheet">
-
 <!-- Tema del editor de codemirror -->
 <link href="${s}/css/code-design-theme.css" rel="stylesheet">
 <!-- Codemirror editor -->
