@@ -116,6 +116,18 @@ Here is another basic example code for a robot. This robot will chase the closes
 Now maybe you are thinking: "But this example code doesn't takes into account the fact that there might be a wall in between the robot and his enemy..."
 You are right! ;)
 
+One last thing. For your robot to really do his best, you will probably need to save extra information apart from what is in "data".
+For this there is "dataMap". It is a Map (not a battleground but a Map object) where you can store any information you want.
+To put information into the map do:
+	dataMap.set(<key>, <value>);
+And to get information from the map do:
+	dataMap.get(<key>);
+	
+Now with this possibilities are really endless... 
+You could now explore the map and save what you know of it, remember what enemies have you shot, see if enemies are chasing you or escaping from you...
+
+
+Well, this is all you need to know, the rest is up to you.
 Good luck and have fun!
  */
 
