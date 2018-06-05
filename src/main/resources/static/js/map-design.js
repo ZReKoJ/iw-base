@@ -159,10 +159,17 @@ function mapDesign(mapId) {
 	let mapProperty;
 	for (let x = 0; x <= 30; x++){
 		mapProperty = mapPropertiesArray[x];
-		mapProperty = "Atk: " + mapProperty.atk * 100 + "%\n" +
+		if(mapProperty.type == 0){
+			mapProperty = mapProperty.name + "\nCannot pass through\nBlocks bullets";
+		}else if(mapProperty.type == 1){
+		mapProperty = mapProperty.name + "\nModifiers:\n" +
+					"Atk: " + mapProperty.atk * 100 + "%\n" +
 					"Hp: " + mapProperty.hp * 100 + "%\n" + 
 					"Def: " + mapProperty.def * 100 + "%\n" +
 					"Speed: " + mapProperty.speed * 100 + "%";
+		}else if(mapProperty.type == 2){
+			mapProperty = mapProperty.name + "\nCannot pass through\nDoes not block bullets";
+		}
 		path = "<img class='icon' src='/static/img/map/component (" + x + ").png' data-toggle='tooltip' title='" + mapProperty + "'>";
 		$('#grid-element').append(path)
 	}
