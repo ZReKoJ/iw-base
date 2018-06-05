@@ -202,4 +202,16 @@ function codeDesign(codeId) {
 		}
 	});
 	
+	//Resize for codeMirror
+	let cmFrame = document.querySelector("#cm-frame");
+	function cm_resize() {
+		codeMirrorEditor.setSize(cmFrame.clientWidth + 2, cmFrame.clientHeight - 10);
+	}
+	cm_resize();
+	if (window.ResizeObserver)
+		new ResizeObserver(cm_resize).observe(cmFrame);
+	else if (window.MutationObserver)
+		new MutationObserver(cm_resize).observe(cmFrame, {attributes: true});
+
+	
 }

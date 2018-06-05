@@ -30,7 +30,9 @@
 	    </div>
 	    <div class="row">
 			<div class="pull-left" style="width: 60%; height: 300px;">
-	        	<textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+				<div id="cm-frame">
+	        		<textarea id="codeText" name="code" class="codemirror-textarea"></textarea> 
+	        	</div>
 	        </div>
 			<div class="pull-right" style="width: 40%; height: 300px;">
 				<canvas id="canvas"></canvas>

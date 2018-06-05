@@ -18,3 +18,9 @@
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
+
+#cm-frame {
+  overflow: hidden;
+  resize: both;
+  height: 103.5%;
+}
