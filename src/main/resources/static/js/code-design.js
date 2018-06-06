@@ -110,7 +110,7 @@ function codeDesign(codeId) {
 			battleGround.fillContent(data, function(){
 				robot = new Robot(
 						{"id": 0, "name": "admin", "creatorId": 0, "creatorName": "admin" }, 
-						"/static/img/robot/robot (10).png", 
+						"/static/img/robot/robot (1).png", 
 						"", 
 						battleGround
 				);
