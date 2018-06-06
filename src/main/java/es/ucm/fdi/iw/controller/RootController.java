@@ -63,12 +63,18 @@ public class RootController{
     @ModelAttribute
     public void addAttributes(Model model) {
         model.addAttribute("s", "/static");
+        
+        List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
+		model.addAttribute("maps", maps);
+		
+		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
+		model.addAttribute("codes", codes);
     }
     
     @GetMapping(value = "/deleteCode")
     @Transactional
 	public String deleteCodesHandler(@RequestParam("codeId") String id, HttpSession s, Model m)
-{
+    {
     	String name = "";
     	if (id != null && !id.isEmpty()) {
 			long uidSession = ((User) s.getAttribute("user")).getId();
@@ -76,16 +82,18 @@ public class RootController{
 					.find(Code.class, Long.parseLong(id))
 					.getCreator()
 					.getId();
-				
+			
+			Code code = entityManager.find(Code.class, Long.parseLong(id));
+			name = code.getName();
+			
 			if( uidParam == uidSession) {
 				if (localData.getFile("/codes", id).delete()) {
-					Code code = entityManager.find(Code.class, Long.parseLong(id));
-					name = code.getName();
-					entityManager.remove(code);
+					log.info("Deleting CODE: " + name + " Result: SUCCESS");
+			        entityManager.remove(code);
+
 				}
 				else
-			        log.info("El fichero no pudo ser borrado");
-				
+					 log.info("Deleting CODE: " + name + " Result: FAILURE Reason: file not found or unable to read file");				
 			}
 				
 			else
@@ -110,16 +118,17 @@ public class RootController{
 					.find(Map.class, Long.parseLong(id))
 					.getCreator()
 					.getId();
-				
+			
+			Map map = entityManager.find(Map.class, Long.parseLong(id));
+			name = map.getName();
+			
 			if( uidParam == uidSession) {
 				if (localData.getFile("/maps", id).delete()) {
-					Map map = entityManager.find(Map.class, Long.parseLong(id));
-					name = map.getName();
+					log.info("Deleting MAP: " + name + " Result: SUCCESS");
 					entityManager.remove(map);
 				}
 				else
-			        log.info("El fichero no pudo ser borrado");
-				
+					 log.info("Deleting MAP: " + name + " Result: FAILURE Reason: file not found or unable to read file");				
 			}
 				
 			else
@@ -133,14 +142,13 @@ public class RootController{
     @PostMapping(value = "/addLoss")
 	@Transactional
 	@ResponseBody
-
 	public String addLossHandler(
 			@RequestParam("id") long id,
 			HttpSession s)
     {
     	User u = entityManager.find(User.class, id);
 		u.setLose(u.getLose()+1);	
-		log.info("Adding a loss to " + id + ": now at " + u.getLose());
+		log.info("Adding a LOSS to " + id + ": now at " + u.getLose());
 		User currentu = (User) s.getAttribute("user");
 		if(id == currentu.getId()) {
 			currentu.setLose(currentu.getLose()+1);
@@ -159,7 +167,7 @@ public class RootController{
     {
     	User u = entityManager.find(User.class, id);
 		u.setWin(u.getWin()+1);
-		log.info("Adding a win to " + id + ": now at " + u.getLose());
+		log.info("Adding a WIN to " + id + ": now at " + u.getLose());
 		User currentu = (User) s.getAttribute("user");
 		if(id == currentu.getId()) {
 			currentu.setWin(currentu.getWin()+1);
@@ -193,9 +201,13 @@ public class RootController{
     		entityManager.persist(u);
     		entityManager.flush();
     		
+    		log.info("Creating USER " + u.getNickname() + " Result: SUCCESS");
+
     		return "login";
     	}
     	
+			log.info("Creating USER " + u.getNickname() + " Result: FAILURE Reason: Nickname already taken");
+
     	return "usernametaken";
 	}
     
@@ -212,11 +224,8 @@ public class RootController{
 
 		codeFileName = HtmlUtils.htmlEscape(codeFileName);
 		
-		String error = "";
-        if (code.isEmpty()) {
-        	error = "You failed to upload a photo for " 
-                + codeFileName + " because the file was empty.";     
-        	log.info(error);
+        if (code.isEmpty()) {   
+        	log.info("Uploading CODE: " + codeFileName + " Result: FAILURE Reason: the file was EMPTY");
         } else {
         	
 	    		Code codeObject= new Code();
@@ -235,15 +244,17 @@ public class RootController{
 	    			stream.write(code.getBytes());
 	     
 	    		} catch (Exception e) {
-	    			error = "Upload failed " + codeFileName + " => " + e.getMessage();
+	            	log.info("Uploading CODE: " + codeFileName + " Result: FAILURE Reason: Unable to create file");
 	    		}
-	  
+	    		
+	        	log.info("Uploading CODE: " + codeFileName + " Result: SUCCESS");
+
 	            return "Code uploaded";
 	            
         }
         // exit with error, blame user
     	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        return error;
+        return "There was a problem uploading the code";
 	}
     
     @RequestMapping(value="/createMap", method=RequestMethod.POST)
@@ -258,10 +269,9 @@ public class RootController{
 		
 		mapFileName = HtmlUtils.htmlEscape(mapFileName);
 		
-    	String error = "";
         if (json.isEmpty()) {
-        	error = "You failed to upload the map";     
-        	log.info(error);
+        	log.info("Uploading MAP: " + mapFileName + " Result: FAILURE Reason: the file was EMPTY");
+
         } 
         else {
         	
@@ -281,14 +291,17 @@ public class RootController{
 	    			stream.write(json.getBytes());
 	     
 	    		} catch (Exception e) {
-	    			error = "Upload failed " + "pruebaCanvas.png" + " => " + e.getMessage();
+	            	log.info("Uploading MAP: " + mapFileName + " Result: FAILURE Reason: Unable to create file");
 	    		}
+	    		
+            	log.info("Uploading MAP: " + mapFileName + " Result: SUCCESS");
+
 	    		return "Map uploaded";
         }
       
      // exit with error, blame user
     	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        return error;
+        return "There was a problem uploading the map";
        
 	}
     
@@ -341,6 +354,9 @@ public class RootController{
 		m.addAttribute("map", map);
 		m.addAttribute("enemies", enemycodes);
 		
+    	log.info("Starting new GAME");
+
+		
 		return "playing";
 	}
     
@@ -384,12 +400,6 @@ public class RootController{
 	@GetMapping("/play")
 	public String play(Model m, HttpSession s) {
 		
-		List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
-		m.addAttribute("maps", maps);
-		
-		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
-		m.addAttribute("codes", codes);
-		
 		User u = (User) s.getAttribute("user");
 		m.addAttribute("ownedCodes", entityManager
 						.createQuery("from Code where creator = :id", Code.class)
@@ -411,6 +421,7 @@ public class RootController{
 				.createQuery("from Code where creator = :nickname", Code.class)
 				.setParameter("nickname", u)
                 .getResultList();
+		
 		List<Map> myMaps = entityManager
 				.createQuery("from Map where creator = :nickname", Map.class)
 				.setParameter("nickname", u)
@@ -478,22 +489,23 @@ public class RootController{
 	@RequestMapping(value="/saveAvatar", method=RequestMethod.POST)
 	public String handleFileUpload(@RequestParam MultipartFile photo, HttpSession s)
 	{
-		String error = "";
+		
 		if (photo.isEmpty()) {
-			error = "Empty file uploading photo";
-			log.error(error);
+        	log.info("Uploading AVATAR Result: FAILURE Reason: the file was EMPTY");
+        	
 		} else {
 			String id = "" + ((User)s.getAttribute("user")).getId();
 			File f = localData.getFile("users/" + id,"avatar");
 			try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
 				stream.write(photo.getBytes());
 			} catch (Exception e) {
-				error = "Upload failed " + s.getAttribute("user").toString() + " => " + e.getMessage();
-				log.error(error);
+	        	log.info("Uploading AVATAR Result: FAILURE Reason: unable to create file");
+				
 			}
 		}
+    	log.info("Uploading AVATAR Result: SUCCESS");
 
-		    return  "redirect:/profile";
+		return  "redirect:/profile";
 	}
 	
 
@@ -509,8 +521,9 @@ public class RootController{
 	    	FileCopyUtils.copy(in, response.getOutputStream());
 	    } catch (IOException ioe) {
 	    	response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404
-	    	log.info("Error retrieving file: " + f + " -- " + ioe.getMessage());
+	    	log.info("Retrieving AVATAR Result: FAILURE Reason: file not found or unable to read file");
 	    }
+	    log.info("Retrieving AVATAR Result: SUCCESS");
 	}
 	
 }
