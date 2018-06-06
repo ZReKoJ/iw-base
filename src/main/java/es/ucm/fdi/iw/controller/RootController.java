@@ -63,6 +63,12 @@ public class RootController{
     @ModelAttribute
     public void addAttributes(Model model) {
         model.addAttribute("s", "/static");
+        
+        List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
+		model.addAttribute("maps", maps);
+		
+		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
+		model.addAttribute("codes", codes);
     }
     
     @GetMapping(value = "/deleteCode")
@@ -393,12 +399,6 @@ public class RootController{
 	
 	@GetMapping("/play")
 	public String play(Model m, HttpSession s) {
-		
-		List<Map> maps = entityManager.createQuery("from Map", Map.class).getResultList();
-		m.addAttribute("maps", maps);
-		
-		List<Code> codes = entityManager.createQuery("from Code", Code.class).getResultList();
-		m.addAttribute("codes", codes);
 		
 		User u = (User) s.getAttribute("user");
 		m.addAttribute("ownedCodes", entityManager
