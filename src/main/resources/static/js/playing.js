@@ -77,7 +77,7 @@ function start(battleGround, codes){
 	// Starts to load all codes
 	codes.forEach(function(element) {
 		loadData('/loadCode/' + element.id, function(data){
-			let robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 12) + 1) + ").png", data, battleGround);
+			let robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 8) + 1) + ").png", data, battleGround);
 			battleGround.addRobot(robot);
 			// Create all progress bars
 			$("#rank")
