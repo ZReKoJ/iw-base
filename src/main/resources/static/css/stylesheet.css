@@ -287,3 +287,22 @@ label{
 	width: 50%;
 	height: 300px;
 }
+
+.instructions{
+	background-color: primary;
+	opacity: 0.6;
+	border-radius: 10px;
+	color: white;
+	
+}
+
+.instructions h1{
+	text-align: center;
+}
+
+.instructions p{
+	text-align: justify;
+	padding-left: 5%;
+	margin: 0;
+	padding: 0 0 5% 3%;
+}

@@ -20,6 +20,13 @@
 				<a id="play-pause" class="btn btn-primary btn-block" role="button">Pause</a>
 				<a id="fullscreen" class="btn btn-primary btn-block" role="button">FullScreen</a>
 			</div>
+			<div class="instructions">
+  				<h1 class="display-4">Instructions</h1>
+  				<hr class="my-4">
+  				<p>- Follow: click on health bar of a robot to follow that robot</p>
+	  			<p>- Pause: click on pause button to pause the game</p>
+				<p>- Debug: press F12 to see the console logs</p>
+			</div>
 		</div>
 	</div>
 </div>
