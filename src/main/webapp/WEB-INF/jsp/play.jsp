@@ -55,7 +55,7 @@
 	   		<h3 class="page-subtitle">Select Enemy Robots</h3>
 			   <c:choose>
 					<c:when test="${codes.size() > 0}">
-	  					<select id="all-codes" name="enemycodes" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="10" multiple>	
+	  					<select id="all-codes" name="enemycodes" class="selectpicker show-tick" data-width="100%" data-live-search="true" data-hide-disabled="true" data-max-options="9" multiple>	
 							<c:forEach var="code" items="${codes}">
 								<option id="all-${code.id}" value='{"id": ${code.id}, "name": "${code.name}", "creatorId": ${code.creator.id}, "creatorName": "${code.creator.nickname}" }' data-subtext="${code.creator.nickname}">${code.name}</option>
 							</c:forEach>

@@ -25,7 +25,10 @@
   				<hr class="my-4">
   				<p>- Follow: click on health bar of a robot to follow that robot</p>
 	  			<p>- Pause: click on pause button to pause the game</p>
-				<p>- Debug: press F12 to see the console logs</p>
+	  			<p>- Debug: press F12 to see the console logs</p>
+	  			<p>- Zoom: use the mouse wheel next to map center to zoom in and out</p>
+	  			<p>- Move map: use the mouse wheel far from map center to move the map</p>
+	  			
 			</div>
 		</div>
 	</div>
