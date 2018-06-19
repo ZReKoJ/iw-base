@@ -80,26 +80,29 @@ function start(battleGround, codes){
 			let robot = new Robot(element, "/static/img/robot/robot (" + Math.floor((Math.random() * 8) + 1) + ").png", data, battleGround);
 			battleGround.addRobot(robot);
 			// Create all progress bars
-			$("#rank")
-				.append( "<div id=\"robot_" + robot.info.id + "\" class=\"progress\">"
-					+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + robot.hp + "%;\" aria-valuenow=\"" + robot.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
-					+ "<span class=\"progress-type\">" + robot.info.name + "/" + robot.info.creatorName.toUpperCase() + "</span>"
-					+ "<span class=\"progress-completed\">" + robot.hp + "% " + robot.numBullets + " bullets</span>"				
-					+ "</div>"
-				);
-			$("#robot_" + robot.info.id)[0].addEventListener("click", function(e){
-				if (battleGround.followRobot == null || battleGround.followRobot != robot.info.id) {
-					if (battleGround.followRobot != null && battleGround.robots.has("robot_" + battleGround.followRobot)){
-						battleGround.robots.get("robot_" + battleGround.followRobot).setFollow(false);
+			let childNodes = $("#robot_"+ element.id);
+			if (!(childNodes[0] != null && childNodes[0] != undefined)) {
+				$("#rank")
+					.append( "<div id=\"robot_" + robot.info.id + "\" class=\"progress\">"
+						+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + robot.hp + "%;\" aria-valuenow=\"" + robot.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
+						+ "<span class=\"progress-type\">" + robot.info.name + "/" + robot.info.creatorName.toUpperCase() + "</span>"
+						+ "<span class=\"progress-completed\">" + robot.hp + "% " + robot.numBullets + " bullets</span>"				
+						+ "</div>"
+					);
+				$("#robot_" + robot.info.id)[0].addEventListener("click", function(e){
+					if (battleGround.followRobot == null || battleGround.followRobot != robot.info.id) {
+						if (battleGround.followRobot != null && battleGround.robots.has("robot_" + battleGround.followRobot)){
+							battleGround.robots.get("robot_" + battleGround.followRobot).setFollow(false);
+						}
+						battleGround.followRobot = robot.info.id;
+						robot.setFollow(true);
 					}
-					battleGround.followRobot = robot.info.id;
-					robot.setFollow(true);
-				}
-				else {
-					battleGround.followRobot = null;
-					robot.setFollow(false);
-				}
-			});
+					else {
+						battleGround.followRobot = null;
+						robot.setFollow(false);
+					}
+				});
+			}
 		});
 	});
 	
