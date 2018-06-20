@@ -86,7 +86,7 @@ function start(battleGround, codes){
 					.append( "<div id=\"robot_" + robot.info.id + "\" class=\"progress\">"
 						+ "<div class=\"progress-bar progress-bar-success\" role=\"progressbar\" style=\"width: " + robot.hp + "%;\" aria-valuenow=\"" + robot.hp + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
 						+ "<span class=\"progress-type\">" + robot.info.name + "/" + robot.info.creatorName.toUpperCase() + "</span>"
-						+ "<span class=\"progress-completed\">" + robot.hp + "% " + robot.numBullets + " bullets</span>"				
+						+ "<span class=\"progress-completed\">" + Math.ceil(robot.hp) + "% " + robot.numBullets + "</span>"				
 						+ "</div>"
 					);
 				$("#robot_" + robot.info.id)[0].addEventListener("click", function(e){
