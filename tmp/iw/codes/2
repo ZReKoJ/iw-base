@@ -1,0 +1,7 @@
+let rand = Math.random();
+if (0 <= rand && rand < 0.6) this.up();
+else if (0.6 <= rand && rand < 0.75) this.left();
+else if (0.75 <= rand && rand < 0.9) this.right();
+else if (0.9 <= rand && rand < 0.95) this.down();
+else if (0.95 <= rand && rand < 1) this.fire();
+else alert('error');
