@@ -73,6 +73,14 @@ function playing(map, code, enemies) {
 
 }
 
+function wait(ms){
+	var start = new Date().getTime();
+	var end = start;
+	while(end < start + ms) {
+	  end = new Date().getTime();
+   }
+ }
+
 function start(battleGround, codes){
 	// Starts to load all codes
 	codes.forEach(function(element) {
@@ -106,6 +114,8 @@ function start(battleGround, codes){
 		});
 	});
 	
+	wait(1000);
+
 	// Parameter to play or stop the game
 	let playPause = true;
 	
