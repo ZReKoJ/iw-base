@@ -1,6 +1,6 @@
 # output folders
 *.class
-/target/
+target/
 
 # STS project files
 .classpath
